@@ -1,0 +1,19 @@
+<div>
+<?php
+	echo @$this->element()->startForm()
+						 ->formHidden( "id" , $this->data->rid , array( "printLabel" => false ) )
+                  		 ->formHidden( "bulletin_id" , $this->data->bulletin_id , array( "printLabel" => false ) )
+                  		 ->formSelect( "class_id" , $this->data->class_id , array( "label" => $this->translate("group") ) , $this->groups )
+                  		 ->formSelect( "bulletin_group_id" , $this->data->bulletin_group_id , array( "label" => $this->translate("performance") , "model" => "Content_Model_RestrictionBulletin" ) , $this->evaluations )
+                  		 ->formText( "note" , $this->data->note , array( "class" => "input-small" , "label" => $this->translate("minimum note") , "model" => "Content_Model_RestrictionBulletin" ) )
+                  		 ->formtext( "note_restriction" , $this->data->note_restriction , array( "class" => "input-small" , "label" => $this->translate("obtaining the following note eliminates the restriction of time") , "model" => "Content_Model_RestrictionBulletin" )  )
+                  		 ->formSelect( "content_id" , $this->data->content_id , array( "label" => $this->translate("restricting from") )  , $this->contents )
+                  		 ->formSubmit( "save" , $this->translate("save") , array( "printLabel" => false ) )
+                         ->endForm();
+?>
+</div>
+<script>
+	content_model_restriction.success = function(){
+        new Preceptor.util.AjaxUpdate( 'content-restriction' , '<?=$this->url?>/content/restriction/save/type/AV' , { formId:"Content_Model_Restriction" } );
+    }
+</script>

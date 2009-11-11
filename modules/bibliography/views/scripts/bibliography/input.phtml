@@ -1,0 +1,25 @@
+<?=$this->element()->startForm();?>
+<div class="yui-skin-sam" id="div-form-<?=$this->model?>">
+
+    <?php
+        echo $this->element()->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+                  ->formText( "title" , $this->data->title , array( "label" => $this->translate("title") ) )
+                  ->formRadio( "type" , $this->data->type , array( "printLabel" => false ) , array( "1" => $this->translate( 'basic' ) , $this->translate( 'complement' ) ) );
+    ?>
+    <br />
+    
+    <?=$this->element()->formSubmit( "model" , $this->translate("save") , array( "printLabel" => false ) );?>
+</div>
+<script>
+    $( "#<?=$this->model?>-model" ).attr( "disabled" , "disabled" );
+
+
+    $( "#<?=$this->model?> input:radio" ).click( function(){
+        $( this ).each( function(){
+            if( this.checked ){
+                $( "#<?=$this->model?>-model" ).removeAttr( "disabled" );
+            }
+        });
+    });
+</script>
+<?=$this->formRelation( $this->data->id )?>

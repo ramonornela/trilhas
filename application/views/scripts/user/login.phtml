@@ -1,0 +1,83 @@
+<style>
+	#login{ width: 400px; margin: 20px auto; overflow: hidden; }
+	#user, #pass{ width: 270px; }
+	.message{ padding: 5px; font-size: 12px; }
+	label{ display: block; margin-top: 5px; }
+</style>
+<div id="login">
+	<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable">
+	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+		<span class="ui-dialog-title" id="ui-dialog-title-dialog">
+			<h3>Login</h3>
+		</span>
+	</div>
+	<div class="ui-dialog-content ui-widget-content">
+
+		<?php if( $this->messages ): ?>
+			<div class="message" id="message">
+				<ul>
+					<?php foreach( $this->messages as $key => $val ): ?>
+						<li><?=$val?></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		<?php endif; ?>
+
+		<div id="alert_message" class="message" style="display: none"></div>
+
+
+		<form id="frmLogin" method="post" style="padding: 0; margin: 0;" action="<?=$this->url?>/user/login">
+			<label for="usuario">E-mail:</label>
+			<input name="username" tabindex="1" id="user" type="text" maxlength="255" />
+
+			<label for="senha">Senha:</label>
+			<input name="password" id="pass" type="password" tabindex="2" maxlength="255" />
+
+			<br /><br />
+
+			<div class="right"><a href="#this" onclick="forgotPass();"> Esqueci a senha!</a></div>
+			<div><input type="submit" value="Entrar" tabindex="3" /></div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+
+//window.onload = function(){	document.getElementById( "usuario" ).focus(); }
+
+function forgotPass()
+{
+	var frm = document.getElementById( 'frmLogin' ),
+		alert_message = document.getElementById( 'alert_message' ),
+		email = document.getElementById( "user" );
+
+	if( email.value ){
+		frm.action = URL+"user/forgot/";
+		frm.submit();
+	} else {
+		alert_message.style.display = "block";
+		alert_message.innerHTML = "<?=$this->translate( "e-mail is required" )?>";
+
+		email.focus();
+	}
+}
+    $( "#frmLogin" ).submit( function(){
+        if( !$( "#user" ).val() || !$( "#pass" ).val() ){
+            $( "#alert_message" ).text( "<?=$this->translate( "user or password invalid!" )?>" ).removeAttr( "style" );
+            return false;
+        }
+    });
+
+    $( "#user" ).keyup( function(){
+        $( this ).val( jQuery.trim( this.value ) );
+        if( this.value ){
+            $( this ).val( this.value.replace( " " , "" ) );
+        }
+    }).focus();
+
+    $( "#pass" ).keyup( function(){
+        $( this ).val( jQuery.trim( this.value ) );
+        if( this.value ){
+            $( this ).val( this.value.replace( " " , "" ) );
+        }
+    });
+</script>

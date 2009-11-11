@@ -1,0 +1,44 @@
+<!--
+See http://developer.yahoo.com/ypatterns/pattern.php?pattern=searchpagination
+-->
+<?php if ($this->pageCount): ?>
+<div class="paginationControl">
+<!-- Previous page link -->
+<?php if (isset($this->previous)): ?>
+  <a href="#this" id="search-previous"> &lt; <?=$this->translate( "previous" )?></a> |
+  <script type="text/javascript">
+      $( "#search-previous" ).click( function(){
+        new Preceptor.util.AjaxUpdate( "search" , URL + "/search/search/"+ action +"/page/<?=$this->previous?>" );
+      });
+  </script>
+<?php else: ?>
+  <span class="disabled">&lt; <?=$this->translate( "previous" )?></span> |
+<?php endif; ?>
+
+<!-- Numbered page links -->
+<?php foreach ($this->pagesInRange as $page): ?>
+  <?php if ($page != $this->current): ?>
+    <a href="#this" id="search-<?=$page?>"> <?=$page; ?> </a> |
+    <script type="text/javascript">
+        $( "#search-<?=$page?>" ).click( function(){
+          new Preceptor.util.AjaxUpdate( "search" , URL + "/search/search/"+ action +"/page/<?=$page?>" );
+        });
+    </script>
+  <?php else: ?>
+    <span class="enabled"><?=$page;?></span> |
+  <?php endif; ?>
+<?php endforeach; ?>
+
+<!-- Next page link -->
+<?php if (isset($this->next)): ?>
+  <a href="#this" id="search-next"><?=$this->translate( "next" )?> &gt;</a>
+  <script type="text/javascript">
+      $( "#search-next" ).click( function(){
+        new Preceptor.util.AjaxUpdate( "search" , URL + "/search/search/"+ action +"/page/<?=$this->next?>" );
+      });
+  </script>
+<?php else: ?>
+  <span class="disabled"><?=$this->translate( "next" )?> &gt;</span>
+<?php endif; ?>
+</div>
+<?php endif; ?>

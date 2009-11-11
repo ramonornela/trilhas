@@ -1,0 +1,129 @@
+<?=$this->element()->startForm();?>
+<div id="div-form-<?=$this->model?>">
+    <div>
+            <?=$this->element()->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )?>
+            <div>
+                <label for="<?="$this->model-name"?>"><?=$this->translate( "name" )?>:</label>
+                <?=$this->element()->formText( "name" , $this->data->name , array( "id" => "$this->model-name" , "class" => "input-medium" , "printLabel" => false ) )?>
+            </div>
+            <div class="left" style="margin-right: 10px;">
+                <label for="<?="$this->model-started"?>"><?=$this->translate( "initiation" )?>:</label>
+                <?=$this->element()->formText( "started" , $this->date( $this->data->started ) , array( "id" => "$this->model-started" , "style" => "width: 83px;" , "printLabel" => false ) )?>
+            </div>
+            <div class="left" style="margin-right: 10px;">
+                <label for="<?="$this->model-finished"?>"><?=$this->translate( "finish" )?>:</label>
+                <?=$this->element()->formText( "finished" , $this->date( $this->data->finished ) , array( "id" => "$this->model-finished" , "style" => "width: 83px;" , "printLabel" => false ) )?>
+            </div>
+            <div class="left">
+                <label for="<?="$this->model-time"?>"><?=$this->translate( "temp" )?> (min):</label>
+                <?=$this->element()->formText( "time" , $this->data->time , array( "id" => "$this->model-time" , "class" => "input-little" , "printLabel" => false  ) )?>
+            </div>
+
+            <div class="clear"></div>
+            
+            <div style="margin-top: 7px;">
+                <?=$this->formCheckbox( "data[$this->model][attempts]" , $this->data->attempts , array( "id" => "$this->model-attempts" , "class" => "inline" ) , array( "1" , "2" ) )?>
+                <label for="<?="$this->model-attempts"?>" class="inline">
+                    <?=$this->translate( "allow the student to redo this evaluation?" )?>
+                </label>
+            </div>
+
+            <p></p>
+
+            <div>
+                <?=$this->element()->formSubmit( "model" , $this->translate("save") , array( "printLabel" => false ) );?>
+            </div>
+    </div>
+
+    <div class="clear">&nbsp;</div>
+
+    <?php if( isset( $this->data->id ) && $this->data->id ):?>
+    <div>
+        <div class="right" style="margin-bottom: 7px;">
+            <?=$this->ajax( $this->translate( 'access database of questions' ) , "evaluation-evaluation" , "$this->url/evaluation/question/bank-question/evaluation_id/{$this->data->id}" )?>
+            <?=$this->ajax( $this->translate( 'create question' ) , "evaluation-evaluation" , "$this->url/evaluation/question/input/" )?>
+        </div>
+
+        <div class="clear"></div>
+
+        <?php if( isset( $this->rs ) && $this->rs->count() ):?>
+            <table class="tablesorter">
+                <thead>
+                    <tr>
+                        <th><?=$this->translate( "question comand" )?></th>
+                        <th><?=$this->translate( "type" )?></th>
+                        <th><?=$this->translate( "note" )?></th>
+                        <th style="width: 20px;"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                <?php foreach( $this->rs as $key => $rs ):?>
+                    <tr class="<?=$this->changeClass( $key , array( "even" , "odd" ) );?>" >
+
+                        <td><?=$rs->label?></td>
+                        <td>
+                            <?php
+                                switch( $rs->type ){
+                                    case 'text':
+                                        echo $this->translate("default text");
+                                        break;
+                                    case 'textarea':
+                                        echo $this->translate("discursive");
+                                        break;
+                                    case 'radio':
+                                        echo $this->translate("multiple choice(uniq)");
+                                        break;
+                                    case 'checkbox':
+                                        echo $this->translate("multiple choice(more)");
+                                        break;
+                                    case 'truefalse':
+                                        echo $this->translate("true or false");
+                                        break;
+                                    case 'association':
+                                        echo $this->translate("association");
+                                        break;
+                                    case 'keyword':
+                                        echo $this->translate("key word");
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td><?=$rs->note?></td>
+                        <td>
+                            <a href="#this" id="<?=$rs->evaluation_question_id?>-delete" class="ui-state-default ui-corner-all" title="<?=$this->translate( 'delete' )?>" style="width: 17px; display: block;">
+                                <span class="ui-icon ui-icon-trash"></span>
+                            </a>
+                            <script type="text/javascript">
+                                $( "#<?=$rs->evaluation_question_id?>-delete" ).click( function(){
+                                    if( confirm( '<?=$this->translate( "want to delete?" )?>' ) ){
+                                        new Preceptor.util.AjaxUpdate( "evaluation-evaluation" , "<?=$this->url?>/evaluation/question/delete-relation/id/<?=$rs->evaluation_question_id?>" );
+                                    }
+                                });
+                            </script>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+                </tbody>
+            </table>
+        <?php else:?>
+            <div class="message-table-sorter"><?=$this->translate( "there is issues related to this assessment" ) ?></div>
+        <?php endif;?>
+    </div>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    /**
+     * Define the masks for the input fields
+     */
+    $( "#<?="$this->model-started"?>" ).mask( "99/99/9999" );
+    $( "#<?="$this->model-finished"?>" ).mask( "99/99/9999" );
+
+    /**
+     * Clear messages of the validate
+     */
+    $('#<?=$this->model?>-name , #<?=$this->model?>-started').focus( function(){
+        <?=strtolower($this->model)?>.clearMessages();
+    });
+</script>
+<?=$this->formRelation( $this->data->id )?>

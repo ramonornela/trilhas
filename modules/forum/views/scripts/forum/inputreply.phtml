@@ -1,0 +1,33 @@
+<div style="border: 1px dotted black; padding: 3px;">
+<div class="yui-skin-sam gray padding" id="div-form-<?=$this->model?>">
+    <?php
+        echo @$this->element()->startForm()
+                             ->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+                             ->formHidden( "forum_id" , $this->data->forum_id , array( "printLabel" => false ) )
+                             ->formHidden( "forum_reply_id" , $this->data->forum_reply_id , array( "printLabel" => false ) )
+                             ->formText( "title" , $this->data->title )
+                             ->formTextarea( "ds" , $this->data->ds , array( "label" => $this->translate("message") ) );
+
+        if( !$this->data->forum_id && $this->data->id ){
+            echo $this->element()->formText( "started" , $this->date( $this->data->started ), array( "label" => $this->translate("begin date") ) )
+                                 ->formText( "finished" , $this->date( $this->data->finished ) , array( "label" => $this->translate("end date") ) )
+                                 ->formSelect( "status" , $this->data->status , null , $this->status );
+        }
+
+        echo $this->element()->formSubmit( "save" , $this->translate("save") , array( "printLabel" => false ) )
+                             ->endForm();
+        
+    ?>
+</div>
+</div>
+<script>
+	var Editor_Forum = new Preceptor.widget.Editor( "Forum_Model_Forum-ds" , { addButton:["insertHtml"] } );
+
+    $("#Forum_Model_Forum-save").click(function(){
+        Editor_Forum.saveHTML();
+    });
+
+    forum_model_forum.success = function(){
+        new Preceptor.util.AjaxUpdate( 'forum-forum' , '<?=$this->url?>/forum/forum/savereply' , { formId:"Forum_Model_Forum" } );
+    }
+</script>

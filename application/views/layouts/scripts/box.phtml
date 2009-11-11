@@ -1,0 +1,22 @@
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+		<span class="ui-dialog-title" id="ui-dialog-title-dialog">
+			<h3><?=$this->translate( $this->controller );?></h3>
+		</span>
+		<a href="#" class="ui-dialog-titlebar-close ui-corner-all">
+			<span class="ui-icon ui-icon-closethick">close</span>
+		</a>
+	</div>
+	<div class="ui-dialog-content ui-widget-content">
+		<?php if( $this->messages ): ?>
+			<div class="ui-state-highlight ui-corner-all message">
+				<span class="ui-icon ui-icon-info"></span>
+				<?php foreach( $this->messages as $key => $val ): ?>
+					<p><?=$val?></p>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+		
+		<?=$this->layout()->content?>
+	</div>
+</div>

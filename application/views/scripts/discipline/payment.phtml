@@ -1,0 +1,97 @@
+<?php if( isset( $this->class->id ) ): ?>
+    <table class="tablesorter">
+        <thead>
+            <tr>
+                <th><?=$this->translate("discipline")?></th>
+                <th><?=$this->translate("class")?></th>
+                <th><?=$this->translate("amount")?></th>
+                <?php if( isset( $this->discount ) && $this->discount ):?>
+                    <th><?=$this->translate("discount amount")?></th>
+                <?php endif;?>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <?=$this->class->findParentRow( "Station_Model_Discipline" )->name; ?>
+                </td>
+
+                <td>
+                    <?=$this->class->name; ?>
+                </td>
+
+                <td>
+                    <?=number_format($this->class->amount, 2 , "," , ""); ?>
+                </td>
+                <?php if( isset( $this->discount ) && $this->discount ):?>
+                    <?php
+                        if( $this->discount->percentage ){
+                            $amountTotal = $this->class->amount - ( $this->class->amount*$this->discount->percentage/100 );
+                        }else{
+                            $amountTotal = $this->class->amount - $this->discount->value;
+                        }
+                    ?>
+                <td><?=number_format($amountTotal, 2 , "," , "")?></td>
+                <?php endif;?>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php if( isset( $this->class->document_emission_id ) && $this->class->document_emission_id ):?>
+        <?$contract = $this->class->findParentRow( "Station_Model_EmissionDocument" ); ?>
+        <b><?=$contract->name?></b>
+        <div id="contract" style="border: 1px solid #bbb; padding: 10px;">
+            <div style="overflow: auto; height: 300px;">
+                <?=$contract->ds?>
+            </div>
+            
+        </div>
+        <p style="background: #ddd; padding: 3px;">
+            <input type="checkbox" id="contract-check" /><?=$this->translate( "i have read and accepted" )?>
+        </p>
+        <script type="text/javascript">
+            $( "#submit-pagseguro" ).attr( "disabled" , "disabled" ).css({ "background":"#DDD" , "border":"none" , "color":"#222" });
+
+            $( "#contract-check" ).click( function(){
+                if( this.checked ){
+                    $( "#submit-pagseguro" ).removeAttr( "style" ).removeAttr( "disabled" );
+                }else{
+                    $( "#submit-pagseguro" ).attr( "disabled" , "disabled" ).css({ "background":"#DDD" , "border":"none" , "color":"#222" });
+                }
+            });
+        </script>
+    <?php endif?>
+
+    <div class="clear">&nbsp;</div>
+
+    <form target="pagseguro" method="post" action="https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx">
+        <input type="hidden" name="email_cobranca"  value="<?=Application_Model_PagSeguro::EMAIL_COBRANCA?>">
+        <input type="hidden" name="tipo"            value="<?=Application_Model_PagSeguro::TIPO?>">
+        <input type="hidden" name="moeda"           value="<?=Application_Model_PagSeguro::MOEDA?>">
+
+        <input type="hidden" name="item_id_1"       value="<?=$this->data->id?>-<?=$this->class->id?>">
+        <input type="hidden" name="item_descr_1"    value="<?=$this->class->name?>">
+        <input type="hidden" name="item_quant_1"    value="1">
+        <input type="hidden" name="item_valor_1"    value="<?=Zend_Filter::filterStatic( ( isset( $amountTotal ) && $amountTotal ? number_format( $amountTotal , 2) : $this->class->amount ) , "Digits")?>">
+        <input type="hidden" name="item_frete_1"    value="0">
+        <input type="hidden" name="item_peso_1"     value="0">
+
+        <input type="hidden" name="cliente_nome"    value="<?=$this->data->name?>">
+        <input type="hidden" name="cliente_cep"     value="<?=$this->data->cep?>">
+        <input type="hidden" name="cliente_end"     value="<?=$this->data->tlo_tx." ".$this->data->log_no?>">
+        <input type="hidden" name="cliente_num"     value="<?=$this->data->complement?>">
+        <input type="hidden" name="cliente_compl"   value="<?=$this->data->complement?>">
+        <input type="hidden" name="cliente_bairro"  value="<?=$this->data->bai_no?>">
+        <input type="hidden" name="cliente_cidade"  value="<?=$this->data->loc_no?>">
+        <input type="hidden" name="cliente_uf"      value="<?=$this->data->ufe_sg?>">
+        <input type="hidden" name="cliente_pais"    value="<?=Application_Model_PagSeguro::PAIS?>">
+        <input type="hidden" name="cliente_ddd"     value="<?=substr( $this->data->phone, 0 , 2 )?>">
+        <input type="hidden" name="cliente_tel"     value="<?=substr( $this->data->phone, 2 )?>">
+        <input type="hidden" name="cliente_email"   value="<?=$this->data->email?>">
+        <input type="submit" name="submit"          value="Finalizar compra!" id="submit-pagseguro">
+    </form>
+    <br />
+<?php else:?>
+    <div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif;?>

@@ -1,0 +1,135 @@
+/*  ------------- HTML ------------------  */
+*{ font-family: verdana; }
+
+html{ background: url( "../img/layout/bg/bg_fundo_1px.jpg" ) repeat-x #74A8CF; }
+body{ text-align: left; margin: 0; padding: 0; font-size: 70% }
+form label{ display: block; margin-top: 5px; }
+fieldset{ border: 1px solid #DDDDDD; padding: 0 7px; }
+textarea{overflow: auto; height: 40px;}
+table{ font-size: 0.9em; border-collapse: separate; border-spacing: 1px; }
+h2{ font-size:1.4em; font-weight: bold; margin: 2px 0; }
+h3{ font-size:1em; margin: 0; font-weight: bold; }
+p{ margin: 10px 0; }
+a{ color: #000; }
+pre{ font-size:1.3em; }
+object , embed { display: block; background: url( ../img/layout/bg/bg_video.gif ) #eee center center no-repeat; border: 2px solid black; }
+.format { display: block; background: url( ../img/layout/bg/bg_video.gif ) #eee center center no-repeat; border: 2px solid black; }
+td, th{ border: none; }
+img{ border: none; }
+
+input[type="button"], input[type="submit"]{ font-size: 0.9em; background: #3676A6; color: white;  padding: 2px; }
+input[type="text"],input[type="password"]{ padding: 3px 0; }
+input[type="text"], input[type="password"], textarea { width: 40em; }
+
+table.datatable{ width: 100%; border: 1px solid #3676A6; }
+table.datatable th{ background: #A2C7FF; color: black; padding: 2px; }
+table.without-border{ border-spacing: 0px; }
+
+#hd{ padding: 8px 20px; background: #F3F3F3; margin-bottom: 10px; border-bottom: 2px solid #06395F }
+#hd h1{ margin: 10px;	font-size:1.8em; display: none; }
+#hd h2{ float: left; margin: 0 10px 0 0; width:240px; font-size: 13px; text-decoration: underline; text-transform:uppercase; }
+#hd img{ border:none; }
+#hd input{ font-size: 0.6em; }
+
+#bd{ margin: 0 5px; }
+
+#ft{ text-align: center; clear: both; margin-top: 10px; color: white; }
+#ft img{ background: white; }
+
+.menu{ overflow: hidden; width: 145px; float: left; }
+.menu div.ui-accordion-content{ padding: 5px; margin-bottom: 10px; }
+.menu ul{ list-style: none; margin: 0; padding: 0;  }
+.menu ul li{ list-style: none; margin: 3px 0; font-size: 90%; }
+.menu ul li a{ text-decoration: none; }
+.menu ul li a:hover{ text-decoration: underline; }
+
+.menu .picture{ padding: 5px; }
+.menu .picture img{ float: left; margin: 0 5px 5px 0; }
+.menu .picture span{ clear: left; }
+
+/*------------- BD ------------------*/
+
+#main{ margin: 0 210px 0 150px;  }
+#space{	padding: 0;	margin: 0; font-size: 6px; visibility: hidden; }
+#rodape{}
+
+/* -------------- Profile ------------------ */
+
+#identificacao img{	float: left; margin: 0 10px 10px 0; border: 1px solid black; }
+#pagination{ text-align: center; }
+#pagination a{ color: black; text-align: center; }
+
+#boxToolbar{ cursor: default; float: right; padding-top: 5px; }
+#boxToolbar a{ font-family: cursive; text-decoration: none; font-size: 11px; padding: 0; margin-left: 5px; color: #000; font-weight: bold; }
+
+/*  ------------- Classes ------------------  */
+
+.help{ background: #cce6f4; border: 1px dotted #005b8c; padding: 5px; margin-bottom: 10px; font-size: 1em }
+.alert{ background: #FFF1A8; padding: 10px; font-weight: bold; margin: 5px 150px; text-align: center; }
+.message{ background: #FFF1A8; border: 1px dotted orange; margin-bottom: 10px; }
+.message ul{ margin-left: 1em; }
+.message ul li{ list-style: none; }
+
+.menu-index{ width: 140px; }
+.main-index{ margin-left: 150px; }
+.main-index ul{ height: 30px; }
+
+.filter{ background: #E7FFDF; border: 1px dotted #4BAF2B; margin: 20px 0 10px 0; padding: 0 5px 5px 5px; }
+.filter .legend { position: relative; font-size: 0.8em; background: #E7FFDF; border: 1px dashed #4BAF2B; border-bottom: none; font-weight:bold; padding:1px 10px; top:-15px; width: 100px; text-align: center; }
+.filter form label{ display:inline; margin-left: 10px; }
+
+.bar{ text-align: right; padding: 3px 5px; background: #2c4558; color: white; }
+.bar a{ color: white; }
+.bar .icon{ width: 16px; position: absolute; margin-left: -14px; }
+
+.back-transparent{ background: transparent; }
+.border-black{ border: #555 dotted 1px; }
+
+.white{ background-color: #fff; }
+.gray{ background-color: #eee; }
+.light_gray{ background-color: #f4f4f4; }
+
+.boxleft{ width: 140px; float: left; }
+.boxright{ float: right; width: 760px; }
+
+.abstract{ text-align: center; margin-left:636px; }
+.abstract .main{ font-size: 0.91em; background: white; border-right: 2px solid #434343; }
+.abstract .header .rgt{ margin-left: -3px; background: url( ../img/layout/bg/bg_tabela_cima_dir.gif ) no-repeat; height: 22px; width: 16px; float: right; }
+.abstract .header .ctr{ text-align: right; height: 22px; background: url( ../img/layout/bg/bg_tabela_cima.gif ) repeat-x; margin-right: 13px; padding: 0; }
+.abstract .footer .rgt{ float: right; background: url( ../img/layout/bg/bg_tabela_baixo_dir.gif ) no-repeat; width: 22px; height: 22px; margin-right: -6px; }
+.abstract .footer .ctr{	background: white;	padding-top: 14px;	margin-right: 15px;	border-bottom: 2px solid #434343; }
+
+.input-small{ width: 200px; }
+.input-medium{ width: 400px; }
+.input-big{ width: 600px; }
+
+.yui-calendar{ margin-bottom: 0; }
+.yui-calendar .calheader{ *width: 91%; }
+.yui-calendar .calweekdaycell{ padding: 2px; border: none; }
+.yui-calendar td.calcell{ padding: 0; }
+
+.ygtvitem table{ margin-bottom: 0; border-spacing: 0; }
+.ygtvitem td{ padding: 0; }
+
+.topPadding{ margin-top: 19px; }
+.legend{ border-top: dashed 1px orange; top: -16px; left: 20px; padding: 1px 10px; font-size: 123%; font-weight: bold; color: #444; background: #FFF1A8; }
+.filter_person{ background: #FFF1A8; border: dashed 1px orange;  padding: 20px 5px 5px 5px;margin-top:24px; }
+
+#overlay{ text-align: left; width: 100%; height: 100%; position: absolute; z-index: 20; background: #000; opacity: 0.3;filter: Alpha(Opacity=30);top:0;}
+.notEmpty{ color: red; }
+.lightbox{ padding: 15px; position: absolute; z-index: 20; background: #fff; width: 535px; top: 5%; }
+
+.breadCrumb{ margin-bottom: 10px; text-align: left; }
+.bread_arrow{ font-size: 0.7em; font-weight: lighter; }
+
+.group-list{}
+.group-list ul{ margin: 0; }
+.group-list ul li{ background: #eee; list-style: none; margin-bottom: 5px; padding: 5px; }
+.group-list ul li ul{ margin-left: 10px; }
+.group-list ul li ul li{ background: #ddd; height: 20px; padding: 5px 0 0 5px; }
+.group-list ul li ul li label{ width: 92%; display: block; float: left; }
+
+#hd .ui-dialog, #bd .ui-dialog{ width: auto; margin-bottom: 10px; }
+.ui-dialog-titlebar{ height: 1.4em; }
+#menu .ui-accordion-header a, #chat-list .ui-accordion-header a{ padding: 0.5em 0; text-align: center; font-size: 0.8em; font-weight: bold; }
+

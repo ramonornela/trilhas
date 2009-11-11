@@ -1,0 +1,10 @@
+<label for="discipline"><?=$this->translate( "discipline" )?>:</label>
+<?=$this->formSelect( "discipline" , null , array( "id" => "discipline_" . $this->suffix ) , $this->disciplines ) ?>
+<br /><br />
+			
+<script>
+	YAHOO.util.Event.on( "discipline_<?=$this->suffix?>" , "change" , function(){
+		if( this.value )
+			new Preceptor.util.AjaxUpdate( "select_group_activity" , "<?=$this->url?>/activity/group/input/group_id/" + this.value );
+	});
+</script>

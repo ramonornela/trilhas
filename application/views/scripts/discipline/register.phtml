@@ -1,0 +1,33 @@
+<div class="right">
+    <?=$this->ajax( $this->translate('back') , "default-course" , "$this->url/course/index/" , 2 , null )?>
+</div>
+
+<div>
+    <div class="left">
+        <form id="<?=$this->model?>" method="post" action="#">
+            <?=$this->formHidden( "redirect" , $this->redirect )?>
+
+            <label for="username"><?=$this->translate( 'email' )?></label>
+            <?=$this->formText( "username" , null , array( 'class' => 'input-medium' , 'id' => 'username' ) )?>
+            
+            <label for="password"><?=$this->translate( 'password' )?></label>
+            <?=$this->formPassword( "password" , null , array( 'class' => 'input-medium' , 'id' => 'password' ) )?>
+            <br /><br />
+            <input type="submit" value="Entrar" />
+        </form>
+    </div>
+
+    <div class="left" style="margin: 0 60px; width: 4px; height: 160px ; background: #CCC;">&nbsp;</div>
+
+    <div class="left">
+        <?=$this->ajax( $this->translate('no has register? do it now!') , "default-course" , "$this->url/person/new/discipline_id/{$this->discipline_id}" )?>
+    </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<script type="text/javascript">
+    $( "#<?=$this->model?>" ).submit( function(){
+       new Preceptor.util.AjaxUpdate( "default-course" , "<?=$this->url?>/user/login/" , {formId: this.id} );
+       return false;
+    });
+</script>

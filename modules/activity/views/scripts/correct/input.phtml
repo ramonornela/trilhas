@@ -1,0 +1,68 @@
+<div id="input_text" class="yui-skin-sam">
+	<div id="text_update" class="left" style="width: 86%">
+		<?php
+            if ( isset( $this->activity->group_id ) && $this->activity->group_id ){
+                $model = "Activity_Model_ActivityTextGroup";
+            }else{
+                $model = "Activity_Model_ActivityTextPerson";
+            }
+
+
+            echo $this->element()->startForm( array( 'id' => $model ) )
+                                 ->formTextarea( "ds" , isset( $this->rs->current()->ds ) ? $this->rs->current()->ds : null , array( "label" => $this->translate("description") , 'model' => $model ) )
+
+        ?>
+        <input id="textSubmit" type="submit" value="<?=$this->translate("version save")?>" />
+        <input id="finalizingSubmit" type="button" value="<?=$this->translate("save and finalizing")?>" />
+
+        <?=$this->element()->endForm(); ?>
+	</div>
+</div>
+<div>&nbsp;</div>
+<div class="clear">&nbsp;</div>
+<div id="version">
+	<h3><?=$this->translate("versions")?></h3>
+	<hr />
+
+	<?php if( $this->rs->count() ): ?>
+		<ul>
+			<?php foreach( $this->rs as $rs ): ?>
+				<li>
+					<?=$this->ajax( $this->date( $rs->created , "d/m/Y H:i:s" ) , "input_text" , $this->url . "/activity/correct/input/version_id/{$rs->id}" );?> -
+					<?=$rs->findParentRow( "Share_Model_Person" , "SP" )->name?>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	<?php else: ?>
+        <div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+	<?php endif; ?>
+</div>
+<script type="text/javascript">
+    var el = null;
+    var	Editor_<?=$model?> = new Preceptor.widget.Editor( "<?=$model?>-ds" , { addButton:["createPaleta", "insertHtml"] } );
+
+    $("#textSubmit").click(function(){
+        el = this.id;
+        Editor_<?=$model?>.saveHTML();
+    });
+
+    <?=strtolower($model)?>.success = function(){
+        if( el == "textSubmit" ){
+            new Preceptor.util.AjaxUpdate( 'activity-activity' , '<?=$this->url?>/activity/correct/save/' , { formId:'<?=$model?>' } );
+        }else if( el == "finalizingSubmit" ){
+            if( confirm( "<?=$this->translate("really finish?")?>" ) ){
+                new Preceptor.util.AjaxUpdate( "activity-activity" , "<?=$this->url ?>/activity/correct/finalizing" , { formId:"<?=$model?>" } );
+            }
+        }
+
+        el = null;
+    }
+
+    $( "#finalizingSubmit" ).click( function(){
+        el = this.id;
+        Editor_<?=$model?>.saveHTML();
+
+        if( <?=strtolower($model)?>.verify( $( '<?=$model?>' ) ) ){
+        }
+    });
+</script>

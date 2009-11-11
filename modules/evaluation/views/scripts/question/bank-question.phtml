@@ -1,0 +1,161 @@
+<div class="left">
+    <label for="<?="qQuestion"?>"><?=$this->translate( 'search' )?>: </label>
+    <input type="text" name="q" id="qQuestion" style="width: 16em" />
+    <label for="<?="type"?>"><?=$this->translate( 'type' )?>: </label>
+    <?=$this->formSelect( "type" , null , array( "id" => "type" ) , $this->types )?>
+    <input type="button" value="OK" id="buttonQuestion" />
+</div>
+
+<div class="right">
+    <?=$this->ajax( $this->translate( 'create question' ) , "evaluation-evaluation" , "$this->url/evaluation/question/input/" )?>
+</div>
+
+<div class="clear">&nbsp;</div>
+
+<div id="table-question">
+<?php if( isset( $this->rs ) && $this->rs->count() ):?>
+    <table class="tablesorter">
+        <thead>
+            <tr>
+                <th><?=$this->translate( 'question comand' )?></th>
+                <th><?=$this->translate( 'type' )?></th>
+                <th style="width: 72px;"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        <?php foreach( $this->rs as $key => $rs ):?>
+            <tr class="<?=$this->changeClass( $key , array( "even" , "odd" ) );?>">
+                <td>
+                    <a href="#this" class="select-question" id="<?=$rs->id?>">
+                        <?=$rs->label?>
+                    </a>
+                </td>
+                <td>
+                    <?php
+                        switch( $rs->type ){
+                            case 'text':
+                                echo $this->translate("default text");
+                                break;
+                            
+                            case 'textarea':
+                                echo $this->translate("discursive");
+                                break;
+                            
+                            case 'radio':
+                                echo $this->translate("multiple choice(uniq)");
+                                break;
+                            
+                            case 'checkbox':
+                                echo $this->translate("multiple choice(more)");
+                                break;
+                            
+                            case 'truefalse':
+                                echo $this->translate("true or false");
+                                break;
+                            
+                            case 'association':
+                                echo $this->translate("association");
+                                break;
+
+                            case 'keyword':
+                                echo $this->translate("key word");
+                                break;
+                        }
+                      ?>
+                </td>
+                <td>
+                    <a href="#this" id="<?=$rs->id?>" class="ui-state-default ui-corner-all left select-question" title="<?=$this->translate( 'choosing this issue' )?>" style="width: 17px; display: block;  margin-right: 8px">
+                        <span class="ui-icon ui-icon-circle-check"></span>
+                    </a>
+                    
+                    <a href="#this" id="<?=$rs->id?>-input" class="ui-state-default ui-corner-all left" title="<?=$this->translate( 'edit' )?>" style="width: 17px; display: block;  margin-right: 8px">
+                        <span class="ui-icon ui-icon-pencil"></span>
+                    </a>
+                    <script type="text/javascript">
+                        $( "#<?=$rs->id?>-input" ).click( function(){
+                            new Preceptor.util.AjaxUpdate( "evaluation-evaluation" , "<?=$this->url?>/evaluation/question/input/id/<?=$rs->id?>" );
+                        });
+                    </script>
+                    
+                    <a href="#this" id="<?=$rs->id?>-delete" class="ui-state-default ui-corner-all left" title="<?=$this->translate( 'delete' )?>" style="width: 17px; display: block;">
+                        <span class="ui-icon ui-icon-trash"></span>
+                    </a>
+                    <script type="text/javascript">
+                        $( "#<?=$rs->id?>-delete" ).click( function(){
+                            if( confirm( '<?=$this->translate( "want to delete?" )?>' ) ){
+                                new Preceptor.util.AjaxUpdate( "evaluation-evaluation" , "<?=$this->url?>/evaluation/question/delete/id/<?=$rs->id?>" );
+                            }
+                        });
+                    </script>
+                </td>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+    </table>
+    
+    <div id="note-question">
+        <div id="selected-question"></div>
+        <form id="question-rel">
+            <input type="hidden" id="evaluation_question_id" name="evaluation_question_id" />
+            <label for="note"><?=$this->translate( 'tell the question note' )?> ( 1 - 10 | Ex "8.2" ) :</label>
+            <input type="text" id="note" name="note" style="width: 42px;" />
+            <br /><br />
+            <input type="submit" id="submitQuestion" value="<?=$this->translate( 'save' )?>" />
+        </form>
+    </div>
+    <div id="message-validate" style="color: red;" ></div>
+<?php else:?>
+    <div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif;?>
+</div>
+
+<script type="text/javascript">
+    /**
+     * ajax for search question
+     */
+    $( "#buttonQuestion" ).click( function(){
+        new Preceptor.util.AjaxUpdate( "evaluation-evaluation" , "<?=$this->url?>/evaluation/question/bank-question/q-question/" + $( "#qQuestion" ).val() + "/type/" + $( "#type" ).val() );
+    });
+
+    /**
+     * brings the issue selected
+     */
+    $( ".select-question" ).click( function(){
+        $( "#evaluation_question_id" ).val( this.id );
+        $( "#note" ).focus();
+        new Preceptor.util.AjaxUpdate( "selected-question" , "<?=$this->url?>/evaluation/question/selected-question/id/" + this.id );
+    });
+
+    /**
+     * validate
+     * checks whether note and question selected
+     */
+    $( "#question-rel" ).submit( function(){
+        var validate = true;
+
+        $( "#message-validate" ).html( "" );
+
+        if( !$( "#evaluation_question_id" ).val() ){
+            $( "#message-validate" ).append( "<p>* <?=$this->translate( 'select a question' )?></p>" );
+            validate = false;
+        }
+
+        var note = $( "#note" ).val();
+        note = parseFloat( note.replace( "," , "." ) );
+        
+        if( !note ){
+            $( "#message-validate" ).append( "<p>* <?=$this->translate( 'tell the question note' )?></p>" );
+            validate = false;
+        }else if( note < 1 || note > 10 ){
+            $( "#message-validate" ).append( "<p>* <?=$this->translate( 'report a score between 1 and 10' )?></p>" );
+            validate = false;
+        }
+
+        if( $( "#evaluation_question_id" ).val() && $( "#note" ).val() && validate ){
+            new Preceptor.util.AjaxUpdate( "evaluation-evaluation" , "<?=$this->url?>/evaluation/question/save-relation/" , {formId: 'question-rel'} );
+        }
+
+        return false;
+    });
+</script>

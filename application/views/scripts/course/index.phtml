@@ -1,0 +1,38 @@
+<?php if( count( $this->rs ) ): ?>
+		<?php foreach( $this->rs as $rs ):?>
+
+            <h3><?=$this->escape( $rs->name )?></h3>
+			<?php $disciplines = $rs->findManyToManyRowset( "Station_Model_Discipline" ,
+															"Station_Model_CourseDiscipline" ,
+															null ,
+															null ,
+															$rs->getTable()->select()
+																		   ->where( "id IN( {$this->discipline_id} )" )
+																		   ->order( 'name' ) ) ?>
+			<?php if( $disciplines->count() ): ?>
+				<table id="course-list" width="100%">
+					<?php foreach( $disciplines as $discipline ): ?>
+						<tr class="<?=$this->changeClass( $disciplines->key() , array( 'one' , 'two' ) )?>">
+							<td width="50%"><span style="font-size: 1.1em"><?=$this->escape( $discipline->name )?></span></td>
+                            <td>
+                                <?if( Zend_Auth::getInstance()->hasIdentity() ):?>
+                                    <?=$this->ajax( $this->translate('matriculate') , "default-course" , "$this->url/discipline/register-confirm/discipline_id/$discipline->id" , 2 , null )?>
+                                <?else:?>
+									<?=$this->ajax( $this->translate('matriculate') , "default-course" , "$this->url/discipline/register/discipline_id/$discipline->id" , 2 , null )?>
+                                <?endif?>
+                            </td>
+                            <td>
+                                <?php $public = $discipline->findDependentRowset( "Content_Model_Content" , null , $discipline->getTable()->select()->where( "public =?" , Station_Model_Status::ACTIVE ) );?>
+                                <?php if( isset( $public ) && $public->count() ):?>
+                                    <a href="<?=$this->url?>/public/public/view/discipline_id/<?=$discipline->id?>" target="_blank"><?=$this->translate( "demonstration" )?></a>
+                                <?php endif;?>
+                            </td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php endif; ?>
+            <br />
+	<?php endforeach; ?>
+<?php else: ?>
+	<p><?=$this->translate("there are no records")?></p>
+<?php endif; ?>

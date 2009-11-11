@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="en">
+	<head>
+		<title>FAP - Fundação Astrojildo Pereira</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=<?=APP_CHARSET?>"/>
+        <style type="text/css">
+            *{
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+	</head>
+    <body>
+    <div style="width: 100%; background: #9b0b0a; padding-top: 10px">
+        <img src="<?=$this->url?>/img/logo_fap.png" />
+    </div>
+    <div style="padding: 10px 0 0 10px">
+        <?php if( $this->messages ): ?>
+            <?php foreach( $this->messages as $key => $val ): ?>
+                <h2><?=$val?></h2>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    </body>
+</html>

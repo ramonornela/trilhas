@@ -1,0 +1,52 @@
+<?=$this->render("search/menu.phtml")?>
+
+<?php if( $this->paginator->count() ): ?>
+	<table class="tablesorter">
+        <thead>
+            <tr>
+                <th><?=$this->translate("result")?></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach( $this->paginator as $key => $val ): ?>
+                <tr class="<?=$this->changeClass( $key , array( "even" , "odd" ) )?>">
+                    <td nowrap="nowrap">
+                        <a href="#this" id="<?=$val->id?>" >
+                            <?=isset( $val->parent ) && $val->parent ? $val->parent." / " : "" ?>
+                            <?=$val->title;?>
+                        </a>
+                    </td>
+                </tr>
+                <script type="text/javascript">
+                    $( "#<?=$val->id?>" ).click( function(){
+                        <?php
+                            $content = new Content_Model_Content();
+                            $current = $content->getPositionById( $val->id ,
+                                                            Zend_Json::decode($this->contents) );
+                        ?>
+                        $('#composer-content-main').navigation(
+                            '<?=$this->contents?>' ,
+                            { baseUrl:'<?=$this->url?>',
+                              url:'/content/composer/index/id/',
+                              current: <?=$current?>,
+                              cache: false
+                            }
+                        );
+                        //new Preceptor.util.AjaxUpdate( 'content-main-content' , '<?=$this->url?>/content/content/view/id/<?=$val->id;?>');
+                        $('#search').remove();
+                    });
+                </script>
+            <?php endforeach;?>
+        </tbody>
+	</table>
+    <?=$this->paginationControl($this->paginator, 'Sliding', 'search/pagination.phtml'); ?>
+    <div class="clear">&nbsp;</div>
+<?php else:?>
+	<div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif;?>
+
+<div class="clear"></div>
+<script type="text/javascript">
+    action = "<?=$this->type?>";
+</script>

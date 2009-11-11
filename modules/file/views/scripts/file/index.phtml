@@ -1,0 +1,142 @@
+<div class="right">
+	<?php if( $this->allowButtons && $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "input-file"  )) ): ?>
+		<a href="#this" title="<?=$this->translate( "insert" )?> <?=$this->translate( "file" )?>" onclick="new Preceptor.util.AjaxUpdate( 'file-file' , '<?=$this->url?>/file/file/input-file/folder_id/<?=$this->rs->id?>' );"><?=$this->image( "icones/create_file.gif" )?></a>
+	<?php endif; ?>
+
+	&nbsp;
+
+	<?php if( $this->allowButtons && $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "input"  ))): ?>
+		<a href="#this" title="<?=$this->translate( "insert" )?> <?=$this->translate( "folder" )?>" onclick="new Preceptor.util.AjaxUpdate( 'file-file' , '<?=$this->url?>/file/file/input/folder_id/<?=$this->rs->id?>/number_bread_crumbs/<?=$this->numberCallBreadCrumbs?>' );"><?=$this->image( "icones/create_folder.gif" )?></a>
+	<?php endif; ?>
+
+</div>
+
+<?=$this->location?><?=$this->rs->title;?>
+
+<div class="clear"></div>
+<?php if( $this->dirs->count() ): ?>
+
+	<?php foreach( $this->dirs as $dir ): ?>
+		<div class="left margin-folder">
+
+			<?php $jsFolder  = "onmouseover='$( \"#foldersFile{$dir->id}\" ).css(\"background\" , \"#cce6f4\");' onmouseout='$( \"#foldersFile{$dir->id}\" ).css(\"background\" , \"none\");'"; ?>
+			<?php $jsOverOut = ""; ?>
+
+			<?php if( !$dir->relation && ( $this->user->person_id == $dir->person_id || $this->rs->person_id == $this->user->person_id ) &&
+					(
+					  $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "input"  )) ||
+					  $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "delete"  ))
+				  	)
+				  ): ?>
+
+				<?php $jsOverOut = "onmouseover='$( \"#buttons-folderFile{$dir->id}\" ).css(\"visibility\",\"visible\");' onmouseout='$( \"#buttons-folderFile{$dir->id}\" ).removeAttr(\"style\");'"  ?>
+
+				<div class="pos-relative">
+					<div class="pos-absolute buttons-folder" id="buttons-folderFile<?=$dir->id?>" <?=$jsOverOut?>>
+						<ul>
+							<?php if( $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "input"  ))): ?>
+							<li <?=$jsFolder?>><?=$this->ajax( $this->translate( "edit" ) , "file-file" , $this->url . "/file/file/input/id/{$dir->id}/folder_id/{$this->rs->id}" );?></li>
+							<?php endif; ?>
+
+							<?php if( $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "delete"  )) ): ?>
+							<li style="border: none;" <?=$jsFolder?>><?=$this->ajax( $this->translate( "delete" ) , "file-file" , $this->url . "/file/file/delete/id/{$dir->id}/folder_id/{$this->rs->id}/number_bread_crumbs/{$this->numberCallBreadCrumbs}" , 1 , $this->translate( "want to delete?" ) );?></li>
+							<?php endif; ?>
+						</ul>
+					</div>
+				</div>
+			<?php endif; ?>
+
+			<div class="folder-main" id="foldersFile<?=$dir->id?>" <?=$jsFolder?>>
+
+				<div class="icon-folder height-icon">
+					<a href="#this" class="folder" <?=$jsOverOut?> onclick="new Preceptor.util.AjaxUpdate( 'file-file' , '<?=$this->url?>/file/file/index/id/<?=$dir->id?>/number_bread_crumbs/<?=$this->numberCallBreadCrumbs?>' );">&nbsp;</a>
+				</div>
+
+				<div><?=$dir->title?></div>
+			</div>
+
+		</div>
+
+	<?php endforeach; ?>
+
+<?php endif; ?>
+
+<?php if( count( $this->files ) > 0 ): ?>
+
+	<?php foreach( $this->files as $file ): ?>
+
+		<?php
+				$jsFile   = "";
+				$jsFolder = "";
+		?>
+
+		<div class="left margin-folder">
+			<?php if( ( $file->person_id == $this->user->person_id || $this->rs->person_id == $this->user->person_id ) &&
+					  (
+					  	$this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "input-file"  )) ||
+					  	$this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "delete-file"  ))
+					  )
+					 ): ?>
+
+			<?php $jsFile 	= "onmouseover=\"$( '#buttons-fileFile{$file->id}' ).css( 'visibility' , 'visible' );\" onmouseout=\"$( '#buttons-fileFile{$file->id}' ).removeAttr('style');\""; ?>
+
+			<?php $jsFolder = "onmouseover='$( \"#filesFile{$file->id}\" ).css( \"background\" , \"#cce6f4\");' onmouseout='$( \"#filesFile{$file->id}\" ).css( \"background\" , \"none\" );'"; ?>
+
+			<div class="pos-relative">
+				<div class="pos-absolute buttons-folder" style="width: 95px;" id="buttons-fileFile<?=$file->id?>" <?=$jsFile?>>
+					<ul>
+
+						<?php if( $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "input-file"  ))  ): ?>
+						<li <?=$jsFolder?>><?=$this->ajax( $this->translate( "edit" ) , "file-file" , $this->url . "/file/file/input-file/id/{$file->id}/folder_id/{$this->rs->id}" );?></li>
+						<?php endif; ?>
+
+						<?php if( $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "delete-file"  ))  ): ?>
+						<li <?=$jsFolder?>><?=$this->ajax( $this->translate( "delete" ) , "file-file" , $this->url . "/file/file/delete-file/id/{$file->id}/folder_id/{$this->rs->id}/number_bread_crumbs/{$this->numberCallBreadCrumbs}" , 1 , $this->translate( "want to delete?" ) );?></li>
+						<?php endif; ?>
+
+					</ul>
+				</div>
+			</div>
+
+			<?php endif; ?>
+            
+			<div class="folder-main" id="filesFile<?=$file->id?>" <?=$jsFolder?>>
+				<div class="height-icon">
+					<?php
+						$size = strlen( $file->location );
+						$extension = substr( $file->location , strrpos( $file->location  , "." ) , $size );
+					?>
+                    
+                <a href="<?=$this->url?>/file/file/download/file/<?=base64_encode($file->location)?>" target="_blank" class="folder" <?=$jsFile?>>
+						<?php if( in_array( $extension , array( 'jpg' , 'gif' , 'png' ) ) ): ?>
+
+							<div style="height: 50px; overflow: hidden;">
+								<img src="<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode("thumb_small{$file->location}")?>"/>
+							</div>
+
+						<?php else: ?>
+
+							<?=$this->showImageExtension( $file->location ); ?>
+
+						<?php endif; ?>
+					</a>
+
+				</div>
+				<div><?=$file->title?></div>
+			</div>
+
+		</div>
+
+	<?php endforeach; ?>
+
+<?php elseif( !$this->dirs->count() ): ?>
+	<br />
+	<div><?=$this->translate( "there are no records" )?></div>
+	<br />
+<?php endif; ?>
+
+<div class="clear"></div>
+
+<?php if( $this->rs->id != File_Model_Folder::DEFAULT_FOLDER_FILE ): ?>
+	<div style="text-align: right;"><a href="#this" onclick="new Preceptor.util.AjaxUpdate( 'file-file' , '<?=$this->url?>/file/file/index/' );"><?=$this->translate( "back" )?></a></div>
+<?php endif; ?>

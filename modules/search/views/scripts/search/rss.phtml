@@ -1,0 +1,30 @@
+<?=$this->render("search/menu.phtml")?>
+
+<?php if( $this->paginator->count() ): ?>
+	<table class="tablesorter">
+        <thead>
+            <tr>
+                <th><?=$this->translate("result")?></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach( $this->paginator as $key => $val ): ?>
+                <?php $class  = $this->changeClass( $key , array( "even" , "odd" ) );?>
+                <tr class="<?=$class?>">
+                    <td nowrap="nowrap">
+                        <a href="#this" onclick="layout.addPanel( 'rss-rss' , '<?=$this->url?>/rss/rss/view/id/<?=$val->id;?>'); $('#search').remove();" ><?=$val->channel?></a>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+	</table>
+    <?=$this->paginationControl($this->paginator, 'Sliding', 'search/pagination.phtml'); ?>
+<?php else:?>
+	<div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif;?>
+
+<div class="clear"></div>
+<script type="text/javascript">
+    action = "<?=$this->type?>";
+</script>

@@ -1,0 +1,29 @@
+<div id="inputs">
+    <?php
+        $rs = $this->rs->current();
+    ?>
+    <div>
+        <label for="correct"><?=$this->translate( "tell the correct answers" )?>:</label>
+        <?=$this->formTextarea( "correct" , ( isset( $rs->value ) ? $rs->value : null ) , array( "style" => "height: 80px" ) )?>
+    </div>
+    <p></p>
+    <div>
+        <label for="keyword"><?=$this->translate( "inform the key words for separet ','" )?>:</label>
+        <?=$this->formTextarea( "keyword" , ( isset( $rs->status ) ? $rs->status : null ) , array( "style" => "height: 80px" ) )?>
+    </div>
+
+</div>
+<script type="text/javascript">
+    /**
+     * add validate
+     *
+     * QuestionValidate was the variable created in the file question/input.phtml
+     */
+    QuestionValidate.add( 'correct' , Validate.notEmpty , '<?=$this->translate("required field")?>' );
+    QuestionValidate.add( 'keyword' , Validate.notEmpty , '<?=$this->translate("required field")?>' );
+
+    /**
+     * validate_q was the variable created in the file question/input.phtml
+     */
+    validate_q = true;
+</script>

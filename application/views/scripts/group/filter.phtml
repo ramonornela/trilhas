@@ -1,0 +1,72 @@
+<div class="filter">
+	<div class="legend pos-relative"><?=$this->translate("filter")?></div>
+	
+	<div id="choice">
+		<input type="radio" id="choice_period" name="choice">
+		<label><?=$this->translate("by registered users")?></label>
+		&nbsp;&nbsp;
+		<input type="radio" id="choice_course" name="choice">
+		<label><?=$this->translate("by course")?></label>
+	</div>
+	
+	<br />
+	
+	<div id="filter_period" style="display: none;">
+		<form id="form_period">
+
+            <?=$this->formHidden( "discipline_id" , $this->data->discipline_id );?>
+            <?=$this->formHidden( "course_id" , $this->course_id );?>
+            
+			<?=$this->translate("course")?>:
+			<?=$this->formSelect( "course" , $this->course , null , $this->courses ) ?>
+			<br /><br />
+			
+			<?=$this->translate("period")?>:
+			<?=$this->formSelect( "period" , $this->period , null , $this->periods ) ?>
+			&nbsp;&nbsp;
+			
+			<input type="submit" name="Submit" title="Iniciar busca" class="select" value="ok" />
+		</form>
+	</div>
+	
+	<div id="filter_course" style="display: none;">
+		<form id="form_course">
+
+            <?=$this->formHidden( "discipline_id" , $this->data->discipline_id );?>
+
+			<?=$this->translate( "course" )?>:
+			<?=$this->formSelect( "course" , $this->course , array( "id" => "course_" . $this->suffix ) , $this->courses ) ?>
+			<br /><br />
+			
+			<div id="select_discipline"></div>
+			
+			<div id="select_group"></div>
+			
+			<?=$this->translate( "status" )?>:
+			<?=$this->formSelect( "status" , $this->status , null , array( "A" => "Ativo" ,  "I" => "Inativo" , "AI" => "Todos" ) ) ?>
+			<br /><br />
+			
+			<input type="submit" name="Submit" title="Iniciar busca" class="select" value="ok" />
+		</form>
+	</div>
+</div>
+
+<script>
+	
+	YAHOO.util.Event.on( "course_<?=$this->suffix?>" , "change" , function(){
+		if( this.value )
+			new Preceptor.util.AjaxUpdate( "select_discipline" , "<?=$this->url?>/group/discipline/id/" + this.value );
+	});
+	
+	var show = new Preceptor.util.Toggle( ['filter_period' , 'filter_course' ] );
+	
+	YAHOO.util.Event.on( "choice_period" , "click" , function( ev ){
+		show.showOneHiddenAll('filter_period');
+	});
+			
+	YAHOO.util.Event.on( "choice_course" , "click" , function( ev ){
+		show.showOneHiddenAll('filter_course');	
+		
+	});
+	
+</script>

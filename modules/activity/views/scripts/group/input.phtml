@@ -1,0 +1,29 @@
+<?=$this->render("group/filter.phtml")?>
+
+<?php
+    echo $this->element()->startForm( )
+              ->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+              ->formText( "title" , $this->data->title );
+?>
+	
+	<div id="list_person_activity">
+		<table width="100%" style="margin: 0;">
+			<tr>
+				<td width="378"><?=$this->translate( "students" )?>:</td>
+				<td></td>
+			</tr>
+		</table>
+		<?=$this->groupedList( "activitygroup_all" , $this->all , "activitygroupchecked" , $this->checked , array( 'height' => '150px' , 'width' => '239px' , 'width_text' => '235px' ) );?>
+	</div>
+	
+	<br />
+<?php
+echo $this->element()->formSubmit( "save" , $this->translate("save") , array( "printLabel" => false ) )
+          ->endForm();
+?>
+<script>	
+    <?=strtolower($this->model)?>.success = function(){
+        GroupedList_group_activitygroup_all.selectAll( 'activitygroupchecked' );
+        new Preceptor.util.AjaxUpdate( "activity-activity" , "<?=$this->url?>/activity/group/save" , { formId: "<?=$this->model?>" } );
+    };
+</script>

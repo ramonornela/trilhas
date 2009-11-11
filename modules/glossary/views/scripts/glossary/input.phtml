@@ -1,0 +1,20 @@
+<?=$this->element()->startForm();?>
+<div class="yui-skin-sam" id="div-form-<?=$this->model?>">
+   
+    <?php
+        echo $this->element()->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+                  ->formText( "word" , $this->data->word , array( "label" => $this->translate( "title" ) ) )
+                  ->formTextarea( "ds" , $this->data->ds , array( "label" => $this->translate( "text" ) ) )
+                  ->formSubmit( "model" , $this->translate("save") , array( "printLabel" => false ) );
+    ?>
+    
+</div>
+
+<script>
+    var Editor_Glossary = new Preceptor.widget.Editor( "Glossary_Model_Glossary-ds" , { addButton:[ 'uploadImage' , 'insertHtml'] } );
+
+    $("#Glossary_Model_Glossary-model").click(function(){
+        Editor_Glossary.saveHTML();
+    });
+</script>
+<?=$this->formRelation( $this->data->id )?>

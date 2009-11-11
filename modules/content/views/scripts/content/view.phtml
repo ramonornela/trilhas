@@ -1,0 +1,33 @@
+<p><?=$this->rs->ds;?></p>
+<?php if( count( $this->narration ) ): ?>
+	<div class="margin padding border-black">
+		<object width="220" height="30" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0 ">
+			<param name="movie" value="<?=$this->url?>/swf/player_custom/mp3player.swf?src=<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode($this->narration->findParentRow( "File_Model_File" )->location);?>" />
+			<embed src="<?=$this->url?>/swf/player_custom/mp3player.swf?src=<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode($this->narration->findParentRow( "File_Model_File" )->location);?>" type="application/x-shockwave-flash" width="220" height="30" />
+		</object>
+		
+		<?php if( $this->getPermission( array( "module" => "file" , "controller" => "file" , "action" => "download" ) ) ): ?>
+			<br />
+			<a target="_blank" href="<?=$this->url?>/file/file/download/file/<?=base64_encode( $this->narration->findParentRow( "File_Model_File" )->location ); ?>"><strong><?=$this->translate( "download" ); ?></strong></a>
+		<?php endif; ?>
+	</div>
+<?php endif; ?>
+<script>
+	var $content = $('.content','#content-main'),
+		contentHTML = $content.html(), i, lower;
+
+    if (words) {
+        for (i = 0 ; i < words.length; i++) {
+            if (contentHTML.indexOf(words[i] + " ") > -1) {
+                contentHTML = contentHTML.replace(words[i] + " " , ' <a href="#this" style="border-bottom: 1px dotted; text-decoration: none;" onclick="layout.addPanel(\'glossary-glossary\' , \'<?=$this->url?>/glossary/glossary/index/q/'+ words[i] + ' \' )">' + words[i] + '</a> ');
+             } else {
+                lower = words[i].toLowerCase();
+                contentHTML = contentHTML.replace(" " + lower + " ", ' <a href="#this" style="border-bottom: 1px dotted; text-decoration: none;" onclick="layout.addPanel(\'glossary-glossary\' , \'<?=$this->url?>/glossary/glossary/index/q/'+ lower + ' \' )">' + lower + '</a> ');
+             }
+        }
+    }
+
+	$content.html(contentHTML);
+
+    $( "#content-main-content > * > a" ).attr( "target" , "_blank" );
+</script>

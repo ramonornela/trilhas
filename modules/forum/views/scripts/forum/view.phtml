@@ -1,0 +1,105 @@
+<div>
+	<?php $status = $this->rs->current()->status;?>
+	<?php if( $this->q && $this->status ): ?>
+		<div style="float: left;">
+			<?=$this->ajax( $this->translate("back to search results") , "forum-forum" , $this->url . "/forum/forum/index/q/{$this->q}/status/{$this->status}" , 2 )?>
+		</div>
+	<?php endif; ?>
+	
+	<div style="float: right;">
+		<?php 
+			if( $status <> Application_Model_Status::CLOSED ){
+				if( $this->getPermission( "subscribe" ) ){
+					if( !$this->subscribe->count() )
+						echo $this->ajax( $this->translate( "receive by email" ) , "forum-forum" , $this->url . "/forum/forum/subscribe/flag/T/id/" . $this->forum_id , 2 , $this->translate( "really want to receive messages of this forum by e-mail?" ) );
+					else
+						echo $this->ajax( $this->translate( "not receive by email" ) , "forum-forum" , $this->url . "/forum/forum/subscribe/flag/F/id/" . $this->forum_id , 2 );
+				}
+			}
+		?>
+	</div>
+    
+	<div class="clear">&nbsp;</div>
+	<?php if( $this->rs->count() ):?>
+			<table width="100%" class="datable without-border">
+				<?php foreach( $this->rs as $rs ):?>
+					
+					<?php 
+						$edit   = $delete = null;
+						$person = $rs->findParentRow( "Share_Model_Person" );
+						$class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "gray" ) );
+						$verifyPermission = false;
+
+                        if( $this->user->roles[SYSTEM_ID]['current'] == Share_Model_Role::INSTITUTION ){
+                            $verifyPermission = true;
+                        }else{
+                            if( $this->user->config->forum_edit_delete == true ){
+                                $verifyPermission = true;
+                                if( $this->user->config->forum_edit_delete_time > 0 ){
+                                    $time = time();
+                                    $time_expirate = mktime( $this->date( $rs->created , "H" ) , $this->date( $rs->created , "i" ) + $this->user->config->forum_edit_delete_time , $this->date( $rs->created , "s" ) , $this->date( $rs->created , "m" ) , $this->date( $rs->created , "d" ) , $this->date( $rs->created , "Y" ) );
+
+                                    if( $time < $time_expirate ){
+                                        $verifyPermission = true;
+                                    }
+                                }else{
+                                    $verifyPermission = true;
+                                }
+                            }
+                        }
+                        
+						if( $verifyPermission ){
+							if( $this->getPermission( "input" ) && ( $rs->person_id == $this->user->person_id || $this->user->roles[SYSTEM_ID]['current'] > Role::STUDENT ) )
+								$edit = $this->ajax( $this->translate("edit") , "forum_input_" . $rs->id , $this->url . "/forum/forum/inputreply/id/" . $rs->id , 2 );
+								
+							if( $this->getPermission( "delete" ) && ( $rs->person_id == $this->user->person_id || $this->user->roles[SYSTEM_ID]['current'] > Role::STUDENT ) )
+								$delete = $this->ajax( $this->translate("delete") , "forum-forum" , $this->url . "/forum/forum/delete/id/" . $rs->id . "/forum_id/" . $this->forum_id , 2 , $this->translate("want to delete?") );
+						}
+					?>
+					
+					<tr class="<?=$class?>">
+						<td colspan="2">
+							<div class="right">
+								<?php if( $status <> 7 || $this->user->roles[SYSTEM_ID]['current'] > Share_Model_Role::STUDENT ): ?>
+									<?=$this->ajax( $this->translate("reply") , "forum_input_" . $rs->id , $this->url . "/forum/forum/inputreply/forum_reply_id/" . $rs->id . "/forum_id/" . $this->forum_id , 2 )?>
+									<?=$edit?> 
+									<?=$delete?>
+								<?php endif; ?> 
+							</div>
+							<?=$this->date( $rs->created , "d/m/Y H:i" )?>
+						</td>
+					</tr>
+					
+					<tr class="<?=$class?>">
+						<td width="10%">
+							<img src="<?=$this->url;?>/file/file/download/read/true/file/<?=base64_encode('thumb_small'.$person->location)?>" /><br />
+							<div class="messageProfile"><div><?=$person->name?></div></div>
+						</td>
+						<td valign="top">
+							<p><strong><?=$this->escape( $rs->title )?></strong></p>
+							<p><?=$rs->ds?></p>
+						</td>
+					</tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="clear">&nbsp;</div>
+                            <div id="forum_input_<?=$rs->id?>"></div>
+                        </td>
+                    </tr>
+                    
+				<?php endforeach;?>
+			</table>
+	<?php endif;?>
+		
+	<br />
+	
+	<div class="right">
+		<?php if( $this->limit < 999999 && count( $this->counts ) > 1 ): ?>
+			<?=$this->ajax( $this->translate("all reply") , "forum-forum" , $this->url . "/forum/forum/view/id/" . $this->forum_id . "/to/0/limit/999999" , 2 )?>
+		<?php endif;?>
+	</div>
+		
+	<?=$this->pagination( "forum-forum" , $this->url . "/forum/forum/view/id/" . $this->forum_id , $this->to , $this->counts ) ?>
+</div>
+	
+	

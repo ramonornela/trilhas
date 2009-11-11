@@ -1,0 +1,64 @@
+<div>
+     <?php
+        echo $this->element()
+				  ->startForm()
+                  ->formHidden( "id" , $this->data->id , array( "printLabel" => false , 'model' => 'Bulletin_Model_BulletinGroup' ) )
+                  ->formText( "title" , $this->data->title , array( 'model' => 'Bulletin_Model_BulletinGroup' ) );
+                  
+     ?>
+    <fieldset>
+        <legend><?=$this->translate("select the modules to be assessed")?></legend>
+        <br />
+
+        <label for="modules-Bulletin"><?=$this->translate("modules without items")?>:</label>
+        <?=$this->formSelect( "modules-Bulletin" , null , array( "id" => "modules-Bulletin" ) , $this->modules )?>
+        <span><input type="button" id="modules_button" value="<?=$this->translate("add")?>" /></span>
+
+        <br /><br />
+
+        <label for="modules_itens-Bulletin"><?=$this->translate("modules with items")?>:</label>
+        <?=$this->formSelect( "modules_itens" , null , array( "id" => "modules_itens-Bulletin" ) , $this->modules_itens )?>
+
+        <br /><br />
+
+        <div id="module-Bulletin"></div>
+
+        <br /><br />
+    </fieldset>
+    <br />
+    
+    <div class="filter padding">
+        <div class="legend pos-relative"><?=$this->translate("added")?></div>
+        <div id="added-<?=$this->model?>" class="clear"></div>
+    </div>
+	
+	<input name="json_relation_bulletin" id="json_relation_Bulletin" type="hidden" />
+	
+    <input type="submit" value="<?=$this->translate("save")?>" />
+    <?php if( ( $this->getPermission( "delete" ) ) && ( $this->data->id ) ) : ?>
+        <?=$this->ajax( $this->translate("delete") , 'bulletin-bulletin' , $this->url . '/bulletin/bulletin/delete/id/' . $this->data->id , 2 , $this->translate("want to delete?") );?>
+    <?php endif; ?>
+    <?=$this->element()->endForm();?>
+</div>
+<script>
+	
+	relation = new Relation( '<?=$this->jsonRelation?>' );
+	
+	$("#modules_button").click(function(){
+		relation.add( "0" , $( "#modules-Bulletin" ).val() , $( "#modules-Bulletin" )[0].options[ $( "#modules-Bulletin" )[0].selectedIndex ].innerHTML , "Bulletin_Model_Bulletin" );
+	});
+	
+	$("#modules_itens-Bulletin").click(function(){
+		if( this.value )
+			new Preceptor.util.AjaxUpdate( 'module-Bulletin' , '<?=$this->url?>/bulletin/bulletin/list/modules/' + $( "#modules_itens-Bulletin" ).val() + '/group_id/<?=$this->data->id ?>' );
+	});
+	
+    bulletin_model_bulletin.success = function(){
+        var json = relation.save();
+        
+        document.getElementById( 'json_relation_Bulletin' ).value = json;
+
+        new Preceptor.util.AjaxUpdate( 'bulletin-bulletin' , '<?=$this->url?>/bulletin/bulletin/save/' , { formId:"Bulletin_Model_Bulletin" } );
+    }
+
+</script>

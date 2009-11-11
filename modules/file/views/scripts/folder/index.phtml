@@ -1,0 +1,129 @@
+<div class="right">
+    
+	<?php if( $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "input-file"  )) ): ?>
+		<a href="#this" title="<?=$this->translate( "insert" )?> <?=$this->translate( "file" )?>" onclick="new Preceptor.util.AjaxUpdate( 'file-folder' , '<?=$this->url?>/file/folder/input-file/folder_id/<?=$this->rs->id?>' );"><img src="<?=$this->url?>/img/icons/create_file.gif" /></a>
+	<?php endif; ?>
+
+	&nbsp;
+
+	<?php if( ( $this->rs->id == File_Model_Folder::DEFAULT_FOLDER_COMPOSER || 
+								$this->rs->person_id  == $this->user->person_id )
+				&& $this->getPermission( array( "module" => "file" ,
+												"controller" => "folder" ,
+												"action" => "input"  )) ): ?>
+		<a href="#this" title="<?=$this->translate( "insert" )?> <?=$this->translate( "folder" )?>" onclick="new Preceptor.util.AjaxUpdate( 'file-folder' , '<?=$this->url?>/file/folder/input/folder_id/<?=$this->rs->id?>' );"><img src="<?=$this->url?>/img/icons/create_folder.gif" /></a>
+	<?php endif; ?>
+
+</div>
+
+<?=$this->location?><?=$this->rs->title;?>
+
+<div class="clear"></div>
+
+<?php if( $this->dirs->count() || count( $this->files ) > 0 ): ?>
+	<table class="tablesorter" cellpadding="5">
+        <thead>
+            <tr>
+                <th style="width: 66px;"></th>
+                <th><?=$this->translate("name")?></th>
+                <th><?=$this->translate("copy")?></th>
+                <th style="width: 84px;"></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+        <?php if( $this->dirs->count() ):?>
+            <?php foreach( $this->dirs as $key => $dir ): ?>
+                <?php
+                    $class  = $this->changeClass( $this->dirs->key() , array( "even" , "odd" ) );
+                    if( $this->user->person_id == $dir->person_id &&
+                        (
+                          $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "input"  )) ||
+                          $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "delete"  ))
+                        )
+                      ){
+
+                         if( $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "input"  ))){
+                            $editFolder = $this->ajax( $this->translate( "edit" ) , "file-folder" , $this->url . "/file/folder/input/id/{$dir->id}/folder_id/{$this->rs->id}" );
+                         }
+
+                         if( $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "delete"  )) ){
+                            $deleteFolder = $this->ajax( $this->translate( "delete" ) , "file-folder" , $this->url . "/file/folder/delete/id/{$dir->id}/folder_id/{$this->rs->id}" , 1 , $this->translate( "want to delete?" ) );
+                         }
+                     }
+                ?>
+                <tr class="<?=$class?>">
+                    <td class="icon-folder height-icon">&nbsp;</td>
+                    <td>
+                        <a href="#this" class="folder-upload" onclick="new Preceptor.util.AjaxUpdate( 'file-folder' , '<?=$this->url?>/file/folder/index/id/<?=$dir->id?>' );">
+                            <?=$dir->title?>
+                        </a>
+                    </td>
+                    <td></td>
+                    <td>
+                        <?=$editFolder . " " . $deleteFolder ?>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        <?php endif?>
+
+        <?php if( count( $this->files ) > 0 ): ?>
+            <?php foreach( $this->files as $file ): ?>
+                <?php
+                    $class  = $this->changeClass( $this->dirs->key() , array( "even" , "odd" ) );
+                    $editFile = $deleteFile = null;
+
+                    if( $file->person_id == $this->user->person_id || $this->rs->person_id == $this->user->id ){
+                         if( $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "input-file"  ) ) ){
+                            $editFile = $this->ajax( $this->translate( "edit" ) , "file-folder" , $this->url . "/file/folder/input-file/id/{$file->id}/folder_id/{$this->rs->id}" );
+                         }
+
+                         if( $this->getPermission( array( "module" => "file" , "controller" => "folder" , "action" => "delete-file"  )) ){
+                            $deleteFile = $this->ajax( $this->translate( "delete" ) , "file-folder" , $this->url . "/file/folder/delete-file/id/{$file->id}/folder_id/{$this->rs->id}" , 1 , $this->translate( "want to delete?" ) );
+                         }
+                     }
+                ?>
+                <tr class="<?=$class?>">
+                    <td style="text-align: center">
+                        <?php
+                            $size = strlen( $file->location );
+                            $extension = substr( $file->location , strrpos( $file->location  , "." ) , $size );
+                        ?>
+
+                        <a href="<?=$this->url?>/file/file/download/file/<?=base64_encode( $file->location )?>" target="_blank">
+
+                            <?php if( in_array( $extension , array( 'jpg' , 'gif' , 'png' ) ) ): ?>
+
+                                <div style="height: 50px; overflow: hidden;">
+                                    <img src="<?=$this->url?>/upload/thumb_small<?=$file->location?>"/>
+                                </div>
+
+                            <?php else: ?>
+                                <?=$this->showImageExtension( $file->location ); ?>
+                            <?php endif; ?>
+                        </a>
+                    </td>
+                    <td><?=$file->title ?></td>
+                    <td><input type="text" id="hidden_copy<?=$file->id?>" value="<?=$this->generateEmbed( $file->location  , array( 'title' =>  $file->title  , 'ds' => $file->ds  , 'width' => 550 , 'height' => 400 , 'download' => $this->translate( "download" ) ) )?>" /></td>
+                    <td>
+                        <?=$editFile . " " . $deleteFile ?>
+                    </td>
+                </tr>
+                <script type="text/javascript">
+                    YAHOO.util.Event.on( 'hidden_copy<?=$file->id?>' , 'focus' , function( ev ){
+                        this.select();
+                    });
+                </script>
+            <?php endforeach;?>
+        <?php endif;?>
+        </tbody>
+    </table>
+<?php else: ?>
+	<div><?=$this->translate( "there are no records" )?></div>
+<?php endif; ?>
+
+<div class="clear"></div>
+
+<?php if( $this->rs->id != File_Model_Folder::DEFAULT_FOLDER_COMPOSER ): ?>
+	<div style="text-align: right;"><a href="#this" onclick="new Preceptor.util.AjaxUpdate( 'file-file' , '<?=$this->url?>/file/folder/index/id/<?=$this->rs->folder_id?>' );"><?=$this->translate( "back" )?></a></div>
+<?php endif; ?>

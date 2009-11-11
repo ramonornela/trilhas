@@ -1,0 +1,2 @@
+SetEnv APPLICATION_ENV development
+RewriteEngine Off

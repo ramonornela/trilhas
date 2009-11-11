@@ -1,0 +1,58 @@
+<div id="person-input">
+<form id="formUser" action="#">
+		<input type="hidden" name="id" value="<?php echo $this->data->id; ?>" />
+
+		<label for="file"><?=$this->translate("photo")?>:</label>
+		<?=$this->formFile( "file" ); ?>
+		
+		<label for="name"><?=$this->translate("name")?>:</label>
+		<?=$this->formText( "name" , $this->data->name , array( 'style' => "width: 300px;" ) );  ?>
+
+		<br />
+
+		<label for="email"><?=$this->translate("email")?>:</label>
+		<?php echo $this->formText( "email" , $this->data->email , array( 'style' => "width: 300px;" ) );  ?>
+
+		<?php if ( isset( $this->data->id ) ): ?>
+			<br /><br />
+			<a onclick="showHidden( 'alterkey' );" href="#this"><?=$this->translate( "change password" )?></a>
+			<?php $display = "none" ?>
+		<?else : ?>
+			<?php $display = "block" ?>
+		<?php endif; ?>
+
+		<br /><br />
+		
+		<div id="alterkey" style="display:<?php echo $display ?>">
+			<label for="password" style="display: inline"><?=$this->translate( "password" )?>:</label>&nbsp;&nbsp;&nbsp;
+			<label  style="margin-left: 100px; display: inline;" for="cpassword"><?=$this->translate("reply password")?>:</label><br />
+
+			<?php echo $this->formPassword( "password"  , null , array( 'style' => "width: 100px;" ) );  ?>
+			<?php echo $this->formPassword( "cpassword" , null , array( 'style' => "width: 100px; margin-left: 50px;" ) );  ?>
+		</div>
+		
+		<br /><br />
+		
+		<?php echo $this->formSubmit( "SAVE" , $this->translate( "save" ) );?>
+</form>	
+</div>
+<script type="text/javascript">
+	var UserValidate = new Validator('formUser');
+
+	UserValidate.add( 'name' , Validate.stringLength , '<?=$this->translate("maxlength")?>'  , 0 , 255 );
+	UserValidate.add( 'name' , Validate.notEmpty 	 , '<?=$this->translate("required field")?>' );
+
+	UserValidate.add( 'email' , Validate.emailAddress , '<?=$this->translate("invalid email")?>');
+	UserValidate.add( 'email' , Validate.stringLength , '<?=$this->translate("maxlength")?>'  , 0 , 255 );
+	UserValidate.add( 'email' , Validate.notEmpty 	  , '<?=$this->translate("required field")?>');
+
+	UserValidate.add( 'password'  , Validate.stringLength , '<?=$this->translate("maxlength")?>'  , 0 , 20 );
+	UserValidate.add( 'cpassword' , Validate.stringLength , '<?=$this->translate("maxlength")?>'  , 0 , 20 );
+	UserValidate.add( 'cpassword' , Validate.identical , '<?=$this->translate("not equals")?>'  , 'password' );
+
+	UserValidate.success = function(){
+		new Preceptor.util.AjaxUpdate( 'person-input' , '<?=$this->url?>/person/save' , { formId: "formUser" , isUpload: true });
+//		$.tabs('load', 1 );
+	}
+</script>
+

@@ -1,0 +1,17 @@
+<div class="left">
+	<input type="text" name="word" id="qWeblibrary" style="width: 16em" />
+	<input type="button" value="OK" id="buttonWeblibrary" />
+</div>
+<div class="alphabet">
+	<?=$this->ajax( '0-9' , 'weblibrary' , $this->url . '/weblibrary/weblibrary/index/letter/%5B0-9%5D' ); ?>
+	<? $letters = array( 'a' , 'b' , 'c' , 'd' , 'e' , 'd' , 'f' , 'g' , 'h' , 'i' , 'j' , 'k' , 'l' , 'm' , 'n' , 'o' , 'p' , 'q' , 'r' , 's' , 't' , 'u' , 'v' , 'w' , 'x' , 'y' , 'z' ); ?>
+
+	<?php foreach( $letters as $letter ): ?>
+		<?=$this->ajax( strtoupper( $letter ) , 'weblibrary' , $this->url . '/weblibrary/weblibrary/find/letter/' . $letter ); ?>
+	<?php endforeach; ?>
+</div>
+<script type="text/javascript">
+	YAHOO.util.Event.on( "buttonWeblibrary" , "click" , function(){
+		new Preceptor.util.AjaxUpdate( 'weblibrary' , '<?=$this->url?>/weblibrary/weblibrary/find/word/' + $( 'qWeblibrary' ).value )
+	});
+</script>

@@ -1,0 +1,34 @@
+<div>
+	<?php if( $this->rs->count() ): ?>
+		<table class="tablesorter">
+			<thead>
+                <tr>
+                    <th><?=$this->translate("photo");?></th>
+                    <th><?=$this->translate("name");?></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php $verify = false ?>
+                <?php foreach ( $this->rs as $rs ): ?>
+                
+                    <?php if ( $rs->status == Activity_Model_ActivityTextPerson::FINALITY_STUDENT ) : ?>
+                        <?php $verify = true ?>
+                        <tr class="<?=$this->changeClass( $key , array( "even" , "odd" ) );?>">
+                            <td width="77">
+                                <?=$this->image( UPLOAD . "/thumb_small_" . $rs->findParentRow( "Share_Model_Person" , "SP" )->location )?>
+                            </td>
+                            <td><?=$this->ajax( $rs->findParentRow( "Share_Model_Person" , "SP" )->name , 'activity-activity' ,  $this->url . '/activity/correct/input/person_id/' . $rs->person_id ); ?></td>
+                        </tr>
+                    <?php endif; ?>
+
+                <?php endforeach;?>
+            </tbody>
+		</table>
+		<?php if ( ! $verify ) : ?>
+			<div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+		<?php endif; ?>
+	<?php else: ?>
+		<div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+	<?php endif; ?>
+</div>

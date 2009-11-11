@@ -1,0 +1,49 @@
+<div id="flashcontentCom"></div>
+
+<br />
+
+<?php if( $this->result ): ?>
+
+	<h3>Detalhamento</h3>
+	<hr />
+
+	<blockquote><div id="treeview"></div></blockquote>
+
+	<?php $message = array( 'forum'    => array( 'first' => 'Tópicos'  , 'last' => 'Respondidos' ),
+							 'chat'    => array( 'first' => 'Enviados' , 'last' => 'Recebidas' ) ,
+							 'message' => array( 'first' => 'Enviados' , 'last' => 'Recebidas' )
+							);
+	?>
+	<script>
+
+
+
+			var so = new SWFObject( "<?php echo URL . "swf/amcharts/ampie.swf" ?>" , "ampie" , "700" , "470" , "8" , "#FFFFFF" );
+			so.addVariable( "settings_file"   , escape( "<?php echo URL . "swf/amcharts/ampie_settings.xml" ;?>" ) );
+			so.addVariable( "data_file"		  , escape( "<?php echo URL . "log/comunication/report/" ?>" ) );
+			so.addVariable( "preloader_color" , "#999999" );
+			so.write("flashcontentCom");
+
+			var comunication = new YAHOO.widget.TreeView( "treeview" );
+
+			<?php foreach( $this->result as $key => $val ): ?>
+				var turma = new YAHOO.widget.TextNode( "<b><?php echo $val['Turma']['turma_nome']; ?></b>" , comunication.getRoot(), false , false , <?php echo $val['Turma']['turma_id']; ?> );
+				<?php if( $val['Usuario'] ): ?>
+					<?php foreach( $val['Usuario'] as $key2 => $val2 ): ?>
+
+						var aluno = new YAHOO.widget.TextNode( "<b><?php echo $val2['vl'];?> - <?php echo $val2['usuario_nome']?></b>" , turma , false , false , <?php echo $val2['usuario_id']?> );
+
+						new YAHOO.widget.HTMLNode( "<b><?php echo $message[$this->option]['first']?></b> - <?php echo $val2['first'];?><div style='width:100px; border: 1px solid black;'><p style='padding:0; margin: 0; text-align: center; width: <?php echo number_format( ( $val2['first'] * 100 ) / ( $val['totalFirst'] > 0 ? $val['totalFirst'] : 1 ) , 0  ); ?>px; background: green;'>&nbsp;</p></div><br />" , aluno , false , true );
+
+						new YAHOO.widget.HTMLNode( "<b><?php echo $message[$this->option]['last']?></b> - <?php echo $val2['last'];?><div style='width:100px; border: 1px solid black;'><p style='padding:0; margin: 0; text-align: center; width: <?php echo number_format( ( $val2['last'] * 100 ) / ( $val['totalLast'] > 0  ?  $val['totalLast']  : 1 ) , 0  ); ?>px; background: green;'>&nbsp;</p></div><br />" , aluno , false , true );
+					<?php endforeach; ?>
+				<?php endif; ?>
+
+			<?php endforeach; ?>
+
+			comunication.draw();
+
+	</script>
+	<?php else: ?>
+		<div>Não há Relatórios dispóniveis.</div>
+<?php endif; ?>

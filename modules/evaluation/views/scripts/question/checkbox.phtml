@@ -1,0 +1,92 @@
+<div id="inputs">
+<?php if( $this->rs && $this->rs->count() ):?>
+    <?php $i = 1?>
+    <?php foreach( $this->rs as $key => $rs ):?>
+        <div id="<?=$i."-".$this->evaluation_id?>">
+            <input type="checkbox" name="correct[<?=$i?>]" value="<?=$i?>" <?= $rs->status == "V" ? "checked" : null ?> />
+            <input type="text" name="alternative[<?=$i?>]" value="<?=$rs->value?>" id="text-<?=$i?>" />
+            <div>
+                <?=$this->translate( "justify" )?>
+                <input type="text" name="justify[<?=$i?>]" value="<?=$rs->justify?>" id="justify-<?=$i?>" style="margin: 5px 0px 25px 0px; width: 440px;" />
+            </div>
+        </div>
+        <?php $i++?>
+    <?php endforeach;?>
+<?php else:?>
+    <div id="<?="1-".$this->evaluation_id?>">
+        <input type="checkbox" name="correct[]" value="1" />
+        <input type="text" name="alternative[1]" id="text-1" />
+        <div>
+            <?=$this->translate( "justify" )?>
+            <input type="text" name="justify[1]" id="justify-1" style="margin: 5px 0px 25px 0px; width: 440px;" />
+        </div>
+    </div>
+
+    <div id="<?="2-".$this->evaluation_id?>">
+        <input type="checkbox" name="correct[]" value="2" />
+        <input type="text" name="alternative[2]" id="text-2" />
+        <div>
+            <?=$this->translate( "justify" )?>
+            <input type="text" name="justify[2]" id="justify-2" style="margin: 5px 0px 25px 0px; width: 440px;" />
+        </div>
+    </div>
+</div>
+<?php endif;?>
+
+<a id="add" href="#this"><?=$this->translate( 'add alternative' )?></a>
+
+<script type="text/javascript">
+    /**
+     * add validate
+     *
+     * QuestionValidate was the variable created in the file question/input.phtml
+     */
+    QuestionValidate.add( 'text-1' , Validate.notEmpty , '<?=$this->translate("required field")?>' );
+    QuestionValidate.add( 'text-2' , Validate.notEmpty , '<?=$this->translate("required field")?>' );
+
+    /**
+     * variable to generate the id's of inputs
+     */
+    <?php if( $this->rs && $this->rs->count() ):?>
+        var i = <?=$i?>;
+    <?php else:?>
+        var i = 3;
+    <?php endif;?>
+
+    /**
+     * function to add an input to div 'inputs'
+     */
+    $( "#add" ).click( function(){
+        var id    = i +'-<?=$this->evaluation_id?>';
+        var xhtml = '<div id="'+ id +'">\n\
+                        <input type="checkbox" name="correct[]" value="'+ i +'" />\n\
+                        <input type="text" name="alternative['+ i +']" id"text-'+ i +'" />\n\
+                        <a onclick="$( \'#'+ id +'\' ).remove();" href="#this"><?=$this->translate( 'remove the alternative' )?></a>\n\
+                        <div>\n\
+                            <?=$this->translate( "justify" )?>\n\
+                            <input type="text" name="justify['+ i +']" id="justify-1" style="margin: 5px 0px 25px 0px; width: 440px;" />\n\
+                        </div>`\n\
+                    </div>';
+        i++;
+        $("#inputs").append( xhtml );
+    });
+
+    /**
+     * function that verify if input type checkbox was selected
+     */
+    $( "#submitQuestion" ).click( function(){
+            if( $( "#<?=$this->model?> input:checked" ).length ){
+            //  validate_q was the variable created in the file question/input.phtml
+                validate_q = true;
+                $("#submitQuestion").trigger('submit');
+            }else{
+                $( "#message-validate" )
+                    .html( "<?=$this->translate( 'selected the(s) alternative(s) correct(s)' )?>" )
+                    .css({"border":"1px red solid",
+                          "background":"#fff",
+                          "padding":"10px",
+                          "margin-bottom":"25px"
+                      });
+            }
+    });
+</script>

@@ -1,0 +1,72 @@
+<div class="right">
+	<?php if( $this->getPermission( "input" ) ): ?>
+		<?=$this->ajax( $this->translate("new") , "evaluation-evaluation" , $this->url . "/evaluation/evaluation/input" , 2 ) ?>
+	<?php endif; ?>
+</div>
+<br /><br />
+<?php if( $this->rs->count() ):?>
+	<table class="tablesorter">
+        <thead>
+            <tr>
+                <th><?=$this->translate("title")?></th>
+                <th><?=$this->translate("begin date")?></th>
+                <th><?=$this->translate("end date")?></th>
+
+                <?php if( ( $this->getPermission( array( "module" => "evaluation" , "controller" => "question" , "action" => "index"  ) ) ) ): ?>
+                    <th width="90px"></th>
+                <?php endif;?>
+
+                <?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+                    <th width="77px"></th>
+                <?php endif;?>
+            </tr>
+        </thead>
+
+        <tbody>
+		<?php foreach( $this->rs as $rs ):?>
+			<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+			
+			<?php if( $this->getPermission( "input" ) ): ?>
+				<?php $edit = $this->ajax( $this->translate("edit") , 'evaluation-evaluation' , $this->url . '/evaluation/evaluation/input/id/' . $rs->id );?>	
+			<?php endif;?>
+				
+			<?php if( $this->getPermission( "delete" ) ): ?>
+				<?php $delete = $this->ajax( $this->translate("delete") , 'evaluation-evaluation' , $this->url . '/evaluation/evaluation/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );?>
+			<?php endif;?>
+			
+			<tr class="<?=$class?>">
+				<td nowrap="nowrap">
+                    <?=$rs->name?>
+				</td>
+				<td nowrap="nowrap"><?=$this->date( $rs->started )?></td>
+                <?php if( $rs->finished ):?>
+                    <td nowrap="nowrap"><?=$this->date( $rs->finished )?></td>
+                <?php else:?>
+                    <td nowrap="nowrap"><?=$this->translate( " - " )?></td>
+                <?php endif;?>
+
+                <td nowrap="nowrap">
+                    <?php if( $this->getPermission( array( "module" => "evaluation" , "controller" => "correct" , "action" => "index"  ) ) ): ?>
+                        <?=$this->ajax( $this->translate("correct") , 'evaluation-evaluation' , $this->url . '/evaluation/correct/index/id/' . $rs->id ) ?>
+                    <?php endif;?>
+
+                    <?php if( $this->getPermission( array( "module" => "evaluation" , "controller" => "reply" , "action" => "students-evaluated"  ) ) ): ?>
+                        <?=$this->ajax( $this->translate("students evaluated") , 'evaluation-evaluation' , $this->url . '/evaluation/reply/students-evaluated/id/' . $rs->id ) ?>
+                    <?php endif;?>
+
+                    <?php if ( $this->role == Share_Model_Role::STUDENT ):?>
+                        <?=$this->ajax( $this->translate( 'make exercise' ) , 'evaluation-evaluation' , $this->url . '/evaluation/reply/index/id/' . $rs->id );?>
+                        <?=$this->ajax( $this->translate( 'see answer' ) , 'evaluation-evaluation' , $this->url . '/evaluation/reply/view/id/' . $rs->id );?>
+                    <?php endif;?>
+                </td>
+				
+				<?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+					<td nowrap="nowrap"><?=$edit . " " . $delete?></td>
+				<?php endif;?>
+			</tr>
+		<?php endforeach;?>
+        </tbody>
+	</table>
+<?php else:?>
+	<div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif;?>

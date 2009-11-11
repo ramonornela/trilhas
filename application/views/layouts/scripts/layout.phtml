@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="en">
+<head>
+<title>Trilhas - Preceptor Educação a Distância</title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?=APP_CHARSET?>"/>
+<base href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/" />
+
+<?php echo $this->headLink()
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "yahoo/fonts/fonts-min.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "yahoo/calendar/assets/calendar.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "yahoo/container/assets/skins/sam/container.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "yahoo/editor/assets/skins/sam/editor.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "preceptor/organizer/assets/organizer.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "jquery/tablesorter/themes/blue/style.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "jquery/themes/".$this->theme."/jquery-ui.css" )
+        ->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "rte/rte.css")
+        ->appendStylesheet('css/themes/'.$this->theme.'/main.css')
+        ->appendStylesheet('css/themes/'.$this->theme.'/modules.css')
+        ->appendStylesheet('css/navigation.css')
+        ->appendStylesheet('css/editor.css')
+        ->appendStylesheet('css/utils.css'); ?>
+
+<?php echo $this->headScript()
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/yahoo-dom-event/yahoo-dom-event.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/element/element-beta.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/button/button-min.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/container/container_core-min.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/menu/menu-min.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/connection/connection-min.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/json/json-min.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/editor/editor-min.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/preceptor.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/layout/layout.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/toggle/toggle.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/groupedlist/groupedlist.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/ajax/ajax.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/validate/validate.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/validate/mask.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/validate/brazilian_patterns.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/validate/date.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/validate/number.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/validate/string.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "preceptor/dom/dom.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "rte/html2xhtml.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "rte/richtext_compressed.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "jquery/jquery.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "jquery/jquery-ui-all.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "jquery/jquery.maskedinput.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "jquery/ui/i18n/ui.datepicker-pt-BR.js" )
+        ->appendFile( URL_JAVASCRIPT_LIBRARY . "jquery/tablesorter/jquery.tablesorter.min.js" )
+        ->appendFile('js/chat.js')
+        ->appendFile('js/relation.js')
+        ->appendFile('js/action.js')
+        ->appendFile('js/run.js')
+        ->appendFile('js/string.js')
+        ->appendFile('js/navigation.js')
+        ->appendFile('js/editor.js'); ?>
+        <style id="theme-style"></style>
+</head>
+<body>
+    <div id="hd">
+        <h1>Trilhas</h1>
+        <div class="left">
+            <img src="<?=URL_JAVASCRIPT_LIBRARY?>/jquery/themes/<?=$this->theme?>/images/logo.png" />
+        </div>
+        <div class="right">
+            <?if( Zend_Auth::getInstance()->hasIdentity() ):?>
+                <span style="margin-right: 5px;">Olá, <?=$this->shortName( $this->user->name )?></span> |
+                <?php if( count( $this->profiles ) > 2 ): ?>
+                    <?=$this->formSelect( "profile" , $this->user->roles[SYSTEM_ID]['current'] ,  array( "class" => "select_profile", "style" => "margin-left: 6px; margin-right: 6px; height: 18px;" , "onchange" => "window.location = 'user/select/id/' + this.value" ) , $this->profiles );?> |
+                <?php endif ?>
+                <a href="user/logout"><?php echo $this->translate("logout");?></a>&nbsp;
+            <?php endif; ?>
+            <span style="display: block; text-align: right; padding-top: 6px;">
+                <a href="#" id="normal-font"><img src="img/bt/normal2.gif" alt="Tamanho normal do texto" title="Tamanho normal do texto" /></a>
+                <a href="#" id="increase-font"><img src="img/bt/aumentar2.gif" alt="Aumentar o tamanho do texto" title="Aumentar o tamanho do texto" /></a>
+                <a href="#" id="decrease-font"><img src="img/bt/diminuir2.gif" alt="Diminuir o tamanho do texto" title="Diminuir o tamanho do texto" /></a>
+            </span>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div id="bd">
+        <?=$this->layout()->content?>
+    </div>
+    <div id="ft">
+        <a href="http://www.preceptoread.com.br" target="_blank"><img src="<?=$this->url?>/img/logo.png" /></a>
+    </div>
+    <div id="clearHTML" style="display: none"></div>
+    <script>
+        var font_size = 100;
+        
+        $( "#normal-font" ).click( function(){
+            font_size = 100;
+            $( "#bd" ).removeAttr("style");
+        });
+        $( "#increase-font" ).click( function(){
+            font_size += 10;
+            $( "#bd" ).css({ 'font-size':font_size +'%' });
+        });
+        $( "#decrease-font" ).click( function(){
+            font_size -= 10;
+            $( "#bd" ).css({ 'font-size':font_size +'%' });
+        });
+
+        $(".ui-dialog-titlebar-close").live('click',function(){
+            $(this).parent().parent().parent().remove();
+            return false;
+        });
+    </script>
+</body>
+</html>

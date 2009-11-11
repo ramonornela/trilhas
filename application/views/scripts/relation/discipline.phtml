@@ -1,0 +1,29 @@
+<br />
+<div>
+	<label><?=$this->translate( "discipline" )?>:</label>
+</div>
+
+<br />
+
+<div>
+	<span><?=$this->formSelect( "discipline" , null , array( "id" => "{$this->model}-discipline" ) , $this->disciplines )?></span>
+	<span><input type="button" id="<?=$this->model?>-discipline_button" value="<?=$this->translate("add")?>" /></span>
+</div>
+<br />
+
+<script>
+
+    $("#<?=$this->model?>-discipline").change(function(){
+		$( "#group_td<?=$this->model?>" ).empty();
+		$( "#person_td<?=$this->model?>" ).empty();
+		
+		if( this.value )
+			new Preceptor.util.AjaxUpdate( "group_td<?=$this->model?>" , "<?=$this->url?>/relation/group/id/" + this.value );
+	});
+	
+	YAHOO.util.Event.removeListener( "<?=$this->model?>-discipline_button" , "click" );
+	
+    $("#<?=$this->model?>-discipline_button").click(function(){
+		relation_<?=$this->model?>.add( $( "#<?=$this->model?>-discipline" ).val() , "discipline_id" , $( "#<?=$this->model?>-discipline" )[0].options[ $( "#<?=$this->model?>-discipline" )[0].selectedIndex ].innerHTML , "<?=$this->model?>" );
+	});
+</script>

@@ -1,0 +1,14 @@
+<?=$this->element()->startForm();?>
+<div id="div-form-<?=$this->model?>">
+    <?php
+        echo $this->element()
+                  ->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+				  ->formText( "title" , $this->data->title , array( 'style' => "width: 400px;" ) )
+                  ->formText( "url" , $this->data->url , array( 'style' => "width: 400px;" , "label" => "Url" ) )
+                  ->formTextarea( "ds" , $this->data->ds , array( 'style' => "width: 400px; height: 200px;" ) )
+				  ->formSubmit( "model" , $this->translate("save") , array( "printLabel" => false ) );
+    ?>
+    
+    <div class="clear"></div>
+</div>
+<?=$this->formRelation( $this->data->id )?>

@@ -1,0 +1,9 @@
+<p><?=$this->rs->ds;?></p>
+<?php if( count( $this->narration ) ): ?>
+	<div class="margin padding border-black">
+		<object width="220" height="30" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0 ">
+			<param name="movie" value="<?=$this->url?>/swf/player_custom/mp3player.swf?src=<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode($this->narration->findParentRow( "File_Model_File" )->location);?>" />
+			<embed src="<?=$this->url?>/swf/player_custom/mp3player.swf?src=<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode($this->narration->findParentRow( "File_Model_File" )->location);?>" type="application/x-shockwave-flash" width="220" height="30" />
+		</object>
+	</div>
+<?php endif; ?>

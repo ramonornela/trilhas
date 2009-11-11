@@ -1,0 +1,22 @@
+<?=$this->element()->startForm();?>
+
+<div class="yui-skin-sam" id="div-form-<?=$this->model?>">
+    <?php
+        echo @$this->element()->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+                  ->formHidden( "forum_id" , $this->data->forum_id , array( "printLabel" => false ) )
+                  ->formHidden( "forum_reply_id" , $this->data->forum_reply_id , array( "printLabel" => false ) )
+                  ->formText( "title" , $this->data->title )
+                  ->formTextarea( "ds" , $this->data->ds , array( "label" => $this->translate("message") ) )
+                  ->formText( "started" , $this->data->started , array( "label" => $this->translate("begin date"),'class'=>'input-small') )
+                  ->formText( "finished" , $this->data->finished , array( "label" => $this->translate("end date"),'class'=>'input-small' )  )
+                  ->formSubmit( "model" , $this->translate("save") , array( "printLabel" => false ) )
+    ?>
+</div>
+<script>
+	var Editor_Forum = new Preceptor.widget.Editor( "Forum_Model_Forum-ds" , { addButton:["insertHtml"] } );
+	
+	$("#Forum_Model_Forum-model").click(function(){
+        Editor_Forum.saveHTML();
+    });
+</script>
+<?=@$this->formRelation( $this->data->id )?>

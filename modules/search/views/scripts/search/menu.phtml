@@ -1,0 +1,33 @@
+<?php ${$this->type} = "ativa"; ?>
+<div id="menuSearch">
+	<ul>
+		<!-- <li class="<?php echo $discipline; ?>">
+			<?php echo $this->ajax( $this->translate( "discipline" ) , "search" , "{$this->url}/search/search/find/type/curso/string/{$this->string}" , 1 ); ?>
+		</li>
+		 -->
+
+		<li class="<?php echo isset( $glossary ) ? $glossary : null ; ?>">
+			<?php echo $this->ajax( $this->translate( "glossary" ) , "search" , "{$this->url}/search/search/glossary/string/{$this->string}" , 1 ); ?>
+		</li>
+
+		<li class="<?php echo isset( $content ) ? $content : null ; ?>">
+			<?php echo $this->ajax( $this->translate( "content" ) , "search" , "{$this->url}/search/search/content/string/{$this->string}" , 1 ); ?>
+		</li>
+
+		<li class="<?php echo isset( $forum ) ? $forum : null ; ?>">
+			<?php echo $this->ajax( $this->translate( "forum" ) , "search" , "{$this->url}/search/search/forum/string/{$this->string}"  , 1 ); ?>
+		</li>
+
+		<li class="<?php echo isset( $weblibrary ) ? $weblibrary : null ; ?>">
+			<?php echo $this->ajax( $this->translate( "weblibrary" ) , "search" , "{$this->url}/search/search/weblibrary/string/{$this->string}" , 1 ); ?>
+		</li>
+
+		<li class="<?php echo isset( $rss ) ? $rss : null ; ?>">
+			<?php echo $this->ajax( $this->translate( "rss" ) , "search" , "{$this->url}/search/search/rss/string/{$this->string}" , 1 ); ?>
+		</li>
+
+	</ul>
+</div>
+<br />
+<div style="background: #EEE; padding: 5px; height: 18px;">Procurar por: "<b><?=$this->string?></b>"</div>
+<br />

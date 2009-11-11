@@ -1,0 +1,43 @@
+<div class="right">
+    <?php if( $this->getPermission( "input" ) ): ?>
+        <?=$this->ajax( $this->translate("new") , "bulletin-bulletin" , $this->url . "/bulletin/bulletin/input" , 2 ) ?>
+    <?php endif; ?>
+</div>
+<br /><br />
+
+<?php if( $this->rs->count() ): ?>
+<form id="form">
+    <table class="datatable">
+        <tr>
+            <th rowspan="2"><?=$this->translate("studant")?></th>
+            <?php foreach( $this->rs as $key => $rs ):?>
+                <th colspan="2">
+                    <?php if( $this->getPermission( "input" ) ): ?>
+                        <?="<a href='#this' style='color: #FFFFFF;' onclick=\"new Preceptor.util.AjaxUpdate( 'bulletin-bulletin' , '{$this->url}/bulletin/bulletin/input/id/{$rs->id}' )\" >{$rs->title}"?>
+                    <?php else : ?>
+                        <?=$rs->title?>
+                    <?php endif; ?>
+                </th>
+
+                <?php $evaluations[$key] = $this->itemEvaluatios( $rs ) ?>
+
+            <?php endforeach;?>
+            <th rowspan="2"><?=$this->translate("overall average")?></th>
+        </tr>
+        <tr>
+            <?php foreach( $this->rs as $key => $rs ):?>
+                <th><?=$this->translate("note")?></th>
+                <th><?=$this->translate("average")?></th>
+            <?php endforeach;?>
+        </tr>
+            <?=$this->printItemEvaluatios( $this->persons , $evaluations , $this->person_id , $this->role ) ?>
+    </table>
+</form>
+
+<?php else: ?>
+<table class="datatable">
+    <tr class="<?=$class?>">
+        <td><?=$this->translate( "there are no records" );?></td>
+    </tr>
+</table>
+<?php endif; ?>

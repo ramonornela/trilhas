@@ -1,0 +1,56 @@
+<?php if( $this->getPermission( "input" ) ): ?>
+	<div class="right"><?=$this->ajax( $this->translate( "new" ) , 'glossary-glossary' , $this->url . '/glossary/glossary/input/' , 2 ); ?></div>
+<?php endif; ?>
+
+<div >
+	<form action="#" id="glossaryQWeblibrary">
+		<?=$this->render( "glossary/menu.phtml" ); ?>
+    <div class="clear">&nbsp;</div>
+	</form>
+</div>
+
+<?php if( $this->rs->count() ):?>
+    <table class="tablesorter">
+        <thead>
+            <tr>
+                <th class="entry"><?=$this->translate("entries")?></th>
+                <?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+                        <th></th>
+                <?php endif;?>
+            </tr>
+        </thead>
+
+        <tbody>
+			<?php foreach( $this->rs as $key => $rs ): ?>
+                <?php
+                    if( $this->getPermission( "input" ) ){
+                        $edit = $this->ajax( $this->translate("edit") , 'glossary-glossary' , $this->url . '/glossary/glossary/input/id/'. $rs->id );
+                    }
+
+                    if( $this->getPermission( "delete" ) ){
+                        $delete = $this->ajax( $this->translate("delete") , 'glossary-glossary' , $this->url . '/glossary/glossary/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );
+                    }
+
+                    $display = "display: none;";
+
+                    if( ( strlen( $this->q ) > 1 ) && $key == 0 ){
+                        $display = "";
+                    }
+                ?>
+				<tr class="<?=$this->changeClass( $key , array( "even" , "odd" ) );?>">
+					<td>
+                        <a href="#this" onclick="showHidden( 'glossary_description_<?=$rs->id?>' );"><?=$rs->word?></a>
+                        <div style="<?=$display?> margin-top: 10px;" id="glossary_description_<?=$rs->id?>"><?=nl2br( $rs->ds )?></div>
+                    </td>
+
+					<?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+						<td nowrap="nowrap" width="77"><?=$edit . " " . $delete?></td>
+					<?php endif;?>
+				</tr>
+			<?php endforeach;?>
+        </tbody>
+    </table>
+<?php else:?>
+    <div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif;?>
+        

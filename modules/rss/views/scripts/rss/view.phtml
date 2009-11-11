@@ -1,0 +1,12 @@
+<div>
+	<?php if( $this->channel ): ?>
+		<?php foreach( $this->channel['items'] as $key => $val ):?>
+			<div class="padding <?php echo $this->changeClass( $key , array( 'light_gray' , 'gray' ) ); ?>">
+				<a href="<?php echo $val['link'] ?>" target="_blank"><?php echo $val['title'] ?></a>
+				<p><?php echo $val['description'] ?></p>
+			</div>
+		<?php endforeach;?>
+	<?php else: ?>
+		<p>Not&iacute;cias indispon&iacute;veis</p>
+	<?php endif;?>
+</div>

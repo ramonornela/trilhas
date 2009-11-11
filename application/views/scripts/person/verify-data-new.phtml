@@ -1,0 +1,22 @@
+<?php if( $this->verify ):?>
+    <script type="text/javascript">
+        $( "#form-fields-complete" ).show();
+        $( "#verify-data" ).hide();
+        $( "#refresh-data" ).show();
+        $( "#<?=$this->model?>-cpf , #<?=$this->model?>-email" ).attr( "disabled" , "disabled" );
+        $( "#<?=$this->model?>-model" ).removeAttr( "disabled" );
+    </script>
+<?php else:?>
+    <?php if( $this->resultCpf && $this->resultEmail ):?>
+        <span style="color: red;"><?=$this->resultCpf?> e <?=$this->resultEmail?></span>
+    <?php else:?>
+        <span style="color: red;"><?=$this->resultCpf?></span>
+        <span style="color: red;"><?=$this->resultEmail?></span>
+    <?php endif;?>
+<?php endif;?>
+
+
+
+
+
+

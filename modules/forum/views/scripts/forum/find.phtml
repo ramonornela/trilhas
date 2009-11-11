@@ -1,0 +1,39 @@
+	<?php if( $this->rs->count() ):?>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate( "author" )?></th>
+				<th><?=$this->translate( "description" )?></th>
+				<th><?=$this->translate( "date" )?></th>
+			</tr>
+			
+			<?php foreach( $this->rs as $rs ):?>
+				
+				<?php 
+					$class   = $this->changeClass( $this->rs->key() , array( "gray" , "light_gray" ) );
+					$person  = $rs->findParentRow( "Share_Model_Person" );
+					$ds_replace = str_replace( $this->escape( $this->q ) , "<span  style='background: yellow;'>{$this->q}</span>" , $rs->ds );
+					$title_replace = str_replace( $this->q , "<span  style='background: yellow;'>{$this->q}</span>" , $rs->title );
+					$forum_id = $rs->forum_id ? $rs->forum_id : $rs->id;
+				?>
+				
+				<tr class="<?=$class?>">
+					<td width="55">
+						<img src="<?=$this->url;?>/file/file/download/read/true/file/<?=base64_encode('thumb_small'.$person->location)?>" /><br />
+						<div class="messageProfile"><div><?=$person->name?></div></div>
+					</td>
+					<td>
+						<strong><?=$this->ajax( $title_replace , 'forum-forum' , $this->url . '/forum/forum/view/q/'.$this->q.'/status/'.$this->statusQ.'/id/' . $forum_id );?></strong>
+						<p><?=$ds_replace?></p>
+					</td>
+					<td nowrap="nowrap"><?=$this->date( $rs->created  , "d/m/Y H:i" ) ?></td>
+				</tr>
+				
+			<?php endforeach;?>
+		</table>
+		
+		<br/>
+		
+		<?=$this->pagination( "forum-forum" , $this->url . "/forum/forum/index" , $this->to , $this->counts ) ?>
+	<?php else: ?>
+		<?=$this->translate( "there are no records" )?>
+	<?php endif;?>

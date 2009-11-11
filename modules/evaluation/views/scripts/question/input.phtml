@@ -1,0 +1,81 @@
+<div>
+    <div class="right">
+        <?=$this->ajax( $this->translate( 'access database of questions' ) , "evaluation-evaluation" , "$this->url/evaluation/question/bank-question/evaluation_id/{$this->data->id}" )?>
+    </div>
+    <div class="yui-skin-sam">
+        <form id="<?=$this->model?>" method="post">
+            <?=$this->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )?>
+            <div>
+                <label for="<?="$this->model-type"?>"><?=$this->translate( 'select the type of question' )?></label>
+                <?=$this->formSelect( "type" , $this->data->type , array( "id" => "$this->model-type" ) , $this->types )?>
+            </div>
+
+            <div class="clear">&nbsp;</div>
+            
+            <div>
+                <label for="<?="$this->model-label"?>"><span style="color: red">*</span> <?=$this->translate( 'question comand' )?></label>
+                <?=$this->formTextarea( "label" , $this->data->label , array( "id" => "$this->model-label" ) )?>
+            </div>
+
+            <div class="clear">&nbsp;</div>
+
+            <div id="message-validate"></div>
+            <div id="questions-create"></div>
+            
+            <br /><br />
+
+            <input type="submit" id="submitQuestion" value="<?=$this->translate( 'save' )?>" />
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    <?php if( isset( $this->data->id ) && $this->data->id ):?>
+        new Preceptor.util.AjaxUpdate( "questions-create" , "<?=$this->url?>/evaluation/question/types/type/<?=$this->data->type?>/id/<?=$this->data->id?>" );
+    <?php endif;?>
+
+    /**
+     * created var for validate inputs type radio and checkbox;
+     *
+     * can take the value boolean
+     */
+     validate_q = false;
+
+    /**
+     * created validation
+     */
+    QuestionValidate = new Validator('<?=$this->model?>');
+
+    /**
+     * clean text of the validade, id 'message-validate';
+     * clean messages and validates of the var QuestionValidate;
+     * does the requisition AJAX for type selected;
+     */
+    $( "#<?=$this->model?>-type" ).change( function(){
+        $( "#message-validate" ).html( "" ).removeAttr( "style" );
+        QuestionValidate.clearMessages();
+        QuestionValidate.clear();
+        validate_q = false;
+
+        if( this.value ){
+            new Preceptor.util.AjaxUpdate( "questions-create" , "<?=$this->url?>/evaluation/question/types/type/" + this.value )
+        }else{
+            $( "#questions-create" ).html( "" );
+        }
+    });
+
+    /**
+     * created var for editor
+     */
+    var Editor_Question = new Preceptor.widget.Editor( "Evaluation_Model_EvaluationQuestion-label" , { addButton:['insertHtml'] , height: '80px' } );
+
+    /**
+     * save question
+     */
+    QuestionValidate.success = function(){
+        if( validate_q ){
+            Editor_Question.saveHTML();
+            new Preceptor.util.AjaxUpdate( "evaluation-evaluation" , "<?=$this->url?>/evaluation/question/save/" , {formId: '<?=$this->model?>'} );
+        }
+    }
+
+</script>

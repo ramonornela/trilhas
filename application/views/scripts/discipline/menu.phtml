@@ -1,0 +1,73 @@
+<div class="ui-accordion ui-widget ui-helper-reset">
+    <h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top">
+        <a href="#"><?=$this->translate("communication")?></a>
+    </h3>
+    <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
+        <ul>
+            <li>
+                <a href="#this" onclick="layout.addPanel('chat-message', 'chat/message/index');  return false;">
+                    <?=$this->translate( "message" )?>
+                </a>
+            </li>
+            <li>
+                <a href="#this" onclick="layout.addPanel('forum-forum', 'forum/forum/index'); return false;">
+                    <?=$this->translate( "forum" )?>
+                </a>
+            </li><!--
+            <li>
+                <a href="#this" onclick="addElement( 'main' , 'message' , 'chat/room/index' )">
+                    <?=$this->translate( "chat room" )?>
+                </a>
+            </li>-->
+        </ul>
+    </div>
+    <?php foreach ( $this->menuRs as $menu ) {
+        $childs = $menu->findDependentRowset( "Preceptor_Share_Menu" , null , $menu->select()->where( "status =?" , Preceptor_Share_Menu::ACTIVE )->order( "position" ) );
+        $permission = true;
+
+        foreach ($childs as $child) {
+            $resource = $child->findManyToManyRowset("Preceptor_Share_Resource" , "Preceptor_Share_MenuResource" , null , null , $child->select()->order( "resource_id" ) )->current();
+            if ($this->getPermission(array("module" => $resource->module, "controller" => $resource->controller, "action" => $resource->action))){
+                $permission = true;
+            }
+        }
+        if ($permission) {
+            $printed = false;
+            $header = '<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top">
+                           <a href="#">'.$this->translate( $menu->name ).'</a>
+                       </h3>
+                       <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" >';
+            if( count( $childs ) ) {
+                $printedUl = false;
+                foreach( $childs as $child ) {
+                    $resource = $child->findManyToManyRowset( "Preceptor_Share_Resource" , "Preceptor_Share_MenuResource" , null , null , $child->select()->order( "resource_id" ) )->current();
+
+                    if ($this->getPermission(array("module" => $resource->module, "controller" => $resource->controller, "action" => $resource->action ))) {
+                        if (!$printed) {
+                            echo $header;
+                            $printed = true;
+                        }
+                        if(!$printedUl) {
+                            echo "<ul>";
+                            $printedUl = true;
+                        }
+                        $div = $resource->module ."-". $resource->controller;
+                        echo '<li>
+                                <a href="#" onclick="layout.addPanel( \''.$div.'\' , \''.$resource->module.'/'.$resource->controller.'/index\' ); return false;">
+                                '.$this->translate( $child->name ).'
+                                </a>
+                             </li>';
+                    }
+                }
+
+                if ($printedUl) {
+                    echo "</ul>";
+                }
+                if ($printed) {
+                    echo "</div>";
+                }
+            }
+        }
+    }
+    ?>
+</div>

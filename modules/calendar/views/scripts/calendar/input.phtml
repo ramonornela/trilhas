@@ -1,0 +1,12 @@
+<?=$this->element()->startForm();?>
+
+<div id="div-form-<?=$this->model?>">
+    <?php
+        echo @$this->element()->formHidden( 'id' , null , array( 'printLabel' => false , 'validate' =>false ) )
+						   ->formTextarea( 'ds' , null , array('class'=>'input-small') )
+						   ->formText( 'started' , $this->date( $this->data->started ) , array( 'class' => 'input-small' ) )
+						   ->formText( 'finished' , $this->date( $this->data->finished ) , array( 'class' => 'input-small' ) )
+						   ->formSubmit( 'model' , $this->translate( 'save' ) , array( 'printLabel' => false , 'validate' =>false ) );
+    ?>
+</div>
+<?=@$this->formRelation( $this->data->id )?>

@@ -1,0 +1,82 @@
+<div class="right">
+	<?php
+		if( $this->getPermission( "input" ) ){
+			if( $this->user->roles[SYSTEM_ID]['current'] == Share_Model_Role::STUDENT ){
+				if( $this->user->config->forum_student_created_topic == "true" ){
+					echo $this->ajax( $this->translate("new") , "forum-forum" , $this->url . "/forum/forum/input" , 2 );
+				}
+			}else{
+				echo $this->ajax( $this->translate("new") , "forum-forum" , $this->url . "/forum/forum/input" , 2 );
+			}
+		}	
+	?>
+</div>
+<div >
+	<form action="#" id="formQForum">
+		<?=$this->translate("search")?>:
+		<?=$this->formText( "q"  , $this->q  , array( "style" => "width: 16em; margin-right: 13px;" ) )?>
+
+		<?=$this->translate("status")?>:
+		<?=$this->formSelect( "status" , $this->statusQ , null , $this->status )?>
+
+		&nbsp; <input type="submit" value="ok" />
+	</form>
+</div>
+<br />
+<div id="forum_data">
+	<?php if( $this->rs->count() ):?>
+		<table class="tablesorter">
+            <thead>
+                <tr>
+                    <th><?=$this->translate( "author" )?></th>
+                    <th><?=$this->translate( "topic" )?></th>
+                    <th><?=$this->translate( "responses" )?></th>
+                    <th><?=$this->translate( "last post" )?></th>
+                    <th><?=$this->translate( "status" )?></th>
+                </tr>
+            </thead>
+
+            <tbody>
+			<?php foreach( $this->rs as $key => $rs ):?>
+				<?php 
+					$person  = $rs->findParentRow( "Share_Model_Person" );
+					$forum   = $rs->findDependentRowSet( "Forum_Model_Forum" , null , $rs->getTable()->select()->order( "created DESC" ) );
+					$current = $forum->current();
+					$date 	 = isset($current->created) ? $current->created : $rs->created;
+				?>
+				
+				<tr class="<?=$this->changeClass( $key , array( "even" , "odd" ) )?>">
+					<td width="55">
+						<img src="<?=$this->url;?>/file/file/download/read/true/file/<?=base64_encode('thumb_small'.$person->location)?>" /><br />
+						<div class="messageProfile"><div><?=$person->name?></div></div>
+					</td>
+					<td>
+						<strong><?=$this->ajax( $this->escape( $rs->title ) , 'forum-forum' , $this->url . '/forum/forum/view/id/' . $rs->id );?></strong>
+					</td>
+					<td align="center" width="70">
+						<?=$forum->count()?>
+					</td>
+					<td width="120"><?=$this->date( $date , "d/m/Y H:i" ) ?></td>
+					<td align="center" width="60">
+						<img src="<?=$this->url?>/img/icons/<?=strtolower($rs->findParentRow('Application_Model_Status')->name )?>.gif" />
+					</td>
+				</tr>
+				
+			<?php endforeach;?>
+            </tbody>
+		</table>
+		
+		<br/>
+		
+		<?=$this->pagination( "forum-forum" , $this->url . "/forum/forum/index" , $this->to , $this->counts ) ?>
+	<?php endif;?>
+</div>
+<script>
+	YAHOO.util.Event.on( "formQForum" , "submit" , function( ev ){
+			new Preceptor.util.AjaxUpdate( "forum_data" , "<?=$this->url?>/forum/forum/find/q/" + $( "#q" ).val() + "/status/" + $( "#status" ).val() );
+			YAHOO.util.Event.stopEvent( ev );
+	});
+	<?php if( $this->q && $this->status ): ?>
+		new Preceptor.util.AjaxUpdate( "forum_data" , "<?=$this->url?>/forum/forum/find/q/<?=$this->q?>/status/<?=$this->statusQ?>" );
+	<?php endif; ?>
+</script>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="en">
+	<head>
+		<title>Trilhas - Preceptor Educação a distância</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"  />
+
+        <?=$this->headLink()->appendStylesheet( $this->url . "/css/utils.css" )
+                            ->appendStylesheet( $this->url . "/css/themes/".$this->theme."/main.css" )
+                            ->appendStylesheet( $this->url . "/css/themes/".$this->theme."/modules.css" )
+							->appendStylesheet( URL_JAVASCRIPT_LIBRARY . "jquery/themes/".$this->theme."/jquery-ui.css" ); ?>
+                            
+
+        <?=$this->headScript()->appendFile( URL_JAVASCRIPT_LIBRARY . "yahoo/yahoo-dom-event/yahoo-dom-event.js" )
+                              ->appendFile( URL_JAVASCRIPT_LIBRARY . "jquery/jquery.js" );?>
+		
+		<script>
+			var URL = "<?=$this->url;?>";
+		</script>
+	</head>
+	<body>
+		<?=$this->layout()->content?>
+	</body>
+</html>	
+

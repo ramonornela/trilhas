@@ -1,0 +1,58 @@
+[production]
+;config ini set
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+phpSettings.session.cache_expire = 60
+phpSettings.session.cookie_httponly = true
+phpSettings.session.use_only_cookie = true
+phpSettings.default_charset = "UTF-8"
+
+autoloadernamespaces[] = "Xend_"
+autoloadernamespaces[] = "Preceptor_"
+autoloadernamespaces[] = "Application_"
+
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+
+resources.view.encoding = "UTF-8"
+resources.view.helperPath.Xend_View_Helper = "Xend/View/Helper"
+resources.view.filterPath.Xend_View_Filter = "Xend/View/Filter"
+
+resources.layout.layoutPath = APPLICATION_PATH "/views/layouts/scripts/"
+resources.layout.layout		= box
+
+;config controller
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.moduleDirectory = APPLICATION_PATH "/../modules"
+resources.frontController.env = APPLICATION_ENV
+
+;config modules
+resources.modules = 
+
+;config locale
+resources.locale.default = "pt_BR"
+
+;config translate
+resources.translate.locale = "pt_BR"
+resources.translate.adapter = csv
+resources.translate.data = APPLICATION_PATH "/../data/i18n/lang.pt_BR"
+resources.translate.options.delimiter = "="
+
+;config db
+resources.db.adapter = PDO_Pgsql
+resources.db.params.username = postgres
+resources.db.params.dbname = preceptor_server
+resources.db.params.password = 123456
+resources.db.params.host = localhost
+
+[staging : production]
+
+[testing : production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+resources.frontController.baseUrl = "/trails"

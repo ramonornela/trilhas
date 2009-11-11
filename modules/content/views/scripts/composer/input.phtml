@@ -1,0 +1,64 @@
+<div class="yui-skin-sam">
+	<?php echo $this->element()->startForm()?>
+	
+	<div style="float: right; clear: both;">
+		<?=$this->formSubmit( "submit_composer" , $this->translate("save") );?>
+		<input type="button" id="composer-delete" value="<?=$this->translate("delete")?>" />
+	</div>
+
+	<?php
+		echo $this->element()->formHidden( "id" , null , array( "printLabel" => false ) )
+							 ->formText( "title" )
+							 ->formSelect( "content_id" , null , array( "label" => $this->translate("Pertence a") ) , $this->contents );
+	?>
+
+	<?=$this->element()->formHidden( "ds" , null , array( "printLabel" => false ) ); ?>
+
+	<!--
+	<label for="narration"><?=$this->translate( "narration content" )?>:</label>
+	<?=$this->formFile( "narration" , null , array() )?>
+	-->
+
+	<?php if( count( $this->narration ) ): ?>
+		<br /><br />
+
+		<div>
+			<object width="220" height="30" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0 ">
+				<param name="movie" value="<?=$this->url?>/swf/player_custom/mp3player.swf?src=<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode($this->narration->findParentRow( "File_Model_File" )->location);?>" />
+				<embed src="<?=$this->url?>/swf/player_custom/mp3player.swf?src=<?=$this->url?>/file/file/download/read/true/file/<?=base64_encode($this->narration->findParentRow( "File_Model_File" )->location);?>" type="application/x-shockwave-flash" width="220" height="30" />
+			</object>
+		</div>
+
+		<div>
+			<?=$this->ajax( $this->translate( "delete" ) , "content-composer" , $this->url . "/content/composer/delete-narration/file/{$this->narration->file_id}/content/{$this->narration->content_id}" , $this->translate( "want to delete?" ) )?>
+		</div>
+	<?php endif; ?>
+
+	<?=$this->element()->endForm();?>
+</div>
+<script>
+	//var Editor_Composer = new Preceptor.widget.Editor( 'Content_Model_Content-ds' , { addButton:['uploadImage', "insertHtml"] } );
+
+	Editor_Composer.setEditorHTML($("#Content_Model_Content-ds").val());
+
+	$('#submit_composer').click(function(){
+		Editor_Composer.saveHTML();
+        $("#Content_Model_Content-ds").val( Editor_Composer.get('element').value );
+	});
+
+	content_model_content.success = function(){
+		new Preceptor.util.AjaxUpdate( 'composer-content-content' , '<?=$this->url?>/content/composer/save' , { formId:"Content_Model_Content" } );
+	}
+
+	hasChanged = false;
+
+	<?php if( isset($this->data->id) ):?>
+		$('#composer-delete').click(function(){
+			if( confirm( "<?=$this->translate("want to delete?")?>" ) ){
+				new Preceptor.util.AjaxUpdate( null , '<?=$this->url?>/content/composer/delete/id/<?=$this->data->id?>' , { onComplete:function(){
+					$('#composer-content-main .buttons a').eq(0).trigger('click');
+				}});
+			}
+		});
+	<?php endif; ?>
+</script>

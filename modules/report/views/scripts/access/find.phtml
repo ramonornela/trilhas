@@ -1,0 +1,55 @@
+<?php if ( $this->access ):?>
+<?php
+    $i = $qnt_groups = 1 ;
+	$j = $qnt_users = 1;
+	$k = 1;
+	$y = 1;
+
+    $personCounted = array();
+    $controllerCounted = array();
+    
+	foreach ( $this->access as $key => $access ){
+		if ( @$this->access[$key - 1]['class_id'] != $access['class_id'] ){
+			$qnt_groups = $i++;
+		}
+
+		if ( !in_array( $access['person_id'] , $personCounted ) ){
+            $personCounted[] = $access['person_id'];
+			$qnt_users = $j++;
+        }
+
+        if ( !in_array( $access['controller'] , $controllerCounted ) ){
+            $controllerCounted[] = $access['controller'];
+			$qnt_controller = $k++;
+        }
+
+        if ( @( $this->access[$key - 1]['action'] != $access['action'] ) ||
+             ( $this->access[$key - 1]['controller'] != $access['controller'] ) ){
+            $qnt_action = $y++;
+        }
+    }
+    unset($personCounted,$controllerCounted);
+?>
+	<table class="datatable" width="99%" >
+	  <tr>
+	  	<th><?=$this->translate('group') . " (" . $qnt_groups . ")" ?></th>
+	  	<th><?=$this->translate('users') . " (" . $qnt_users . ")"  ?></th>
+	    <th><?=$this->translate('module') . " (" . $qnt_controller . ")" ?></th>
+	    <th><?=$this->translate('action') . " (" . $qnt_action . ")" ?></th>
+	    <th><?=$this->translate('date') ?> / <?=$this->translate('hour') ?></th>
+	  </tr>
+
+	  <?php foreach ( $this->access as $key => $access ) : ?>
+	  	<?php $class = $this->changeClass( $key , array( "light_gray" , "gray" ) );?>
+	  	<tr class="<?=$class?>">
+	  		<td><?=$access['cname']?></td>
+	  		<td><?=$access['name']?></td>
+	    	<td><?=$this->translate( $access['controller'] )?></td>
+	    	<td><?=$this->translate( $access['action'] ) ?></td>
+	    	<td><?=$this->date( $access['log_created'] , 'd/m/Y H:i:s' ) ?></td>
+	  	</tr>
+	  <?php endforeach; ?>
+	</table>
+<?php else : ?>
+	<?=$this->translate( "there are no records" );?>
+<?php endif; ?>

@@ -1,0 +1,24 @@
+<div class="yui-skin-sam">
+	<?php
+		
+    	echo $this->element()->startForm( )
+                             ->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+                             ->formText( "title" , $this->data->title )
+                         	 ->formTextarea( "ds" , $this->data->ds , array( "label" => $this->translate("description") ) )
+                         	 ->formSubmit( "save" , $this->translate("save") , array( "printLabel" => false ) )
+                         	 ->endForm();
+    ?>
+</div>
+<script>
+	
+	var	Editor_ActivityStage = new Preceptor.widget.Editor( "Activity_Model_ActivityStage-ds" , { addButton:["insertHtml"] } );
+
+    $("#Activity_Model_ActivityStage-save").click(function(){
+        Editor_ActivityStage.saveHTML();
+    });
+
+    activity_model_activitystage.success = function(){
+        new Preceptor.util.AjaxUpdate( 'activity-activity' , '<?=$this->url?>/activity/stage/save/' , { formId:"Activity_Model_ActivityStage" } );
+    }
+	
+</script>

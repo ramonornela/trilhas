@@ -1,0 +1,38 @@
+<div id="theme-list" class="theme">
+	<?php foreach( $this->rs as $rs ):?>
+		<div class="item">
+				<?php $this->theme == $rs ? $checked="checked='checked'" : $checked=""; ?>
+				<input type="radio" name="theme-radio" value="<?=$rs?>" <?=$checked?> class="theme-radio" id="theme_<?=$rs?>" />
+				<label for="theme_<?=$rs?>">
+					<?=$this->translate( "t-" . $rs )?><br />
+					<?=$this->image("../css/themes/" . $rs . "/window.png")?>
+				</label>
+		</div>
+	<?php endforeach;?>
+	<div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+	var currentTheme = '<?=$this->theme?>';
+	
+	$('.theme-radio').click(function(){
+		var newValue = this.value,
+			$newLink = '';
+			
+		document.cookie = "theme-<?=$this->user->group_id?>="+ this.value +";expires=<?=time()+60*60*24*365?>;path=<?=$this->url?>/";
+
+		$head = $('head');
+		
+		$('link').each(function(){
+			if( this.href.indexOf(currentTheme) > -1 ){
+				//$(this).remove();
+				$newLink = $('<link media="screen" rel="stylesheet" type="text/css" />');
+				$newLink.attr( 'href' , this.href.replace( currentTheme , newValue ) );
+
+				$head.append($newLink);
+			}
+		});
+
+		currentTheme = this.value;
+	});
+</script>

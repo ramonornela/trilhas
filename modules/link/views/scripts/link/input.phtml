@@ -1,0 +1,33 @@
+<?=$this->element()->startForm();?>
+<div class="yui-skin-sam" id="div-form-<?=$this->model?>">
+    <?php
+        echo $this->element()->formHidden( "id" , $this->data->id , array( "printLabel" => false ) )
+                  ->formText( "title" , $this->data->title )
+                  ->formText( "url" , $this->data->url );
+     ?>
+
+    <?php if( ( $this->getPermission( "input" ) ) && ( ! $this->data->id ) ): ?>
+        <br />
+        <div style="float: right;margin-right: 93px;">
+            <input type="button" id="manager_category_link" value="<?=$this->translate("category")?>" >
+        </div>
+    <?php endif; ?>
+
+    <a name="focus_link"></a>
+    <div id="categories">
+        <? if( $this->all || $this->checked ): ?>
+            <label for="category_<?=$this->suffix?>"><?=$this->translate("categories")?>:</label>
+            <?=$this->groupedList( "linkall" , $this->all , "linkchecked" , $this->checked , null , array( 'height' => '180px' , 'width' => '292px' , 'width_text' => '288px' ) );?>
+        <? endif; ?>
+    </div>
+
+    <?php echo $this->element()->formSubmit( "model" , $this->translate("save") , array( "printLabel" => false ) ) ?>
+    <div class="clear">&nbsp;</div>
+</div>
+<script>
+	$( "#manager_category_link").click(function(){
+        layout.addPanel( "category-category" , "<?=$this->url?>/category/category/index/type/L/id/<?=$this->data->id?>" );
+	});
+
+</script>
+<?=$this->formRelation( $this->data->id , array( "groupedList" => true ) )?>

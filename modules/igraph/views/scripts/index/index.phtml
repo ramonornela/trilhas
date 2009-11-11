@@ -1,0 +1,89 @@
+<style>
+    .graph{ margin-left: 50px;}
+    .graph-img{ background: url(img/graph.png) center center; position: relative; width: 400px; height: 266px; }
+    .graph-util{ position: absolute; top: 48px; left: 48px; width: 351px; height: 210px; overflow: hidden; }
+    .graph-util span{ font-size: 5em; position: absolute; }
+
+    .graph-fields{ margin-top: 10px; }
+    .graph-fields h3{ margin-bottom: 10px; }
+    .graph-fields label{ display: block; float: left; width:190px; }
+    .graph-fields input{ clear: left; width: 30px;  }
+    .graph-fields div{ float: left; }
+    .graph-fields .item{ clear: both; float: none; margin-bottom: 5px; }
+    #axis-y{ margin-left: 80px; }
+</style>
+<div class="graph">
+    <div class="graph-img">
+        <div class="graph-util">
+            <span>&bull;</span>
+        </div>
+    </div>
+</div>
+<div class="graph-fields">
+    <div id="axis-x">
+        <h3>Força competitiva</h3>
+        <?php foreach($this->axis_x as $value): ?>
+        <div class="item">
+            <label><?php echo $value?></label>
+            <input value="8" maxlength="2" />
+        </div>
+        <?php endforeach;?>
+    </div>
+    <div id="axis-y">
+        <h3>Atratividade do mercado</h3>
+        <?php foreach($this->axis_y as $value): ?>
+        <div class="item">
+            <label><?php echo $value?></label>
+            <input value="8" maxlength="2" />
+        </div>
+        <?php endforeach;?>
+    </div>
+</div>
+<div class="clear"></div>
+<input type="button" id="view" value="Visualizar" />
+<script>
+    $('#view').click(function(){
+        var $input_x = $('input','#axis-x'),
+            $input_y = $('input','#axis-y'),
+            length_x = $input_x.length,
+            length_y = $input_y.length,
+            total_x = 0,total_y = 0,
+            factor_x = -7, factor_y = -32,
+            bull_x = 329, bull_y = 187,
+            average_x = 0,average_y = 0;
+
+            $input_x.each(function(){
+                total_x += parseInt(this.value);
+            });
+
+            $input_y.each(function(){
+                total_y += parseInt(this.value);
+            });
+
+            total_x = total_x/length_x;
+            total_y = total_y/length_y;
+
+            if (total_x && total_y) {
+                average_x = (total_x*bull_x)/10;
+                average_y = (total_y*bull_y)/10;
+            } 
+
+            average_x += factor_x;
+            average_y += factor_y;
+
+            $('.graph-util span').css('top',average_y)
+                                 .css('left',average_x);
+    })
+    .trigger('click');
+
+    $('.graph-fields input').blur(function(){
+        if (this.value > 10 || this.value < 0) {
+            alert('Digite um valor entre 0 - 10');
+            this.value = 0;
+        }
+
+        if (isNaN(parseInt(this.value))) {
+            this.value = 0;
+        }
+    });
+</script>
