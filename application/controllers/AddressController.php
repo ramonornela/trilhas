@@ -1,4 +1,9 @@
 <?php
+/**
+ * 
+ * @author abdalacerqueira
+ * @version $Id$
+ */
 class AddressController extends Application_Controller_Abstract
 {
     protected $_model = "Station_Model_Address";
