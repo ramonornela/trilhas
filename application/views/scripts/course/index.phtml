@@ -1,0 +1,33 @@
+<div class="menu login">
+    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+        <div class="ui-dialog-content ui-widget-content">
+            <div style="text-align: center; height: 120px; overflow: hidden;">
+                <?php if($this->user->image):?>
+                    <img src="upload/thumb_medium<?php echo $this->user->image?>" />
+                <?php else:?>
+                    <img src="upload/thumb_medium.jpg" />
+                <?php endif;?>
+            </div>
+        </div>
+    </div>
+    <div class="button">
+        <?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+            <a  href="user/input" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-person"></span>
+                <?php echo $this->translate("Information")?>
+            </a>
+            <a href="course/my-course" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-folder-open"></span>
+                <?php echo $this->translate('My courses')?>
+            </a>
+            <a href="course/index/list/true" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-folder-open"></span>
+                <?=$this->translate('All courses')?>
+            </a>
+            <a href="course/input" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-document"></span>
+                <?=$this->translate('Create course')?>
+            </a>
+        <?php endif;?>
+    </div>
+</div>

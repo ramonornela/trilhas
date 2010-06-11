@@ -1,0 +1,28 @@
+<?php if(count($this->calendar)):?>
+    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+            <h3><?=$this->translate('Calendar');?></h3>
+        </div>
+        <div class="calendar ui-dialog-content ui-widget-content">
+            <?php $begin = null;?>
+            <?php foreach($this->calendar as $calendar): ?>
+                <?php if ($calendar->begin != $begin):?>
+                    <?php if ($begin != null):?>
+                        </ul></div>
+                    <?php endif;?>
+                    <div class="item">
+                        <div class="date">
+                            <div><?php echo date('d', strtotime($calendar->begin))?></div>
+                            <div><?php echo $this->translate(date('M', strtotime($calendar->begin)))?></div>
+                        </div>
+                        <ul>
+                <?php endif;?>
+                <li>
+                    <?php echo $calendar->description?>
+                    <?php $begin = $calendar->begin;?>
+                </li>
+            <?php endforeach;?>
+                    </ul></div>
+        </div>
+    </div>
+<?php endif; ?>

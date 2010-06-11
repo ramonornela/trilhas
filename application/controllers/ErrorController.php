@@ -1,8 +1,8 @@
 <?php
-class ErrorController extends Zend_Controller_Action
+class ErrorController extends Tri_Controller_Action
 {
-    public function errorAction()
-    {
+	public function errorAction()
+	{
         $e = $this->_getParam('error_handler')->exception;
 
         try{
@@ -15,9 +15,10 @@ class ErrorController extends Zend_Controller_Action
         echo '<br /><br />';
         $traces = $e->getTrace();
         foreach ($traces  as $trace) {
-            echo $trace['line'] . " => " . $trace['file'] . '<br />';
+            if (isset($trace['line'])) {
+                echo $trace['line'] . " => " . $trace['file'] . '<br />';
+            }
         }
         exit;
-    }
+	}
 }
-?>

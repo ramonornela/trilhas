@@ -1,0 +1,80 @@
+<?php echo $this->doctype(); ?>
+<?php $locale = str_replace('_', '-', $this->locale)?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo $this->locale?>" xml:lang="en">
+	<head>
+		<title>Trilhas - Preceptor Educação a Distância</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <base href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/" />
+        <link rel="shortcut icon" href="favicon.ico" />
+
+        <?=$this->headLink()->appendStylesheet('js/editor/stylesheets/xq_ui.css')
+							->appendStylesheet('js/editor/stylesheets/xq_contents.css')
+							->appendStylesheet('css/themes/'.$this->theme.'/jquery-ui.css')
+							->appendStylesheet('css/themes/'.$this->theme.'/main.css')
+							->appendStylesheet('css/navigation.css')
+							->appendStylesheet('css/utils.css'); ?>
+                            
+		<?=$this->headScript()->appendFile('js/jquery/jquery.js')
+							  ->appendFile('js/jquery/jquery-ui-all.js')
+							  ->appendFile('js/jquery/jquery.maskedinput.js')
+							  ->appendFile('js/jquery/ui/i18n/ui.datepicker-'.$locale.'.js')
+                              ->appendFile('js/editor/all.js')
+							  ->appendFile('js/editor/plugin/FileGalleryPlugin.js')
+							  ->appendFile('js/editor/plugin/CustomStylePlugin.js')
+							  ->appendFile('js/editor/plugin/EditorResizePlugin.js')
+							  ->appendFile('js/editor/plugin/FlashMovieMacroPlugin.js')
+							  ->appendFile('js/editor/plugin/LinkToImagePlugin.js')
+							  ->appendFile('js/editor/plugin/ContextoPlugin.js')
+							  ->appendFile('js/chat.js')
+							  ->appendFile('js/relation.js')
+							  ->appendFile('js/action.js')
+							  ->appendFile('js/string.js')
+							  ->appendFile('js/run.js')
+							  ->appendFile('js/navigation.js'); ?>
+	</head>
+    <body>
+        <div id="hd">
+            <h1>Trilhas</h1>
+            <img src="css/themes/<?=$this->theme?>/images/logo.png" alt="Logo Trilhas" />
+            <?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+                <span style="margin-right: 5px;">Olá, [username]</span> |
+                <?php if(count($this->groups) > 2): ?>
+                    <?php echo $this->formSelect("group_id", $this->user->group_id, array( "class" => "select_profile", "style" => "margin-left: 6px; margin-right: 6px; height: 18px;") , $this->groups);?> |
+                <?php endif ?>
+                <a href="user/logout"><?php echo $this->translate("logout");?></a>&nbsp;
+            <?php endif; ?>
+        </div>
+        <div id="bd">
+            <?=$this->layout()->content?>
+        </div>
+        <div id="ft">
+            <a href="http://www.preceptoread.com.br">
+                <img src="img/logo.png" alt="Logo Preceptor" />
+            </a>
+        </div>
+        <script type="text/javascript">
+            var font_size = 100;
+
+            $('#normal-font').click(function(){
+                font_size = 100;
+                $('#bd').removeAttr("style");
+            });
+            $('#increase-font').click(function(){
+                font_size += 10;
+                $('#bd').css({'font-size':font_size +'%'});
+            });
+            $("#decrease-font" ).click( function(){
+                font_size -= 10;
+                $('#bd').css({ 'font-size':font_size +'%'});
+            });
+
+            <?php if (isset($this->user)): ?>
+                $('#group_id').change(function(){
+                    if (this.value) {
+                        location = 'discipline/index/id/<?php echo $this->user->course_id?>/discipline_id/<?php echo $this->user->discipline_id?>/group_id/' + this.value;
+                    }
+                });
+            <?php endif; ?>
+        </script>
+    </body>
+</html>

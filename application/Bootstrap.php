@@ -1,6 +1,15 @@
 <?php
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
+    protected function _initConstants () {
+        if ($this->hasOption('constants')) {
+            $options = $this->getOption('constants');
+            foreach($options as $name => $value) {
+                define($name, $value);
+            }
+        }
+    }
+
     protected function _initZFDebug() {
         // Setup autoloader with namespace
         $autoloader = Zend_Loader_Autoloader::getInstance();
