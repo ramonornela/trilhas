@@ -61,9 +61,7 @@
                 <?php foreach($this->courses as $course): ?>
                     <div class="item">
                         <img alt="<?php echo $course->name?>" src="upload/<?php echo $this->thumbnail($course->image, 'small')?>" width="40" height="40" />
-                        <a href="course/view/id/<?php echo $course->id?>">
-                            <?php echo $course->name?>
-                        </a>
+                        <a href="course/view/id/<?php echo $course->id?>"><?php echo $course->name?></a>
                         <span><?php echo $this->translate($course->category)?></span>
                         <p class="light"><?php echo substr($course->description, 0, strpos($course->description, '.'))?></p>
                     </div>

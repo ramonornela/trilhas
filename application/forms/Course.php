@@ -44,7 +44,8 @@ class Application_Form_Course extends Zend_Form {
             $category = new Zend_Form_Element_Text('category');
         } else {
             $category = new Zend_Form_Element_Select('category');
-            $category->addMultiOptions(array('' => '[select]') + $categories);
+            $category->addMultiOptions(array('' => '[select]') + $categories)
+                     ->setRegisterInArrayValidator(false);
         }
         $category->setLabel('Category')
                  ->addValidators($validators['category'])
@@ -65,7 +66,8 @@ class Application_Form_Course extends Zend_Form {
             $status = new Zend_Form_Element_Text('status');
         } else {
             $status = new Zend_Form_Element_Select('status');
-            $status->addMultiOptions(array('' => '[select]') + $statusOptions);
+            $status->addMultiOptions(array('' => '[select]') + $statusOptions)
+                   ->setRegisterInArrayValidator(false);
         }
         $status->setLabel('Status')
                ->addValidators($validators['status'])

@@ -52,10 +52,3 @@ class Calendar_Form_Form extends Zend_Form {
         $this->addElement('submit', 'Save');
     }
 }
-/*
-    user_id
-	classroom_id
-	description
-	begin
-	end
- */

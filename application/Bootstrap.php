@@ -32,14 +32,33 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $options['plugins']['Database']['adapter'] = $db;
             }
 
+            $options['plugins']['File']['base_path'] = APPLICATION_PATH;
+            
             # Setup the cache plugin
-            if ($this->hasPluginResource('cache')) {
-                $this->bootstrap('cache');
-                $cache = $this->getPluginResource('cache')->getCache();
+            if ($this->hasPluginResource('cachemanager')) {
+                $this->bootstrap('cachemanager');
+                $cache  = $this->getPluginResource('cachemanager')
+                       ->getCacheManager()
+                       ->getCache('default');
                 $options['plugins']['Cache']['backend'] = $cache->getBackend();
             }
             $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);
             $front->registerPlugin($zfdebug);
         }
+    }
+
+    public function _initCache() {
+        $this->bootstrap('cachemanager');
+        $cache  = $this->getPluginResource('cachemanager')
+                       ->getCacheManager()
+                       ->getCache('default');
+        
+        Zend_Paginator::setCache($cache);
+        Zend_Db_Table::setDefaultMetadataCache($cache);
+        Zend_Date::setOptions(array('cache' => $cache));
+        Zend_Translate::setCache($cache);
+        Zend_Locale::setCache($cache);
+
+        Zend_Registry::set('cache', $cache);
     }
 }

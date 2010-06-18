@@ -14,9 +14,9 @@
 							->appendStylesheet('css/navigation.css')
 							->appendStylesheet('css/utils.css'); ?>
                             
-		<?=$this->headScript()->appendFile('js/jquery/jquery.js')
-							  ->appendFile('js/jquery/jquery-ui-all.js')
-							  ->appendFile('js/jquery/jquery.maskedinput.js')
+		<?=$this->headScript()->appendFile('js/jquery/jquery.min.js')
+							  ->appendFile('js/jquery/jquery-ui.min.js')
+							  ->appendFile('js/jquery/jquery.other.js')
 							  ->appendFile('js/jquery/ui/i18n/ui.datepicker-'.$locale.'.js')
                               ->appendFile('js/editor/all.js')
 							  ->appendFile('js/editor/plugin/FileGalleryPlugin.js')

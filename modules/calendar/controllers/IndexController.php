@@ -1,7 +1,7 @@
 <?php
 class Calendar_IndexController extends Tri_Controller_Action {
     public function indexAction() {
-        $calendar = new Zend_Db_Table('calendar');
+        $calendar = new Tri_Db_Table('calendar');
         $id       = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
 
         $where = array('classroom_id IS NULL');
@@ -20,7 +20,7 @@ class Calendar_IndexController extends Tri_Controller_Action {
         $form = new Calendar_Form_Form();
         
         if ($id) {
-            $calendar = new Zend_Db_Table('calendar');
+            $calendar = new Tri_Db_Table('calendar');
             $row      = $calendar->find($id)->current();
 
             if ($row) {
@@ -33,7 +33,7 @@ class Calendar_IndexController extends Tri_Controller_Action {
 
     public function saveAction() {
         $form  = new Calendar_Form_Form();
-        $table = new Zend_Db_Table('calendar');
+        $table = new Tri_Db_Table('calendar');
         $data  = $this->_getAllParams();
 
         if ($form->isValid($data)) {
