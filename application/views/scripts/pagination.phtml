@@ -1,0 +1,37 @@
+<?php if ($this->pageCount): ?>
+    <?php $params = array('query' => $this->query,
+                          'order' => $this->order,
+                          'direction' => $this->direction,
+                          'status' => $this->status,
+                          'begin' => $this->end,
+                          'end' => $this->end,
+                          'page' => null)?>
+    <div class="paginationControl" style="text-align:center">
+        <?php if (isset($this->previous)): ?>
+            <?php $params['page'] = $this->previous?>
+            <a href="<?php echo $this->url($params); ?>">
+                &lt; <?php echo $this->translate('Previous') ?>
+            </a> |
+        <?php else: ?>
+            <span class="disabled">&lt; <?php echo $this->translate('Previous') ?></span> |
+        <?php endif; ?>
+
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+                <?php $params['page'] = $page?>
+                <a href="<?php echo $this->url($params); ?>"><?php echo $page; ?></a> |
+            <?php else: ?>
+                <?php echo $page; ?> |
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+        <?php if (isset($this->next)): ?>
+            <?php $params['page'] = $this->next?>
+            <a href="<?php echo $this->url($params); ?>">
+                <?php echo $this->translate('Next') ?>  &gt;
+            </a>
+        <?php else: ?>
+            <span class="disabled"><?php echo $this->translate('Next') ?> &gt;</span>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

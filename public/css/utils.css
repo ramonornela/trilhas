@@ -1,0 +1,17 @@
+/*  ------------- Classes ------------------  */
+.inline{display: inline;}
+.clear{clear: both;}
+.drag{cursor: move;}
+.hidden{visibility: hidden;}
+.padding{padding: 10px;}
+.margin{margin: 10px;}
+.left{float: left;}
+.right{float: right;}
+.center{text-align: center;}
+.none{display: none;}
+.light{color: #555;}
+
+input.input-little, textarea.textarea-little{ width: 40px; }
+input.input-small, textarea.textarea-small{ width: 80px; }
+input.input-medium, textarea.textarea-medium{ width: 300px; }
+input.input-big, textarea.textarea-big{ width: 600px; }
