@@ -38,15 +38,16 @@ class Tri_Application_Resource_Acl extends Zend_Application_Resource_ResourceAbs
                 $controller = strtolower($controller);
                 foreach ($grant as $action => $roles) {
                 	$resource = $controller . self::RESOURCE_SEPARATOR . $action;
-                	foreach (explode(' ', $roles) as $role) {
+                	foreach (explode(',', $roles) as $role) {
 	                    if (!empty($role)) {
-	                        $this->_acl->allow($role, $module, $resource);
+	                        $this->_acl->allow(trim($role), $module, $resource);
 	                    }
                 	}
                 }
             }
         }
 
+        Zend_Registry::set('acl', $this->_acl);
         return $this->_acl;
     }
 

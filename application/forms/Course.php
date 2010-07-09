@@ -6,7 +6,7 @@ class Application_Form_Course extends Zend_Form {
 
         $validators    = $course->getValidators();
         $filters       = $course->getFilters();
-        $where         = array("role = 'Admin' OR role = 'Teacher' OR role = 'Creator'");
+        $where         = array("role = 'institution' OR role = 'Teacher' OR role = 'Creator'");
         $users         = $user->fetchPairs('id', 'name', $where, 'name');
         $statusOptions = array_unique($course->fetchPairs('status', 'status'));
         $categories    = array_unique($course->fetchPairs('category', 'category'));

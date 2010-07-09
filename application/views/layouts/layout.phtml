@@ -45,6 +45,13 @@
             <?php endif; ?>
         </div>
         <div id="bd">
+            <div class="message">
+                <?php if ($this->messages):?>
+                    <?php foreach($this->messages as $message):?>
+                        <p><?php echo $message?></p>
+                    <?php endforeach;?>
+                <?php endif;?>
+            </div>
             <?=$this->layout()->content?>
         </div>
         <div id="ft">
@@ -53,28 +60,7 @@
             </a>
         </div>
         <script type="text/javascript">
-            var font_size = 100;
-
-            $('#normal-font').click(function(){
-                font_size = 100;
-                $('#bd').removeAttr("style");
-            });
-            $('#increase-font').click(function(){
-                font_size += 10;
-                $('#bd').css({'font-size':font_size +'%'});
-            });
-            $("#decrease-font" ).click( function(){
-                font_size -= 10;
-                $('#bd').css({ 'font-size':font_size +'%'});
-            });
-
-            <?php if (isset($this->user)): ?>
-                $('#group_id').change(function(){
-                    if (this.value) {
-                        location = 'discipline/index/id/<?php echo $this->user->course_id?>/discipline_id/<?php echo $this->user->discipline_id?>/group_id/' + this.value;
-                    }
-                });
-            <?php endif; ?>
+            
         </script>
     </body>
 </html>

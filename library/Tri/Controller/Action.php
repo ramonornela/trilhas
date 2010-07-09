@@ -1,6 +1,8 @@
 <?php
 class Tri_Controller_Action extends Zend_Controller_Action{
     public function init() {
+//        $this->_helper->cache(array('index'), array('page'));
+        
         $this->_security();
         $this->_locale();
 
@@ -13,6 +15,8 @@ class Tri_Controller_Action extends Zend_Controller_Action{
         if (!$this->_request->isXmlHttpRequest()) {
             $this->_helper->layout->enableLayout();
         }
+
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 
     protected function _locale() {
@@ -25,26 +29,22 @@ class Tri_Controller_Action extends Zend_Controller_Action{
     protected function _security() {
         // apply access control list
         $container = $this->getInvokeArg('bootstrap')->getContainer();
+        $identity  = Zend_Auth::getInstance()->getIdentity();
         if (isset($container->acl)) {
+            if ($identity) {
+                $role = $identity['role'];
+            } else {
+                $role = 'all';
+            }
             $acl       = $container->acl;
-            $roles     = $this->_getUserRoles();
             $resource  = $this->_getParam('module');
-            $privilege = $this->_getParam('controller') .
-                    Tri_Application_Resource_Acl::RESOURCE_SEPARATOR .
-                    $this->_getParam('action');
-            foreach ($roles as $role) {
-                if ($acl->isAllowed($role, $resource, $privilege)) {
-                    return;
-                }
+            $privilege = $this->_getParam('controller') 
+                       . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
+                       . $this->_getParam('action');
+            if ($acl->isAllowed($role, $resource, $privilege)) {
+                return;
             }
             //throw new Exception('Acesso restrito.');
         }
-    }
-    
-    /**
-     * @return string[]
-     */
-    protected function _getUserRoles() {
-        return (array) $this->getInvokeArg('bootstrap')->getContainer()->acl->getRoles();
     }
 }
