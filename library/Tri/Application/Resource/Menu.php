@@ -24,7 +24,8 @@ class Tri_Application_Resource_Menu extends Zend_Application_Resource_ResourceAb
         return $menu;
     }
 
-    public function setNames(array $names) {
+    public function setNames(array $names)
+    {
         $this->_names = $names;
         return $this;
     }

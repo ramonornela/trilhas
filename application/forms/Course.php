@@ -1,6 +1,8 @@
 <?php
-class Application_Form_Course extends Zend_Form {
-    public function init() {
+class Application_Form_Course extends Zend_Form
+{
+    public function init()
+    {
         $course = new Tri_Db_Table('course');
         $user   = new Tri_Db_Table('user');
 
@@ -50,7 +52,7 @@ class Application_Form_Course extends Zend_Form {
         $category->setLabel('Category')
                  ->addValidators($validators['category'])
                  ->addFilters($filters['category']);
-                 
+
 
         $file = new Zend_Form_Element_File('image');
         $file->setLabel('Upload an image:')

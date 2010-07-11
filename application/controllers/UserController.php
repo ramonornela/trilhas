@@ -1,6 +1,8 @@
 <?php
-class UserController extends Tri_Controller_Action {
-    public function loginAction() {
+class UserController extends Tri_Controller_Action
+{
+    public function loginAction()
+    {
         $auth = Zend_Auth::getInstance();
         $form = new Application_Form_Login();
 
@@ -12,7 +14,7 @@ class UserController extends Tri_Controller_Action {
             if ($form->isValid($this->getRequest()->getPost())) {
                 $username = $form->getValue('username');
                 $password = $form->getValue('password');
-                $db = Zend_Db_Table::getDefaultAdapter();
+                $db      = Zend_Db_Table::getDefaultAdapter();
                 $adapter = new Tri_Auth_Adapter_DbTable($db, 'user', 'email', 'password');
 
                 $adapter->setIdentity($username)
@@ -31,12 +33,14 @@ class UserController extends Tri_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function logoutAction() {
+    public function logoutAction()
+    {
 		Zend_Auth::getInstance()->clearIdentity();
 		$this->_redirect( "/user/login/" );
     }
 
-    public function resetAction() {
+    public function resetAction()
+    {
 
     }
 }

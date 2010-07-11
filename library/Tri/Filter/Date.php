@@ -1,5 +1,6 @@
 <?php
-class Tri_Filter_Date implements Zend_Filter_Interface {
+class Tri_Filter_Date implements Zend_Filter_Interface
+{
     /**
      * Set options
      * @var array

@@ -51,12 +51,14 @@ class Tri_Application_Resource_Acl extends Zend_Application_Resource_ResourceAbs
         return $this->_acl;
     }
 
-    public function setRoles(array $roles) {
+    public function setRoles(array $roles)
+    {
         $this->_roles = $roles;
         return $this;
     }
 
-    public function setResources(array $resources) {
+    public function setResources(array $resources)
+    {
         $this->_resources = $resources;
         return $this;
     }

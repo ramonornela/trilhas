@@ -1,7 +1,8 @@
 <?php
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-    protected function _initConstants () {
+    protected function _initConstants()
+    {
         if ($this->hasOption('constants')) {
             $options = $this->getOption('constants');
             foreach($options as $name => $value) {
@@ -10,7 +11,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
 
-    protected function _initZFDebug() {
+    protected function _initZFDebug()
+    {
         // Setup autoloader with namespace
         $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->registerNamespace('ZFDebug');
@@ -33,7 +35,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             }
 
             $options['plugins']['File']['base_path'] = APPLICATION_PATH;
-            
+
             # Setup the cache plugin
             if ($this->hasPluginResource('cachemanager')) {
                 $this->bootstrap('cachemanager');
@@ -47,12 +49,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
 
-    public function _initCache() {
+    public function _initCache()
+    {
         $this->bootstrap('cachemanager');
         $cache  = $this->getPluginResource('cachemanager')
                        ->getCacheManager()
                        ->getCache('default');
-        
+
         Zend_Paginator::setCache($cache);
         Zend_Db_Table::setDefaultMetadataCache($cache);
         Zend_Date::setOptions(array('cache' => $cache));

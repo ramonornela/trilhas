@@ -7,17 +7,17 @@
         <base href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/" />
         <link rel="shortcut icon" href="favicon.ico" />
 
-        <?=$this->headLink()->appendStylesheet('js/editor/stylesheets/xq_ui.css')
+        <?php echo $this->headLink()->appendStylesheet('js/editor/stylesheets/xq_ui.css')
 							->appendStylesheet('js/editor/stylesheets/xq_contents.css')
-							->appendStylesheet('css/themes/'.$this->theme.'/jquery-ui.css')
-							->appendStylesheet('css/themes/'.$this->theme.'/main.css')
+							->appendStylesheet('css/themes/' . $this->theme . '/jquery-ui.css')
+							->appendStylesheet('css/themes/' . $this->theme . '/main.css')
 							->appendStylesheet('css/navigation.css')
 							->appendStylesheet('css/utils.css'); ?>
-                            
-		<?=$this->headScript()->appendFile('js/jquery/jquery.min.js')
+
+		<?php echo $this->headScript()->appendFile('js/jquery/jquery.min.js')
 							  ->appendFile('js/jquery/jquery-ui.min.js')
 							  ->appendFile('js/jquery/jquery.other.js')
-							  ->appendFile('js/jquery/ui/i18n/ui.datepicker-'.$locale.'.js')
+							  ->appendFile('js/jquery/ui/i18n/ui.datepicker-' . $locale . '.js')
                               ->appendFile('js/editor/all.js')
 							  ->appendFile('js/editor/plugin/FileGalleryPlugin.js')
 							  ->appendFile('js/editor/plugin/CustomStylePlugin.js')
@@ -35,13 +35,13 @@
     <body>
         <div id="hd">
             <h1>Trilhas</h1>
-            <img src="css/themes/<?=$this->theme?>/images/logo.png" alt="Logo Trilhas" />
+            <img src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" />
             <?php if(Zend_Auth::getInstance()->hasIdentity()):?>
                 <span style="margin-right: 5px;">Olá, [username]</span> |
                 <?php if(count($this->groups) > 2): ?>
-                    <?php echo $this->formSelect("group_id", $this->user->group_id, array( "class" => "select_profile", "style" => "margin-left: 6px; margin-right: 6px; height: 18px;") , $this->groups);?> |
+                    <?php echo $this->formSelect('group_id', $this->user->group_id, array('class' => 'select_profile', 'style' => 'margin-left: 6px; margin-right: 6px; height: 18px;') , $this->groups);?> |
                 <?php endif ?>
-                <a href="user/logout"><?php echo $this->translate("logout");?></a>&nbsp;
+                <a href="user/logout"><?php echo $this->translate('logout');?></a>&nbsp;
             <?php endif; ?>
         </div>
         <div id="bd">
@@ -52,15 +52,12 @@
                     <?php endforeach;?>
                 <?php endif;?>
             </div>
-            <?=$this->layout()->content?>
+            <?php echo $this->layout()->content?>
         </div>
         <div id="ft">
             <a href="http://www.preceptoread.com.br">
                 <img src="img/logo.png" alt="Logo Preceptor" />
             </a>
         </div>
-        <script type="text/javascript">
-            
-        </script>
     </body>
 </html>

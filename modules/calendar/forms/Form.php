@@ -1,13 +1,15 @@
 <?php
-class Calendar_Form_Form extends Zend_Form {
-    public function init() {
+class Calendar_Form_Form extends Zend_Form
+{
+    public function init()
+    {
         $calendar  = new Tri_Db_Table('calendar');
         $classroom = new Tri_Db_Table('classroom');
 
         $validators = $calendar->getValidators();
         $filters    = $calendar->getFilters();
         $options    = $classroom->fetchPairs('id', 'name', "status = 'Active'");
-        
+
         $this->setAction('calendar/index/save')
              ->setMethod('post');
 
@@ -43,7 +45,7 @@ class Calendar_Form_Form extends Zend_Form {
             ->setAttrib('class', 'date')
             ->addFilters($filters['end'])
             ->getPluginLoader('filter')->addPrefixPath('Tri_Filter', 'Tri/Filter');
-        
+
         $this->addElement($id);
         $this->addElement($classroom_id);
         $this->addElement($description);

@@ -5,10 +5,9 @@ class ErrorController extends Tri_Controller_Action
 	{
         $e = $this->_getParam('error_handler')->exception;
 
-        try{
+        try {
             Zend_Db_Table_Abstract::getDefaultAdapter()->rollBack();
         } catch (Exception $en) {
-            ;
         }
 
 		echo $e->getMessage();

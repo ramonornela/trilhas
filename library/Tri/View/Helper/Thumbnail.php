@@ -4,19 +4,21 @@
  * @author Abdala Cequeira <abdala.cerqueira@gmail.com>
  *
  */
-class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract {
+class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract
+{
     private $_name   = null;
     private $_width  = null;
     private $_height = null;
     private $_type   = array('small'  => array('width' => 40, 'height' => 40),
-                           'medium' => array('width' => 200, 'height' => 200));
+                             'medium' => array('width' => 200, 'height' => 200));
 
     const IMAGETYPE_GIF  = 'image/png';
     const IMAGETYPE_JPEG = 'image/jpeg';
     const IMAGETYPE_PNG  = 'image/jpg';
     const IMAGETYPE_JPG  = 'image/gif';
 
-    public function thumbnail($path, $type) {
+    public function thumbnail($path, $type)
+    {
         $thumb = UPLOAD_DIR . $path . $type . '.png';
         if (!file_exists($thumb)) {
             $this->_open(UPLOAD_DIR . $path);
@@ -26,11 +28,12 @@ class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract {
         return $path . $type . '.png';
     }
 
-    protected function _setInfo($path) {
+    protected function _setInfo($path)
+    {
         $imgSize = @getimagesize($path);
         if(!$imgSize) {
             throw new Exception('Could not extract image size.');
-        } elseif($imgSize[0] == 0 || $imgSize[1] == 0) {
+        } elseif ($imgSize[0] == 0 || $imgSize[1] == 0) {
             throw new Exception('Image has dimension of zero.');
         }
         $this->_width    = $imgSize[0];
@@ -38,7 +41,8 @@ class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract {
         $this->_mimeType = $imgSize['mime'];
     }
 
-    protected function _setDimension($forDim, $maxWidth, $maxHeight) {
+    protected function _setDimension($forDim, $maxWidth, $maxHeight)
+    {
         if ($this->_width > $maxWidth) {
             $ration = $maxWidth/$this->_width;
             $newwidth = round($this->_width*$ration);
@@ -49,13 +53,13 @@ class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract {
                 $newwidth = round($newwidth*$ration);
                 $newheight = round($newheight*$ration);
 
-                if($forDim == 'w') {
+                if ($forDim == 'w') {
                     return $newwidth;
                 } else {
                     return $newheight;
                 }
             } else {
-                if($forDim == 'w') {
+                if ($forDim == 'w') {
                     return $newwidth;
                 } else {
                     return $newheight;
@@ -69,13 +73,13 @@ class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract {
                 $ration = $maxWidth/$newwidth;
                 $newwidth = round($newwidth*$ration);
                 $newheight = round($newheight*$ration);
-                if($forDim == 'w')
+                if ($forDim == 'w') {
                     return $newwidth;
-                else
+                } else {
                     return $newheight;
-            }
-            else {
-                if($forDim == 'w') {
+                }
+            } else {
+                if ($forDim == 'w') {
                     return $newwidth;
                 } else {
                     return $newheight;
@@ -90,7 +94,8 @@ class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract {
         }
     }
 
-    protected function _open($path) {
+    protected function _open($path)
+    {
         $this->_setInfo($path);
         switch($this->_mimeType) {
             case self::IMAGETYPE_GIF:

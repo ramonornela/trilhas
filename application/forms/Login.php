@@ -1,6 +1,8 @@
 <?php
-class Application_Form_Login extends Zend_Form {
-    public function init() {
+class Application_Form_Login extends Zend_Form
+{
+    public function init()
+    {
         $course = new Tri_Db_Table('course');
         $user   = new Tri_Db_Table('user');
 

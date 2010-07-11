@@ -1,5 +1,6 @@
 <?php
-class Tri_Db_Table extends Zend_Db_Table {
+class Tri_Db_Table extends Zend_Db_Table
+{
     /**
      * table validators
      *
@@ -31,7 +32,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return array
      */
-    public function getValidators() {
+    public function getValidators()
+    {
         if (empty($this->_validators)) {
             $this->setupValidators();
         }
@@ -43,7 +45,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return array
      */
-    public function getFilters() {
+    public function getFilters()
+    {
         if (empty($this->_filters)) {
             $this->setupFilters();
         }
@@ -55,7 +58,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return void
      */
-    public function setupValidators() {
+    public function setupValidators()
+    {
         $this->_validators = array();
         $resultValidators  = $this->info();
 
@@ -105,7 +109,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return void
      */
-    public function setupFilters() {
+    public function setupFilters()
+    {
         $this->_filters = array();
         $resultFilters  = $this->info();
 
@@ -157,12 +162,13 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return void
      */
-    public function addValidators($field, $validators) {
+    public function addValidators($field, $validators)
+    {
         if (empty($this->_validators)) {
             $this->setupValidators();
         }
 
-        $validators = (array)$validators;
+        $validators = (array) $validators;
 
         foreach($validators as $value) {
             $this->_validators[$field][] = $value;
@@ -174,12 +180,13 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return void
      */
-    public function addFilters($field, $filters) {
+    public function addFilters($field, $filters)
+    {
         if (empty($this->_filters)) {
             $this->setupFilters();
         }
 
-        $filters = (array)$filters;
+        $filters = (array) $filters;
 
         foreach($filters as $value) {
             $this->_filters[$field][] = $value;
@@ -191,7 +198,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return void
      */
-    public function removeValidators($field, $validators) {
+    public function removeValidators($field, $validators)
+    {
         if (empty($this->_validators)) {
             $this->setupValidators();
         }
@@ -207,7 +215,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      *
      * @return void
      */
-    public function removeFilters($field, $filters) {
+    public function removeFilters($field, $filters)
+    {
         if (empty($this->_filters)) {
             $this->setupFilters();
         }
@@ -227,7 +236,8 @@ class Tri_Db_Table extends Zend_Db_Table {
      * @param  integer                           $offset
      * @return mixed[]
      */
-    public function fetchPairs($key = 'id', $value = 'name', $where = null, $order = null, $count = null, $offset = null) {
+    public function fetchPairs($key = 'id', $value = 'name', $where = null, $order = null, $count = null, $offset = null)
+    {
         // check input
         $translate = Zend_Registry::get('Zend_Translate');
 
@@ -263,7 +273,7 @@ class Tri_Db_Table extends Zend_Db_Table {
                 return $cache->load($id);
             }
         }
-        
+
         $stmt = $this->_db->query($select);
         $data = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
@@ -273,24 +283,28 @@ class Tri_Db_Table extends Zend_Db_Table {
         return $data;
     }
 
-    public function clearCache() {
+    public function clearCache()
+    {
         if (Zend_Registry::isRegistered('cache')) {
             $mode = Zend_Cache::CLEANING_MODE_MATCHING_TAG;
             Zend_Registry::get('cache')->clean($mode, array($this->_name));
         }
     }
 
-    public function insert(array $data) {
+    public function insert(array $data)
+    {
         $this->clearCache();
         return parent::insert($data);
     }
 
-    public function update(array $data, $where) {
+    public function update(array $data, $where)
+    {
         $this->clearCache();
         return parent::update($data, $where);
     }
 
-    public function delete($where) {
+    public function delete($where)
+    {
         $this->clearCache();
         return parent::delete($where);
     }
