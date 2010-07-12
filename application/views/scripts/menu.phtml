@@ -1,0 +1,29 @@
+<div id="menu">
+	<ul>
+        <?php $menu = Zend_Registry::get('menu');?>
+        <?php $i = 0; $previousParentName = null;?>
+		<?php foreach ($menu as $parentName => $childs): ?>
+                <?php foreach($childs as $name => $data): ?>
+                    <?php if ($this->isAllowed($data)): ?>
+                        <?php if ($parentName != $previousParentName):?>
+                            <?php if($i > 0): ?>
+                                </ul>
+                             </li>
+                            <?php endif;?>
+                            <li>
+                                <h3><?=$this->translate($parentName)?></h3>
+                                <ul>
+                        <?php endif;?>
+                        <li>
+                            <a href="#this" onclick="addElement('main', '<?=$data['controller']?>' , '<?=$this->url?>/<?=$data['module']?>/<?=$data['controller']?>/<?=$data['action']?>' )"  >
+                                <?=$this->translate($name)?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php $previousParentName = $parentName; $i++;?>
+                <?php endforeach; ?>
+		<?php endforeach; ?>
+        </ul>
+            </li>
+	</ul>
+</div>

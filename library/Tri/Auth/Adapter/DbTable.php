@@ -15,7 +15,7 @@ class Tri_Auth_Adapter_DbTable extends Zend_Auth_Adapter_DbTable
     {
         return new Zend_Auth_Result(
             $this->_authenticateResultInfo['code'],
-            $this->_resultRow,
+            $this->getResultRowObject(),
             $this->_authenticateResultInfo['messages']
             );
     }

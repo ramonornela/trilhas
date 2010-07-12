@@ -1,30 +1,50 @@
 <?php
-class Application_Form_Login extends Zend_Form {
-    public function init() {
-        $course = new Tri_Db_Table('course');
-        $user   = new Tri_Db_Table('user');
+/**
+ * Trilhas - Learning Management System
+ * Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-        $validators    = $course->getValidators();
-        $filters       = $course->getFilters();
-        $where         = array("role = 'Admin' OR role = 'Teacher' OR role = 'Creator'");
-        $users         = $user->fetchPairs('id', 'name', $where, 'name');
-        $statusOptions = array_unique($course->fetchPairs('status', 'status'));
-        $categories    = array_unique($course->fetchPairs('category', 'category'));
-
+/**
+ * @category   Application
+ * @package    Application_Form
+ * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
+ * @license    http://www.gnu.org/licenses/  GNU GPL
+ */
+class Application_Form_Login extends Zend_Form
+{
+    /**
+     * (non-PHPdoc)
+     * @see Zend_Form#init()
+     */
+    public function init()
+    {
         $this->setAction('user/login')
              ->setMethod('post');
 
-        $username = new Zend_Form_Element_Text('username');
-        $username->setRequired()
-                 ->setLabel('Username')
-                 ->addFilters(array('StringTrim', 'StripTags'));
+        $email = new Zend_Form_Element_Text('email');
+        $email->setRequired()
+              ->setLabel('Email')
+              ->addFilters(array('StringTrim', 'StripTags'));
 
         $password = new Zend_Form_Element_Password('password');
         $password->setRequired()
                  ->setLabel('Password')
                  ->addFilters(array('StringTrim', 'StripTags'));
 
-        $this->addElement($username)
+        $this->addElement($email)
              ->addElement($password)
              ->addElement('submit', 'Login');
    }

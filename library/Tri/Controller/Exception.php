@@ -18,9 +18,9 @@
  */
 
 /**
- * @see Zend_Controller_Action
+ * @see Tri_Exception
  */
-require_once 'Zend/Controller/Action.php';
+require_once 'Tri/Exception.php';
 
 /**
  * @category   Tri
@@ -28,34 +28,5 @@ require_once 'Zend/Controller/Action.php';
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Tri_Controller_Action extends Zend_Controller_Action
-{
-    /**
-     * (non-PHPdoc)
-     * @see Zend_Controller_Action#init()
-     */
-    public function init()
-    {
-        $this->_locale();
-
-        if (!isset($theme)) {
-            $this->view->theme = 'cupertino';
-        }
-
-        $this->_helper->layout->disableLayout();
-
-        if (!$this->_request->isXmlHttpRequest()) {
-            $this->_helper->layout->enableLayout();
-        }
-
-        $this->view->messages = $this->_helper->flashMessenger->getMessages();
-    }
-
-    protected function _locale()
-    {
-        $locale = Zend_Registry::get('Zend_Locale');
-        
-        $this->view->locale = key($locale->getDefault());
-        $this->view->date_format = Zend_Locale_Data::getContent($this->view->locale, 'date');
-    }
-}
+class Tri_Controller_Exception extends Tri_Exception
+{}

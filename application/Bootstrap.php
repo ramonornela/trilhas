@@ -43,6 +43,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $options['plugins']['Cache']['backend'] = $cache->getBackend();
             }
             $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);
+            $zfdebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Auth(array('user' => 'name')));
+            $zfdebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Session());
             $front->registerPlugin($zfdebug);
         }
     }
