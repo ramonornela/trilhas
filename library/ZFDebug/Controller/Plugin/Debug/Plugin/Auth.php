@@ -104,7 +104,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth implements ZFDebug_Controller_
     	    $username = $this->_auth->getIdentity();
     		$role = '';
     	}
-    	return "$username";
+    	return $username . " ($role)";
     }
 
     /**

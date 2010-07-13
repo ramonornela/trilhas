@@ -18,9 +18,9 @@
  */
 
 /**
- * @see Zend_Controller_Action
+ * @see Zend_Controller_Action_HelperBroker
  */
-require_once 'Zend/Controller/Action.php';
+require_once 'Zend/Controller/Plugin/Abstract.php';
 
 /**
  * @category   Tri
@@ -28,34 +28,26 @@ require_once 'Zend/Controller/Action.php';
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Tri_Controller_Action extends Zend_Controller_Action
+class Tri_Controller_Plugin_Security extends Zend_Controller_Plugin_Abstract
 {
-    /**
-     * (non-PHPdoc)
-     * @see Zend_Controller_Action#init()
-     */
-    public function init()
+    public function  preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $this->_locale();
-
-        if (!isset($theme)) {
-            $this->view->theme = 'cupertino';
+        $acl = Zend_Registry::get('acl');
+        $identity  = Zend_Auth::getInstance()->getIdentity();
+        if (isset($acl)) {
+            if ($identity) {
+                $role = $identity->role;
+            } else {
+                $role = 'all';
+            }
+            $resource  = $request->getParam('module');
+            $privilege = $request->getParam('controller')
+                       . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
+                       . $request->getParam('action');
+            if ($acl->isAllowed($role, $resource, $privilege)) {
+                return;
+            }
+            throw new Tri_Controller_Plugin_Exception('Acesso restrito.');
         }
-
-        $this->_helper->layout->disableLayout();
-        if (!$this->_request->isXmlHttpRequest()) {
-            $this->_helper->layout->enableLayout();
-        }
-
-        $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
-
-    protected function _locale()
-    {
-        $locale = Zend_Registry::get('Zend_Locale');
-
-        $this->view->locale = key($locale->getDefault());
-        $this->view->date_format = Zend_Locale_Data::getContent($this->view->locale, 'date');
-    }
-
 }

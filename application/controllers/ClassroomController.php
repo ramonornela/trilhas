@@ -23,18 +23,10 @@
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class IndexController extends Tri_Controller_Action
+class ClassroomController extends Tri_Controller_Action
 {
     public function indexAction()
     {
-        $course   = new Tri_Db_Table('course');
-        $calendar = new Tri_Db_Table('calendar');
-        $form     = new Application_Form_Login();
 
-        $this->view->courses  = $course->fetchAll(array('status = ?' => 'Active'),
-                                                  array('name', 'category'));
-        $where = array('classroom_id IS NULL', 'end IS NULL OR end > ?' => date('Y-m-d'));
-        $this->view->calendar = $calendar->fetchAll($where, 'begin', 10);
-        $this->view->form = $form;
     }
 }
