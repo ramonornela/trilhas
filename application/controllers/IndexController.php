@@ -30,7 +30,6 @@ class IndexController extends Tri_Controller_Action
         $course   = new Tri_Db_Table('course');
         $calendar = new Tri_Db_Table('calendar');
         $form     = new Application_Form_Login();
-        
         $this->view->courses  = $course->fetchAll(array('status = ?' => 'Active'),
                                                   array('name', 'category'));
         $where = array('classroom_id IS NULL', 'end IS NULL OR end > ?' => date('Y-m-d'));

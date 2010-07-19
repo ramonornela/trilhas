@@ -18,7 +18,7 @@
  */
 
 /**
- * @see Zend_Controller_Action_HelperBroker
+ * @see Zend_View_Helper_Abstract
  */
 require_once 'Zend/View/Helper/Abstract.php';
 
@@ -41,7 +41,7 @@ class Tri_View_Helper_isAllowed extends Zend_View_Helper_Abstract
         $acl      = Zend_Registry::get('acl');
         $identity = Zend_Auth::getInstance()->getIdentity();
         $role     = $identity->role;
-        
+
         if (is_array($data)) {
             $privilege = $data['controller'] . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR .
                          $data['action'];
@@ -49,12 +49,11 @@ class Tri_View_Helper_isAllowed extends Zend_View_Helper_Abstract
             if ($acl->isAllowed($role, $resource, $privilege)) {
                 return true;
             }
-        }
-        else {
+        } else {
             $front     = Zend_Controller_Front::getInstance();
             $resource  = $front->getRequest()->getModuleName();
             $privilege = $front->getRequest()->getControllerName()
-                       . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR 
+                       . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
                        . $data;
             if ($acl->isAllowed($role, $resource, $privilege)) {
                 return true;

@@ -30,7 +30,8 @@ require_once 'Zend/Controller/Plugin/Abstract.php';
  */
 class Tri_Controller_Plugin_Security extends Zend_Controller_Plugin_Abstract
 {
-    public function  preDispatch(Zend_Controller_Request_Abstract $request) {
+    public function  preDispatch(Zend_Controller_Request_Abstract $request)
+    {
         $acl = Zend_Registry::get('acl');
         $identity  = Zend_Auth::getInstance()->getIdentity();
         if (isset($acl)) {

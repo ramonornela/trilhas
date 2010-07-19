@@ -43,7 +43,6 @@ class Tri_Controller_Action extends Zend_Controller_Action
         }
 
         $this->_helper->layout->disableLayout();
-
         if (!$this->_request->isXmlHttpRequest()) {
             $this->_helper->layout->enableLayout();
         }
@@ -54,8 +53,9 @@ class Tri_Controller_Action extends Zend_Controller_Action
     protected function _locale()
     {
         $locale = Zend_Registry::get('Zend_Locale');
-        
+
         $this->view->locale = key($locale->getDefault());
         $this->view->date_format = Zend_Locale_Data::getContent($this->view->locale, 'date');
     }
+
 }

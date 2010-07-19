@@ -38,7 +38,7 @@ class UserController extends Tri_Controller_Action
             if ($form->isValid($this->getRequest()->getPost())) {
                 $username = $form->getValue('email');
                 $password = $form->getValue('password');
-                $db = Zend_Db_Table::getDefaultAdapter();
+                $db      = Zend_Db_Table::getDefaultAdapter();
                 $adapter = new Tri_Auth_Adapter_DbTable($db, 'user', 'email', 'password');
 
                 $adapter->setIdentity($username)
