@@ -1,10 +1,20 @@
+<?php echo $this->render('menu.phtml')?>
 <div id="main">
 
 </div>
 <div id="fixed">
-    
+    <div class="main index">
+        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                <h3><?php echo $this->translate('content');?></h3>
+            </div>
+            <div class="courses ui-dialog-content ui-widget-content">
+                <div><?php echo $this->data->title?></div>
+                <div><?php echo $this->data->description?></div>
+            </div>
+        </div>
+    </div>
 </div>
-<?php echo $this->render('menu.phtml')?>
 <script type="text/javascript">
 
 </script>

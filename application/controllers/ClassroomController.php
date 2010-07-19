@@ -27,6 +27,16 @@ class ClassroomController extends Tri_Controller_Action
 {
     public function indexAction()
     {
-        
+        $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $classroom = new Zend_Db_Table('classroom');
+        $content = new Zend_Db_Table('content');
+        $rowset = $classroom->find($id);
+
+        if (!count($rowset)) {
+            $this->_redirect('/dashboard');
+        }
+        $row = $rowset->current();
+
+        $this->view->data = $content->fetchRow(array('course_id = ?' => $row->course_id));
     }
 }

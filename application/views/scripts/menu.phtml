@@ -1,5 +1,4 @@
-<div id="menu">
-	<ul>
+<div id="menu" class="ui-accordion ui-widget ui-helper-reset">
         <?php $menu = Zend_Registry::get('menu');?>
         <?php $i = 0; $previousParentName = null;?>
 		<?php foreach ($menu as $parentName => $childs): ?>
@@ -7,11 +6,11 @@
                     <?php if ($this->isAllowed($data)): ?>
                         <?php if ($parentName != $previousParentName):?>
                             <?php if($i > 0): ?>
+                                    </div>
                                 </ul>
-                             </li>
                             <?php endif;?>
-                            <li>
-                                <h3><?=$this->translate($parentName)?></h3>
+                                 <h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top"><?=$this->translate($parentName)?></h3>
+                                 <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
                                 <ul>
                         <?php endif;?>
                         <li>
@@ -23,7 +22,6 @@
                     <?php $previousParentName = $parentName; $i++;?>
                 <?php endforeach; ?>
 		<?php endforeach; ?>
+            </div>
         </ul>
-            </li>
-	</ul>
 </div>
