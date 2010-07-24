@@ -33,7 +33,8 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
-# Netbeans files #
+# Netbeans and Eclipse files #
 ###################
 nbproject/
 data/cache/
+.project
