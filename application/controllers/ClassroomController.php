@@ -29,14 +29,13 @@ class ClassroomController extends Tri_Controller_Action
     {
         $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $classroom = new Zend_Db_Table('classroom');
-        $content = new Zend_Db_Table('content');
         $rowset = $classroom->find($id);
 
         if (!count($rowset)) {
             $this->_redirect('/dashboard');
         }
         $row = $rowset->current();
-
+        $content = new Zend_Db_Table('content');
         $this->view->data = $content->fetchRow(array('course_id = ?' => $row->course_id));
     }
 }
