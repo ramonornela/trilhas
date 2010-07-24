@@ -36,5 +36,5 @@ Thumbs.db
 # Netbeans and Eclipse files #
 ###################
 nbproject/
-data/cache/
+data/cache/*
 .project
