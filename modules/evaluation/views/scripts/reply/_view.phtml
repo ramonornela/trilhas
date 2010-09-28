@@ -1,0 +1,352 @@
+<p><?php echo $this->translate('title')?>: <b><?php echo$this->evaluation->name?></b></p><br/>
+<?php if ( $this->rs ) : ?>
+    <?php
+        $i = 1;
+        $letters = array( 1 => 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' );
+        $noteTotal = 0;
+        $noteEvaluationTotal = 0;
+    ?>
+	<?php foreach( $this->rs as $key => $rs ):?>
+        <?php
+            $noteEvaluationTotal += $rs->note;
+        ?>
+        <?php $select = $rs->getTable()->select()->where( "version =?" , $this->version )->where( "person_id =?" , $this->person_id )?>
+        <div class="question">
+            <p class="question-alternative">
+                <b><?php echo $this->translate('question')." ".$i;?></b> - <?php echo $this->translate( "value question" )?> (
+                <?php $note = substr($rs->note , 0 , 1);?>
+                <?php if( $note == "," ):?>
+                    <?="0".$rs->note?>
+                <?php else:?>
+                    <?=$rs->note?>
+                <?php endif;?>
+                )
+            </p>
+            <p>
+                <?php echo $rs->labels?>
+            </p>
+            <?php $note = 0?>
+        <?php if( $rs->type == "text" ): ?>
+            <?php
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select )->current();
+                $alternative = $rs->findDependentRowset( "EvaluationValue" )->current();
+            ?>
+            <?php if( $alternative->value == $reply->value ):?>
+                <div style="color: green">
+                    <?=$reply->value?>
+                </div>
+                <?php $note = $rs->note?>
+            <?php else:?>
+                <div style="color: red">
+                    <?=$reply->value?>
+                </div>
+                <?php $note = 0?>
+            <?php endif; ?>
+
+            <br />
+            <div class="padding" style="background: #FFF; border: green solid 1px;">
+                <b><?=$this->translate( "feedback" )?>:</b> <?=$alternative->value?>
+                <?php if( isset( $alternative->justify ) && $alternative->justify ):?>
+                    <br />
+                    <b><?=$this->translate( "justify" )?>:</b> <?=$alternative->justify?>
+                <?php endif;?>
+            </div>
+            <p><b><?=$this->translate( "grade for this issue" )?>:</b> <?=str_replace( "." , "," , $note )?></p>
+            <?php $noteTotal += $note?>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "truefalse" ): ?>
+            <?php
+                $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select )->toArray();
+                $questions = 0;
+                $correct = 0;
+                $feedback = "";
+            ?>
+            <?php foreach( $alternatives as $key => $alternative ):?>
+                <?php $questions++?>
+                <?php if( $alternative->status == $reply["$key"]["value"] ):?>
+                    <div style="color: green">
+                        <?=$letters["$questions"]?>) <?=$reply["$key"]["value"]." - ".$alternative->value?>
+                        <?php $correct++?>
+                    </div>
+                <?php else:?>
+                    <div style="color: red">
+                        <?=$letters["$questions"]?>) <?=$reply["$key"]["value"]." - ".$alternative->value?>
+                    </div>
+                <?php endif; ?>
+
+                <?php $feedback .= "{$letters["$questions"]}) - $alternative->status, "?>
+                <br />
+            <?php endforeach;?>
+            <br />
+            <div class="padding" style="background: #FFF; border: green solid 1px;">
+                <b><?=$this->translate( "feedback" )?>:</b> <?=substr($feedback, 0 , -2)?>
+            </div>
+            <?php
+                $note = str_replace( ',' , '.' , $rs->note );
+            ?>
+            <p><b><?=$this->translate( "grade for this issue" )?>:</b> <?=str_replace( '.' , ',' , ($correct*( $note/$questions )) )?></p>
+            <?php $noteTotal += $correct*( $note/$questions )?>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "association" ): ?>
+            <?php
+                $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select )->toArray();
+                $questions = 0;
+                $correct = 0;
+                $feedback = "";
+            ?>
+            <?php foreach( $alternatives as $key => $alternative ):?>
+                <?php $questions++?>
+                <?php if( $alternative->status == $reply["$key"]["value"] ):?>
+                    <div style="color: green">
+                        <?=$letters["$questions"]?>) <?=$reply["$key"]["value"]." - ".$alternative->value?>
+                        <?php $correct++?>
+                    </div>
+                <?php else:?>
+                    <div style="color: red">
+                        <?=$letters["$questions"]?>) <?=$reply["$key"]["value"]." - ".$alternative->value?>
+                    </div>
+                <?php endif; ?>
+
+                <?php $feedback .= "{$letters["$questions"]}) - $alternative->status, "?>
+                <br />
+            <?php endforeach;?>
+            <div class="padding" style="background: #FFF; border: green solid 1px;">
+                <b><?=$this->translate( "feedback" )?>:</b> <?=substr($feedback, 0 , -2)?>
+            </div>
+            <p><b><?=$this->translate( "grade for this issue" )?>:</b> <?=number_format( ($correct*( $rs->note/$questions )) , "2")?></p>
+            <?php $noteTotal += $correct*( $rs->note/$questions )?>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "radio" ): ?>
+            <?php
+                $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select )->current();
+                $feedback = "";
+                $questions = 0;
+            ?>
+            <?php foreach( $alternatives as $key => $alternative ):?>
+                <?php $questions++;?>
+                <?php if( trim($alternative->status) ):?>
+                    <div style="border: 1px solid green; padding: 3px;">
+
+                    <?php if( isset( $reply->value ) && $alternative->id == $reply->value ):?>
+                            <span style="color: green;"><?=$letters["$questions"]?>) <?=$alternative->value?></span>
+                            <?php $note = $rs->note?>
+                    <?php else:?>
+                            <?=$letters["$questions"]?>) <?=$alternative->value?>
+                    <?php endif; ?>
+                    </div>
+
+                <?php else:?>
+                    <?php if( isset( $reply->value ) && $alternative->id == $reply->value ):?>
+                        <div style="color: red">
+                            <?=$letters["$questions"]?>) <?=$alternative->value?>
+                            <?php $note = "0"?>
+                        </div>
+                    <?php else:?>
+                        <div>
+                            <?=$letters["$questions"]?>) <?=$alternative->value?>
+                        </div>
+                    <?php endif; ?>
+                <?php endif;?>
+                <br />
+                <?php
+                    if( $alternative->status == "V" ){
+                        $feedback = $letters["$questions"].") ";
+                    }
+                ?>
+
+            <?php endforeach;?>
+            <div class="padding" style="background: #FFF; border: green solid 1px;">
+                <b><?=$this->translate( "feedback" )?>:</b> <?=$feedback?>
+                <?php if( isset( $alternative->justify ) && $alternative->justify ):?>
+                    <br />
+                    <b><?=$this->translate( "justify" )?>:</b> <?=$alternative->justify?>
+                <?php endif;?>
+            </div>
+
+            <?php $noteTotal += str_replace( ',' , '.' , $note ) ?>
+            <p>
+                <b><?=$this->translate( "grade for this issue" )?>:</b>
+                <?php $noteReplace = substr($note , 0 , 1);?>
+                <?php if( $noteReplace == "," ):?>
+                    <?="0".$note?>
+                <?php else:?>
+                    <?=$note?>
+                <?php endif;?>
+            </p>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "checkbox" ): ?>
+            <?php
+                $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select )->toArray();
+                $questions = 0;
+                $correct = 0;
+                $feedback= "";
+            ?>
+            <?php foreach( $alternatives as $key => $alternative ):?>
+                <?php $questions++?>
+                <?php
+                    if( trim( $alternative->status ) ){
+                        echo '<div style="border: 1px solid green; padding: 3px;">';
+                        if( count( $reply ) ){
+                            foreach( $reply as $k => $r ){
+                                if( $alternative->id == $r["evaluation_value_id"] ){
+                                    echo '<span style="color: green">
+                                            '.$letters["$questions"].') '.$alternative->value.'
+                                          </span>';
+
+                                    if( $alternative->justify ){
+                                        echo '<p style="margin-top: 0px; margin-bottom: 0px;">'.$this->translate("justify").': '.$alternative->justify.'</p>';
+                                    }
+                                    $correct++;
+                                    unset( $reply["$k"] );
+                                    break;
+                                }else{
+                                    echo $letters["$questions"].') '.$alternative->value;
+                                    $correct--;
+                                }
+                            }
+                        }else{
+                            echo $letters["$questions"].') '.$alternative->value;
+                            $correct--;
+                        }
+                        echo '</div>';
+                    }else{
+                        echo '<div>';
+                        if( count( $reply ) ){
+                            foreach( $reply as $k => $r ){
+                                if( $alternative->id == $r["evaluation_value_id"] ){
+                                    echo '<span style="color: red">
+                                            '.$letters["$questions"].') '.$alternative->value.'
+                                          </span>';
+
+                                    if( $alternative->justify ){
+                                        echo '<p style="margin-top: 0px; margin-bottom: 0px;">'.$this->translate("justify").': '.$alternative->justify.'</p>';
+                                    }
+                                    $correct--;
+                                    unset( $reply["$k"] );
+                                }else{
+                                    echo $letters["$questions"].') '.$alternative->value;
+                                    $correct++;
+                                }
+                                break;
+                            }
+                        }else{
+                            echo $letters["$questions"].') '.$alternative->value;
+                            $correct++;
+                        }
+                        echo '</div>';
+                    }
+
+                    if( $alternative->status == "V" ){
+                        $feedback .= "{$letters["$questions"]}), ";
+                    }
+                ?>
+                <br />
+            <?php endforeach;?>
+
+            <br />
+            <div class="padding" style="background: #FFF; border: green solid 1px;">
+                <b><?=$this->translate( "feedback" )?>:</b> <?=substr($feedback, 0 , -2)?>
+            </div>
+            <p>
+                <b><?=$this->translate( "grade for this issue" )?>:</b>
+                <?php
+                    $note = $correct*( $rs->note/$questions );
+                    if( $note <= 0 ){
+                        echo '0,0';
+                    }else{
+                        echo str_replace( "." , "," , $note );
+                        $noteTotal += $correct*( $rs->note/$questions );
+                    }
+                ?>
+            </p>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "textarea" ): ?>
+            <?php
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select  )->current();
+                $note = 0;
+            ?>
+            <div>
+                <p><?=$reply->value?></p>
+            </div>
+            <?php
+                $note = $reply->findDependentRowset( "EvaluationReplyNote" )->current()->note;
+                $noteTotal += $note;
+            ?>
+            <br />
+            <p><b><?=$this->translate( "grade for this issue" )?>:</b> <?=number_format( $note , "2")?></p>
+        <?php endif; ?>
+
+        <?php if( $rs->type == "keyword" ): ?>
+            <?php
+                $reply = $rs->findDependentRowset( "EvaluationReply" , null , $select  )->current();
+                $alternative = $rs->findDependentRowset( "EvaluationValue" )->current();
+                $feedback= "";
+                $correct = 0;
+            ?>
+            <div>
+                <?php
+                $strs = explode( ',' , trim($alternative->status) );
+                $ereg = "";
+
+                foreach ( $strs as $str )
+                {
+                    $ereg = eregi( "(".trim($str).")" , $reply->value );
+                    if ( $ereg ){
+                        $correct++;
+                    }
+                }
+
+                ?>
+                <?=$this->translate("answer")?>: <?=$reply->value?>
+                <br /><br />
+            </div>
+            <div class="padding" style="background: #FFF; border: green solid 1px;">
+                <b><?=$this->translate( "feedback" )?>:</b> <?=$alternative->value?>
+            </div>
+            <p><b><?=$this->translate( "grade for this issue" )?>:</b> <?=number_format( (count( $correct )*( $rs->note/count( $strs ) )) , "2")?></p>
+            <?php $noteTotal += count( $correct )*( $rs->note/count( $strs ) ) ?>
+            <br />
+        <?php endif; ?>
+        <?php $i++; ?>
+        </div>
+        <br />
+
+    <?php endforeach;?>
+
+    <div>
+        <h3><?=$this->translate( "total" )?>: <?=number_format( $noteTotal , "2")?></h3>
+    </div>
+    <script type="text/javascript">
+    <?php if( $noteEvaluationTotal ):?>
+        <?php $mediaCertificate = ($noteEvaluationTotal*70/100) ?>
+        <?php if( $this->evaluation->evaluation_final == Status::ACTIVE && $noteTotal >= $mediaCertificate ):?>
+                <?php $user = new Zend_Session_Namespace( "user" );?>
+                <?php $this->createPdf( $user->person_id , $user->group_id );?>
+                new Preceptor.util.AjaxUpdate( "note" , "<?=$this->url?>/evaluation/reply/save-note/note/<?=$noteTotal?>/certificate/true" );
+        <?php else: ?>
+            new Preceptor.util.AjaxUpdate( "note" , "<?=$this->url?>/evaluation/reply/save-note/note/<?=$noteTotal?>" );
+        <?php endif; ?>
+    <?php endif; ?>
+        jQuery( ".question" ).css({"background":"#EFEFEF" , "border":"#BBB 1px solid" , "padding":"5px"});
+    </script>
+<?php else : ?>
+	<div class="message-table-sorter">
+            <?=$this->translate('This assessment contains questions that are subject to correction by mentor') ?><br />
+            <?=$this->translate('Watch for a correction to access your feedback') ?>
+	</div>
+<?php endif; ?>
+<div id="note"></div>

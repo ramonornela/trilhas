@@ -25,21 +25,23 @@
  */
 class CourseController extends Tri_Controller_Action
 {
+    public function init()
+    {
+        parent::init();
+        $this->view->title = "Course";
+    }
+
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
         $query = Zend_Filter::filterStatic($this->_getParam('query'), 'alnum');
-        $course = new Zend_Db_Table('course');
-        $where  = array();
+        $table = new Zend_Db_Table('course');
+        $select = $table->select()->order('status');
 
         if ($query) {
-            $where['name LIKE (?)'] = "%$query%";
+            $select->where('name LIKE (?)', "%$query%");
         }
 
-        $this->view->params = array('query' => $query,
-                                    'page' => $page);
-
-        $select    = $course->fetchAll($where, 'status');
         $paginator = new Tri_Paginator($select, $page);
         $this->view->data = $paginator->getResult();
     }
@@ -64,8 +66,8 @@ class CourseController extends Tri_Controller_Action
         $form = new Application_Form_Course();
 
         if ($id) {
-            $calendar = new Tri_Db_Table('course');
-            $row      = $calendar->find($id)->current();
+            $table = new Tri_Db_Table('course');
+            $row   = $table->find($id)->current();
 
             if ($row) {
                 $form->populate($row->toArray());
@@ -91,7 +93,7 @@ class CourseController extends Tri_Controller_Action
                 unset($data['image']);
             }
 
-            $data['user_id'] = 1;
+            $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
 
             if (isset($data['id']) && $data['id']) {
                 $row = $table->find($data['id'])->current();

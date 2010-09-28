@@ -1,0 +1,154 @@
+<div id="coursebox" class="box">
+    <div title="Mover janela" id="<?php echo $this->controller ?>Drag" class="drag header">
+        <div class="rgt"></div>
+        <div class="lft"></div>
+        <div class="ctr">
+            <h3><?=$this->translate( 'content' )?></h3>
+            <div id="boxToolbar">
+
+                <?php if( $this->getPermission( array( "module" => "composer" , "controller" => "composer", "action" => "input" ) ) ): ?>
+                <a style="text-decoration: none;" href="#this" onclick="toggleEdit( false )" title="<?=$this->translate("enable editing mode")?>"><?=$this->image( "icones/lapis.gif" )?></a>
+                <?php endif ?>
+
+                <a href="#imprimir" title="Imprimir" onclick="printModule( '<?php echo $this->controller ?>' );"><?=$this->image( "icones/print.gif" , array( 'border' => 0 ) )?></a>
+
+                <?php if( $this->narration ): ?>
+                <a href="#audio" title="Ouça esta página" onclick="showHidden( 'mp3player' ); return false;"><?=$this->image( "icones/print.gif" , array( 'border' => 0 , 'id' => "faudio" , "alt" => "Ou�a esta p�gina"  ) )?></a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div id="main<?php echo $this->controller ?>" class="main">
+        <?php if( $this->narration ): ?>
+        <div class="pos-relative">
+            <div id="mp3player" class="pos-absolute mp3player" style="display: none;">
+                <object width="220" height="30" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0 ">
+                    <param name="movie" value="<?=URL?>swf/player_custom/mp3player.swf?src=<?=URL?>upload/narration/<?=$this->narration;?>" />
+                    <embed src="<?=URL?>swf/player_custom/mp3player.swf?src=<?=URL?>upload/narration/<?=$this->narration;?>" type="application/x-shockwave-flash" width="220" height="30" />
+                </object>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <div id="content-main">
+            <div class="breadCrumb">
+                <?=$this->discipline->title?>
+                <span class="bread_arrow">&gt;</span>
+                <span id="contentBreadCrumb"></span>
+            </div>
+
+            <div class="nav">
+                <a href="#this" id="previous-nav" class="previous-nav">&lt; <?=$this->translate( "previous" )?></a>
+                <?=$this->recursiveSelect( "select_content_id_nav" , $this->content , array( "disableOptions" => true ) , $this->contents )?>
+
+                <div style="display: none">
+                    <?=$this->recursiveSelect( "select_content_id" , $this->content , null , $this->contents )?>
+                </div>
+                <a href="#this" id="next-nav" class="next-nav"><?=$this->translate( "next" )?> &gt;</a>
+
+            </div>
+
+            <div id="content-main-content" class="content">
+
+            </div>
+            <div class="nav">
+                <a href="#this" id="previous-nav-footer" class="previous-nav">&lt; <?=$this->translate( "previous" )?></a>
+                <?=$this->recursiveSelect( "select_content_id_footer" , $this->content , array( "disableOptions" => true ) , $this->contents )?>
+
+                <div style="display: none">
+                    <?=$this->recursiveSelect( "select_content_id_footer" , $this->content , null , $this->contents )?>
+                </div>
+                <a href="#this" id="next-nav-footer" class="next-nav"><?=$this->translate( "next" )?> &gt;</a>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="footer<?php echo $this->controller ?>" class="footer">
+        <div class="rgt"></div>
+        <div class="lft"></div>
+        <div class="ctr"></div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script>
+    YAHOO.util.Event.onDOMReady( function(){
+        window.words = YAHOO.lang.JSON.parse( '<?=$this->words?>' );
+
+        var id = $( 'select_content_id' ).value;
+
+        new Preceptor.util.AjaxUpdate( 'content-main-content' , '<?=$this->url?>/content/view/id/' + id );
+        updateBreadCrumb( id );
+
+        YAHOO.util.Event.on( "select_content_id_nav" , "change" , function(){
+            var content = this.value;
+            jQuery('#select_content_id_footer option').each( function(){
+                if( content == this.value ){
+                    this.selected = true;
+                }
+            });
+
+            selectContent( 'select_content_id' , this.value );
+            updateBreadCrumb( this.value );
+            new Preceptor.util.AjaxUpdate( 'content-main-content' , '<?=$this->url?>/content/view/id/' + this.value );
+        });
+
+        YAHOO.util.Event.on( 'formNotepadAbs' , 'submit' , function( ev ){
+
+            $('contentIdAbs').value = $( 'select_content_id' ).value;
+
+            new Preceptor.util.AjaxUpdate( null , '<?=$this->url?>/notepad/notepad/save' , {
+                formId:'formNotepadAbs',
+                onComplete: function(){
+                    $( 'cadernoDsAbs' ).value = '';
+                    addElement( 'main' , 'notepad' , '<?=$this->url?>/notepad/notepad' );
+                }
+            });
+
+            YAHOO.util.Event.stopEvent( ev );
+        });
+
+        YAHOO.util.Event.on( 'cadernoDsAbs' , 'focus' , function(){
+            if( !this.flag ){
+                this.value = "";
+            }
+            this.flag = true;
+        });
+    });
+
+    jQuery(".previous-nav").click(function(){
+        contentNav( '<?=$this->url?>/content/view/id/' , false , 'select_content_id' , 'content-main-content' );
+        var content = jQuery('#select_content_id_nav option:selected').val();
+        jQuery('#select_content_id_footer option').each( function(){
+            if( content == this.value ){
+                this.selected = true;
+            }
+        });
+    });
+
+    jQuery(".next-nav").click(function(){
+        contentNav( '<?=$this->url?>/content/view/id/' , true , 'select_content_id' , 'content-main-content' );
+        var content = jQuery('#select_content_id_nav option:selected').val();
+        jQuery('#select_content_id_footer option').each( function(){
+            if( content == this.value ){
+                this.selected = true;
+            }
+        });
+    });
+
+    YAHOO.util.Event.on( "select_content_id_footer" , "change" , function(){
+        var content = this.value;
+        jQuery('#select_content_id_nav option').each( function(){
+            if( content == this.value ){
+                this.selected = true;
+            }
+        });
+        
+        selectContent( 'select_content_id' , this.value );
+        updateBreadCrumb( this.value );
+        new Preceptor.util.AjaxUpdate( 'content-main-content' , '<?=$this->url?>/content/view/id/' + this.value );
+    });
+</script>

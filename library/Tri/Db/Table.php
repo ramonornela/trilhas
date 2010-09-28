@@ -264,7 +264,8 @@ class Tri_Db_Table extends Zend_Db_Table
     {
         // check input
         $translate = Zend_Registry::get('Zend_Translate');
-
+        $data      = array();
+        
         if (is_null($value)) {
             $value = $key;
         }

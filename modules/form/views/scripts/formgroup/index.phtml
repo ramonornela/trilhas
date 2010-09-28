@@ -1,0 +1,37 @@
+<div id="drag" style="cursor: move;display: block;width: 99%">
+	<h3 style="float: left;"></h3>
+	<a style="float: right;color: black;text-decoration: underline;" href="#focus" onclick="Lightbox.destroy( 'select_group' , '/form/formfield/input/group/true' )">X</a>
+	<div style="clear: both;"></div>
+</div>
+<?=$this->render("input.tpl")?>
+<br />
+<div id="list_groups">
+<?php if( $this->rs->count() ):?>
+	<table class="datatable">
+		<tr>
+			<th><?=$this->translate("name")?></th>
+			<?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+				<th width="88px"></th>
+			<?php endif;?>
+		</tr>
+		<?php foreach( $this->rs as $rs ): ?>
+			<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+			
+			<?php if( $this->getPermission( "input" ) ): ?>
+				<?php $edit = $this->ajax( $this->translate("edit") , 'edit' , '/form/formgroup/input/id/'. $rs->id ); ?>
+			<?php endif;?>
+				
+			<?php if( $this->getPermission( "delete" ) ): ?>
+				<?php $delete = $this->ajax( $this->translate("delete") , 'category' , '/form/formgroup/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );?>
+			<?php endif;?>
+				
+			<tr class="<?=$class?>">
+				<td nowrap="nowrap"><?=$rs->name ?></td>
+				<td nowrap="nowrap"><?=$edit . " " . $delete?></td>
+			</tr>
+		<?php endforeach;?>
+	</table> 
+<?php else:?>
+	<?=$this->translate( "there are no records" );?>
+<?php endif;?>
+</div>

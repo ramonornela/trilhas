@@ -28,22 +28,23 @@ class Application_Model_Classroom
     /**
      * Get all possible classroom
      *
-     * @param int $user_id
+     * @param int $userId
      * @return array
      */
-    public static function getAllByUser($user_id)
+    public static function getAllByUser($userId)
     {
-        $db   = Zend_Db_Table::getDefaultAdapter();
-        $cols = array('cr.*', 'c.*', 'c.id as id', 'cr.id as classroom_id');
-        $course = array('c' => 'course');
+        $db        = Zend_Db_Table::getDefaultAdapter();
+        $cols      = array('cr.*', 'c.*', 'c.id as id', 'cr.id as classroom_id');
+        $course    = array('c' => 'course');
         $classroom = array('cr' => 'classroom');
         $classUser = array('cu' => 'classroom_user');
+        $response  = array();
         
         //by course or classroom responsible
         $select = $db->select()
                      ->from($classroom, $cols)
                      ->join($course, 'c.id = cr.course_id', array())
-                     ->where('c.responsible = ? OR cr.responsible = ?', $user_id);
+                     ->where('c.responsible = ? OR cr.responsible = ?', $userId);
         $rsResponsible = $db->fetchAll($select);
 
         //by registration
@@ -51,7 +52,7 @@ class Application_Model_Classroom
                      ->from($classroom, $cols)
                      ->join($course, 'c.id = cr.course_id', array())
                      ->join($classUser, 'cr.id = cu.classroom_id', array())
-                     ->where('cu.user_id = ?', $user_id);
+                     ->where('cu.user_id = ?', $userId);
         $rsRegistry = $db->fetchAll($select);
 
         foreach ($rsResponsible as $responsible) {

@@ -1,0 +1,14 @@
+<div class="forum">
+<?php echo $this->form?>
+</div>
+<script type="text/javascript">
+	$(".forum form").submit(function() {
+        var $this = $(this);
+		$.post('forum/index/save', $(this).serialize(), function(data){
+            $this.parents('.content').html(data);
+        });
+        return false;
+	});
+    $('.date').datepicker();
+    $('#status').other();
+</script>

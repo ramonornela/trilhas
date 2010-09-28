@@ -1,0 +1,37 @@
+<div>
+	<?php if( $this->rs->count() ): ?>
+        <p><b><?php echo $this->activity->title?></b></p>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate("name");?></th>
+				<th><?=$this->translate("members to group");?></th>
+			</tr>
+			<?php $verify = false ?>
+			
+			<?php foreach ( $this->rs as $rs ): ?>
+				<?php $class = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				
+				<?php if ( $rs->status == ActivityTextPerson::FINALITY_STUDENT ) : ?>
+					<?php $verify = true ?>
+					<tr class="<?=$class?>">
+						<?php $group = $rs->findParentRow( "ActivityGroup" , 'AG' ) ?>
+						<td nowrap="nowrap"><?=$this->ajax( $group->title , 'activity' ,  '/activity/correct/input/group_id/' . $group->id ); ?></td>
+						<td>
+							<ul>
+							<?php foreach ( $group->findManyToManyRowset( 'Person' , 'ActivityGroupPerson' ) as $persons ) : ?>
+								<li><?=$persons->name ?></li>
+							<?php endforeach; ?>
+							</ul>
+						</td>
+					</tr>
+				<?php endif; ?>
+				
+			<?php endforeach;?>
+		</table>
+		<?php if ( ! $verify ) : ?>
+			<p><?=$this->translate("there are no records");?></p>
+		<?php endif; ?>
+	<?php else: ?>
+		<p><?=$this->translate("there are no records");?></p>
+	<?php endif; ?>
+</div>

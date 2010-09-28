@@ -1,0 +1,29 @@
+<?=$this->render("search/menu.phtml")?>
+	
+<?php if( $this->searchWeblibrary->count() ): ?>
+	<table class="datatable">
+		<th colspan="3"><?=$this->translate("result")?></th>
+		
+		<?php foreach( $this->searchWeblibrary as $val ): ?>
+			<?php $class  = $this->changeClass( $this->searchWeblibrary->key() , array( "light_gray" , "white" ) );?>
+			<tr class="<?=$class?>">
+				<td nowrap="nowrap">	
+					<a href="#this" onclick="addElement('main' , 'weblibrary' , '<?=$this->url?>/weblibrary/weblibrary/find/word/<?=$val->title;?>')" ><?=$val->title?></a><br />
+				<td>
+				
+				<td nowrap="nowrap">	
+					<?=$val->author; ?>
+				</td>
+			</tr>		
+		<?php endforeach;?>
+		
+	</table>
+<?php else:?>
+	<table class="datatable">
+		<tr class="<?=$class?>">
+			<td><?=$this->translate( "there are no records" );?></td>
+		</tr>
+	</table>
+<?php endif;?>
+
+<div class="clear"></div>

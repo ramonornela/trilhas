@@ -1,0 +1,78 @@
+<div>
+	<form id="formPage" action="#">
+		<input type="hidden" name="usuario_id" id="usuario_id" value="<?php echo $this->edit->usuario_id; ?>" />
+		<input type="hidden" name="usuario_flag" value="A" />
+
+		<label for="arquivo">Foto (Preencher caso queira alterar)</label>
+		<?php echo $this->formFile( "arquivo" );  ?>
+
+		<br /><br />
+		
+		<label for="usuarioNome">Nome</label>
+		<?php echo $this->formText( "usuario_nome" , $this->edit->usuario_nome , array( style => "width: 300px;" ) );  ?>
+
+		<br /><br />
+
+		<label for="usuarioEmail">E-mail</label>
+		<?php echo $this->formText( "usuario_email" , $this->edit->usuario_email , array( style => "width: 300px;" ) );  ?>
+		
+		<?php if( $this->user->type != 5 ): ?>
+			<br /><br />
+			<label for="usuarioMatricula">Matr&iacute;cula</label>
+			<?php echo $this->formText( "usuario_matricula" , $this->edit->usuario_matricula , array( style => "width: 100px;" ) );  ?>
+		<?php endif; ?>
+
+		<br /><br />
+
+		<div><a href="#" onclick="showHidden( 'pass' );return false;">Alterar senha</a></div>
+		<br />
+
+		<div id="pass" style="display: none";>
+			<label for="senha" style="display: inline">Senha</label>&nbsp;&nbsp;&nbsp;
+			<label for="csenha" style="margin-left: 100px; display: inline;" >Confirma&ccedil;&atilde;o senha</label><br />
+
+			<?php echo $this->formPassword( "senha" , null , array( style => "width: 100px;" ) );  ?>
+			<?php echo $this->formPassword( "csenha" , null , array( style => "width: 100px; margin-left: 130px;" ) );  ?>
+		</div>
+
+		<br /><br />
+		<input type="submit" id="submitPage" value="Salvar" >
+	</form>
+
+</div>
+
+<script type="text/javascript">
+
+	var PageValidate = new Validate();
+
+	PageValidate.addValidate( 'usuario_nome' , PageValidate.isnull , '<?=LANG_MSG_REQUIRED;?>' , false );
+	PageValidate.addValidate( 'usuario_nome' , PageValidate.nomeCompleto , '<?=LANG_MSG_COMPLETE_NAME;?>' , null );
+	PageValidate.addValidate( 'usuario_nome' , PageValidate.maxlength , '<?=LANG_MSG_MAXLENGTH?>' , 255 );
+
+	PageValidate.addValidate( 'usuario_email' , PageValidate.email 		, '<?=LANG_MSG_EMAIL;?>' 	, null );
+	PageValidate.addValidate( 'usuario_email' , PageValidate.maxlength	, '<?=LANG_MSG_MAXLENGTH?>' , 255 );
+	PageValidate.addValidate( 'usuario_email' , PageValidate.isnull 		, '<?=LANG_MSG_REQUIRED?>' 	, false );
+
+	PageValidate.addValidate( 'usuario_site' , PageValidate.maxlength	, '<?=LANG_MSG_MAXLENGTH?>' , 255 );
+
+	PageValidate.addValidate( 'senha'  , PageValidate.maxlength	, '<?=LANG_MSG_MAXLENGTH?>' , 20 );
+	PageValidate.addValidate( 'csenha' , PageValidate.maxlength	, '<?=LANG_MSG_MAXLENGTH?>' , 20 );
+	PageValidate.addValidate( 'csenha' , PageValidate.equals	, '<?=LANG_MSG_EQUALS?>' , 'senha' );
+
+	YAHOO.util.Event.on( 'submitPage' , 'click' , function( ev ){
+		if( !PageValidate.verify( document.getElementById('formPage') ) )
+		{
+			YAHOO.util.Event.stopEvent( ev );
+		}
+	});
+
+	YAHOO.util.Event.on( 'formPage' , 'submit' , function( ev ){
+		new Preceptor.util.AjaxUpdate( 'page' , 'page/page/keep' , { formId:'formPage' , isUpload:true } );
+		YAHOO.util.Event.stopEvent( ev );
+	});
+
+	YAHOO.util.Event.on( 'arquivo' , 'keypress' , function( ev ){
+		YAHOO.util.Event.stopEvent( ev );
+	});
+
+</script>

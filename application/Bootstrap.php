@@ -58,7 +58,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $options['plugins']['Database']['adapter'] = $db;
             }
 
-            $options['plugins']['File']['base_path'] = APPLICATION_PATH;
+//            $options['plugins']['File']['base_path'] = APPLICATION_PATH;
 
             # Setup the cache plugin
             if ($this->hasPluginResource('cachemanager')) {

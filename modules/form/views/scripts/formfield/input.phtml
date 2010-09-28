@@ -1,0 +1,134 @@
+<div id="form_fields">
+	<div id="list_field">
+		<br />
+		<div id="fields">
+			<?=$this->ShowForm( $this->form , true , $this->url ) ?>
+		</div>
+		<br /> 
+		<fieldset>
+			<legend><?=$this->translate("Registration fields")?></legend> 
+			
+			<form action="#" id="formField_<?=$this->suffix?>">
+				
+				<?=$this->formHidden( 'form_id' , $this->form_id )?>
+				 
+				<label for="label_<?=$this->suffix?>"><?=$this->translate("field name")?>:</label>
+				<?=$this->formText( "label" , $this->data->label , array( "id" => "label_" . $this->suffix ) )?>
+				
+				<? 
+					$types = array( ''    => $this->translate("selection"), 
+					 		   'text'     => $this->translate("text"), 
+					  		   'radio'    => $this->translate("fild uniq choice"), 
+					  		   'checkbox' => $this->translate("fild multiple choice"), 
+					  		   'textarea' => $this->translate("textarea"),
+					  		   'select'   => $this->translate("select"),
+					  		   'password' => $this->translate("password field") ) 
+				?>
+							
+				<label><?=$this->translate("type")?>:</label>
+				<?=$this->formSelect( 'type' , null , null , $types ) ?>
+				
+				<br />
+		
+				<div id="values">
+					<label for="value_<?=$this->suffix?>"><?=$this->translate("default value")?>:</label>
+					<?=$this->formText( "value[]" , $this->data->value , array( "id" => "value_" . $this->suffix ) )?>
+				</div>
+				
+				<div id="created"></div>
+				
+				<label><?=$this->translate("mask")?>:</label>
+				<?=$this->formSelect( 'mask' , null , null , array( '' =>'Selecione' , '00/00/0000' => 'Data' , '00000-000' => 'CEP' , '000.000.000-00' => 'CPF' , '00.000.000/0000-00' => 'CNPJ' ) ) ?>
+				
+				<label><?=$this->translate("validation")?>:</label>
+				<?php echo $this->groupedList( "all" , $this->all , "validate" , $this->validate , null , array( 'height' => '150px' , 'width' => '239px' , 'width_text' => '235px' ) );?>
+				
+				<a name="focus"></a>
+				<div id="select_group">
+					<label><?=$this->translate("group legend")?>:</label>
+					<?=$this->formSelect( 'group' , null , null , $this->group ) ?>
+					<td><input type="button" id="group_legend" value="<?=$this->translate("group manage")?>" > </td>
+				</div>
+				<br />
+				
+				<!-- 
+				<div>
+					<input type="checkbox" name="uniq" value="S">
+					<?//=$this->translate("value uniq field")?>:
+				</div>
+				 -->
+				
+				<br />
+				<input type="submit" value="<?=$this->translate("save")?>" />
+			</form>
+			<br /><br />
+		</fieldset>
+	</div>
+</div>
+		
+<script>
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formField_<?=$this->suffix?>' , 'submit' , function( ev ){
+			GroupedList_formfield_all.selectAll( 'validate' );
+			if( this.verify( $( 'formField_<?=$this->suffix?>' ) ) )
+			{
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+	
+	
+	YAHOO.util.Event.on( "group_legend" , "click" , function(ev){
+		var div = Lightbox.create();
+		div.style.border = 'solid 1px black';
+			
+		new Preceptor.util.AjaxUpdate( 'category' , "<?=$this->url?>/form/formgroup" );
+		window.location = '#category';
+	});
+	
+	YAHOO.util.Event.on( "type" , "change" , function(ev){
+		
+		for( i = $('created').childNodes.length - 1; i > -1; i-- )
+		{
+			$( $('created').childNodes[i].id ).parentNode.removeChild( $( $('created').childNodes[i].id ) );
+		}
+		
+		if ( $('new_value') )
+		{
+			$('new_value').parentNode.removeChild( $('new_value') );
+		}
+		
+		if ( ( $('type').value == 'radio' ) || ( $('type').value == 'checkbox' ) || ( $('type').value == 'select' )  )
+		{
+			var a = document.createElement('A');
+			a.id = "new_value";
+			a.href = '#this';
+			a.innerHTML = '<?=$this->translate("new value")?>';
+			$('values').parentNode.insertBefore( a , $('values').nextSibling );
+			
+			YAHOO.util.Event.on( "new_value" , "click" , function(ev){
+				var div = document.createElement('DIV');
+				div.id = "div" + new Date().getTime();
+				
+				var label = document.createElement('LABEL');
+				label.id = "label" + new Date().getTime();
+				label.innerHTML   = "<?=$this->translate("default value")?>:";
+			
+				var input = document.createElement('INPUT');
+				input.id = "input" + new Date().getTime();
+				input.name = "value[]";
+				
+				div.appendChild( label );
+				div.appendChild( input );
+				
+				$('created').appendChild( div );
+				
+			});
+		}
+	});
+	
+</script>
+<?=$this->validate( "formField_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/form/formfield/save/" , "form"  ); ?>

@@ -1,0 +1,43 @@
+<?=$this->render("formfielddata/menu.phtml")?>
+<p><?=$this->translate( "Total de usuários" ) . ": " . $this->count->total ;?></p>
+<br /><br />
+<div id="list_person">
+	<?php if( $this->rs->count() ):?>
+        <p><?=$this->translate( "total" ) . ": " . $this->rs->count() ;?></p>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate("photo")?></th>
+				<th><?=$this->translate("name")?></th>
+				<th><?=$this->translate("email")?></th>
+				<?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+                    <th width="130px"></th>
+                <?php endif;?>
+			</tr>
+			<?php foreach( $this->rs as $rs ): ?>
+				<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				
+				<?php if( $this->getPermission( "input" ) ): ?>
+					<?php $edit = $this->ajax( $this->translate("edit") , 'user' , '/form/formfielddata/input/personId/'. $rs->id . "/formId/" . $rs->form_id ); ?>
+				<?php endif;?>
+					
+				<?php if( $this->getPermission( "delete" ) ): ?>
+					<?php $delete = $this->ajax( $this->translate("delete") , 'user' , '/person/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );?>
+				<?php endif;?>
+					
+				<tr class="<?=$class?>">
+					<td width="77">
+						<?=$this->image( "../upload/thumb_small" . $rs->findParentRow( "File" )->location , array('width'=>50) )?>
+					</td>
+					<td><?=$this->ajax( $rs->name , "mainformfielddata" , "/form/formfielddata/view/personId/" . $rs->id . "/formId/" . $rs->form_id ) ?></td>
+					<td><?=$rs->email ?></td>
+                    <?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+                        <td nowrap="nowrap"><?=$edit . " " . $delete?></td>
+                    <?php endif;?>
+				</tr>
+			<?php endforeach;?>
+		</table>
+		<p><?=$this->translate( "total" ) . ": " . $this->rs->count() ;?></p>
+	<?php else:?>
+		<?=$this->translate( "there are no records" );?>
+	<?php endif;?>
+</div>

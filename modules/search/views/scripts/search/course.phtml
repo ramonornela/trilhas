@@ -1,0 +1,15 @@
+<?=$this->render("search/menu.phtml")?>
+	
+<?php if( $this->result ): ?>
+
+	<?php foreach( $this->result as $key => $val ): ?>
+		<?php if( $val['unidade_id'] != $this->result[$key-1]['unidade_id'] ):?>
+			<div style="float: left; width: 170px; padding: 5px 5px;">
+				<a href="#glossario" onclick="runSearchView( 'course' , 'course/view/id/<?php echo $val['pagina_id']; ?>/busca/<?php echo $this->string; ?>' );">Unidade <?php echo $val['unidade_id']; ?></a>
+			</div>  
+		<?php endif;?>
+	<?php endforeach;?>
+	
+<?php else:?>
+	<?=$this->translate("there are no records")?>
+<?php endif;?>

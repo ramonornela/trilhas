@@ -30,5 +30,6 @@ class DashboardController extends Tri_Controller_Action
         $identity = Zend_Auth::getInstance()->getIdentity();
         $this->view->courses = Application_Model_Classroom::getAllByUser($identity->id);
         $this->view->user = $identity;
+        $this->_helper->layout->setLayout('layout');
     }
 }

@@ -25,10 +25,18 @@
  */
 class UserController extends Tri_Controller_Action
 {
+    public function init()
+    {
+        parent::init();
+        $this->view->title = "User";
+    }
+
     public function loginAction()
     {
-        $auth = Zend_Auth::getInstance();
-        $form = new Application_Form_Login();
+        $this->view->title = "Login";
+        $session = new Zend_Session_Namespace('data');
+        $auth    = Zend_Auth::getInstance();
+        $form    = new Application_Form_Login();
 
         if ($auth->hasIdentity()) {
             $this->_redirect('/dashboard');
@@ -48,18 +56,93 @@ class UserController extends Tri_Controller_Action
                 $result = $auth->authenticate($adapter);
 
                 if ($result->isValid()) {
+                    if ($session->url) {
+                        $url = $session->url;
+                        $session->url = null;
+                        $this->_redirect($url);
+                    }
+
                     $this->_redirect('/dashboard');
                 }
                 $this->_helper->flashMessenger->addMessage('Login failed');
             }
         }
+
+        if ($this->_hasParam('url')) {
+            $path = str_replace('index.php','', $_SERVER['SCRIPT_NAME']);
+            $url = base64_decode($this->_getParam('url'));
+            $url = str_replace($path, '', $url);
+            $session->url = $url;
+        }
         $this->view->form = $form;
     }
 
+    public function formAction()
+    {
+        $userId   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $form     = new Application_Form_User();
+        $identity = Zend_Auth::getInstance()->getIdentity();
+
+        if ($identity) {
+            $id = $identity->id;
+
+            if ($userId && $identity->role == 'institution') {
+                $id = $userId;
+            }
+
+            $table = new Tri_Db_Table('user');
+            $row   = $table->find($id)->current();
+
+            if ($row) {
+                $form->populate($row->toArray());
+            }
+        }
+        $this->view->form = $form;
+    }
+
+    public function saveAction()
+    {
+        $form  = new Application_Form_User();
+        $table = new Tri_Db_Table('user');
+        $data  = $this->_getAllParams();
+
+        if ($form->isValid($data)) {
+            if (!$form->image->receive()) {
+                $this->_helper->_flashMessenger->addMessage('Image fail');
+            }
+
+            $data = $form->getValues();
+            if (!$form->image->getValue()) {
+                unset($data['image']);
+            }
+
+            if (!$data['password']) {
+                unset($data['password']);
+            }
+            
+            if (isset($data['id']) && $data['id']) {
+                $row = $table->find($data['id'])->current();
+                $row->setFromArray($data);
+                $id = $row->save();
+            } else {
+                unset($data['id']);
+                $row = $table->createRow($data);
+                $id = $row->save();
+            }
+
+            $this->_helper->_flashMessenger->addMessage('Success');
+            $this->_redirect('user/form/id/'.$id);
+        }
+
+        $this->view->messages = array('Error');
+        $this->view->form = $form;
+        $this->render('form');
+    }
+    
     public function logoutAction()
     {
 		Zend_Auth::getInstance()->clearIdentity();
-		$this->_redirect( "/user/login/" );
+		$this->_redirect( "/index" );
     }
 
     public function resetAction()

@@ -1,0 +1,62 @@
+<div id="user-detail">
+    <div id="user-detail-close" class="right">
+        <a href="#this" id="<?=$rs->person_id?>-delete" class="ui-state-default ui-corner-all left" title="<?=$this->translate( 'delete' )?>" style="width: 17px; display: block;">
+            <span class="ui-icon ui-icon-close"></span>
+        </a>
+    </div>
+    <div id="user-detail-content"></div>
+</div>
+<div id="user-list">
+    <?php if( $this->rs->count() ):?>
+        <p><?=$this->translate( "total" ) . ":" . $this->rs->count() ;?></p>
+        <table class="datatable">
+            <tr>
+                <th><?=$this->translate("photo")?></th>
+                <th><?=$this->translate("name")?></th>
+                <th><?=$this->translate("email")?></th>
+                <?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+                    <th width="130px"></th>
+                <?php endif;?>
+            </tr>
+            <?php foreach( $this->rs as $rs ): ?>
+                <?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+                <?php $form = empty($rs->form_id)?1:$rs->form_id?>
+                <?php if( $this->getPermission( "input" ) ): ?>
+                    <?php $edit = $this->ajax( $this->translate("edit") , 'user' , '/form/formfielddata/input/personId/'. $rs->id . "/formId/" . $form ); ?>
+                <?php endif;?>
+
+                <?php if( $this->getPermission( "delete" ) ): ?>
+                    <?php $delete = $this->ajax( $this->translate("delete") , 'user' , '/form/formfielddata/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );?>
+                <?php endif;?>
+
+                <tr class="<?=$class?>">
+                    <td width="77">
+                        <?=$this->image( "../upload/thumb_small" . $rs->findParentRow( "File" )->location , array('width'=>50) )?>
+                    </td>
+                    <td class="link-user-detail"><?=$this->ajax( $rs->name , "user-detail-content" , "/form/formfielddata/view/personId/" . $rs->id . "/formId/" . $form ) ?></td>
+                    <td><?=$rs->email ?></td>
+                    <?php if( $this->getPermission( "input" ) || $this->getPermission( "delete" ) ): ?>
+                        <td nowrap="nowrap"><?=$edit . " " . $delete?></td>
+                    <?php endif;?>
+                </tr>
+            <?php endforeach;?>
+        </table>
+        <p><?=$this->translate( "total" ) . ": " . $this->rs->count() ;?></p>
+    <?php else:?>
+        <?=$this->translate( "there are no records" );?>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    jQuery('#user-detail').hide();
+    jQuery('.link-user-detail > a').click( function(){
+       jQuery('#user-detail').show();
+       jQuery('#user-list').hide()
+       jQuery('#mainformfielddata > .filter').hide();
+    });
+    jQuery('#user-detail-close').click( function(){
+        jQuery('#user-detail').hide();
+        jQuery('#user-list').show();
+        jQuery('#mainformfielddata > .filter').show();
+        jQuery('#user-detail-content').html('');
+    });
+</script>

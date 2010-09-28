@@ -1,0 +1,224 @@
+<?php $this->suffix = $this->controller ?>
+<form action="#" id="formEvaliation_<?=$this->suffix?>" >
+	<?=$this->formHidden( 'id' , $this->data->id )?>
+	
+	<label for="name_<?=$this->suffix?>"><?=$this->translate("title")?>:</label>
+	<?=$this->formText( "name" , $this->data->name , array( "id" => "name_" . $this->suffix ) )?>
+	
+	<br /><br />
+	<div class="left">
+		<label for="started_<?=$this->suffix?>"><?=$this->translate("begin date")?>:</label>
+		<?=$this->formText( "started" , $this->date($this->data->started), array( "id" => "started_" . $this->suffix , "style" => "width: 95px;" ) )?>
+	</div>
+	
+	<div class="left" style="margin-left: 10px;">		
+		<label for="finished_<?=$this->suffix?>"><?=$this->translate("end date")?>:</label>
+		<?=$this->formText( "finished" , $this->date($this->data->finished), array( "id" => "finished_" . $this->suffix , "style" => "width: 95px;" ) )?>
+	</div>
+	
+	<div class="left" style="margin-left: 10px;">			
+		<label for="temp_<?=$this->suffix?>"><?=$this->translate("temp to duration is evaluation")?>:</label>
+		<?=$this->formText( "time" , $this->data->time , array( "id" => "time_" . $this->suffix , 'style' => 'width:40px;' ) )?> <?=$this->translate("minute")?>
+	</div>
+	
+	<div class="clear"></div>
+	<br />
+	
+	<div style="margin-top: 7px;">
+		<?=$this->formCheckbox( "attempts" , $this->data->attempts , array( "id" => "attempts_" . $this->suffix ) , array( "1" , "2" ) )?>
+		<label for="attempts_<?php echo  $this->suffix?>" class="inline">
+			<?=$this->translate( "allow the student to redo this evaluation?" )?>
+		</label>
+   </div>
+   
+   <div style="margin-top: 7px;">
+		<?=$this->formCheckbox( "evaluation_final" , $this->data->evaluation_final , array( "id" => "evaluation_final_" . $this->suffix ) , array( "1" , "2" ) )?>
+		<label for="evaluation_final_<?php echo  $this->suffix?>" class="inline">
+			<?=$this->translate( "Caso este curso seja SEM TUTORIA e essa seja avaliação final marque esta opção." )?>
+		</label>
+   </div>
+	   
+	<br /><br />
+	<input type="submit" value="<?=$this->translate("save")?>" />
+</form>
+
+<?php if( isset( $this->data->id ) && $this->data->id ):?>
+    <div>
+        <div id="menu-question" class="right" style="margin-bottom: 7px;">
+            <?php if( $this->getPermission( "organizer" ) ): ?>
+                <?=$this->ajax( $this->translate( 'organizer' ) , "evaluation" , "$this->url/evaluation/evaluation/organizer/" )?>
+            <?php endif;?>
+            <?=$this->ajax( $this->translate( 'view evaluation' ) , "evaluation" , "$this->url/evaluation/evaluation/view-evaluation/" )?>
+            <?=$this->ajax( $this->translate( 'import database of questions' ) , "evaluation" , "$this->url/evaluation/question/bank-question/evaluation_id/{$this->data->id}" )?>
+            <?=$this->ajax( $this->translate( 'create new question' ) , "evaluation" , "$this->url/evaluation/question/input/" )?>
+        </div>
+
+        <div class="clear"></div>
+        <?php $totalNote = 0;?>
+        <?php if( isset( $this->rs ) && $this->rs->count() ):?>
+            <table class="datatable">
+                <thead>
+                    <tr>
+                        <th style="width:10px"><?=$this->translate( "Nº" )?></th>
+                        <th style="width:60%"><?=$this->translate( "question comand" )?></th>
+                        <th style="width:15%"><?=$this->translate( "type" )?></th>
+                        <th style="width:15%"><?=$this->translate( "theme" )?></th>
+                        <th style="width:20%"><?=$this->translate( "note" )?></th>
+                        <th style="width: 45px;"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                <?php $i = 0;?>
+                <?php foreach( $this->rs as $key => $rs ):?>
+                    <tr class="<?=$this->changeClass( $key , array( "light_gray" , "white" ) );?>" >
+                        <td><?=++$i;?>)</td>
+						<td>
+							<?php if( isset( $rs->label ) && $rs->label && !$rs->labels ):?>
+								<?=substr( strip_tags( $rs->label ) , 0 , 90 )?>
+								<?php if( strlen( strip_tags( $rs->label ) ) > 90 ):?>
+									...
+								<?php endif;?>
+							<?php else:?>
+								<?=substr( strip_tags( $rs->labels ) , 0 , 90 )?>
+								<?php if( strlen( strip_tags( $rs->labels ) ) > 90 ):?>
+									...
+								<?php endif;?>
+							<?php endif;?>
+						</td>
+                        <td>
+                            <?php
+                                switch( $rs->type ){
+                                    case 'text':
+                                        echo $this->translate("default text");
+                                        break;
+                                    case 'textarea':
+                                        echo $this->translate("discursive");
+                                        break;
+                                    case 'radio':
+                                        echo $this->translate("multiple choice(uniq)");
+                                        break;
+                                    case 'checkbox':
+                                        echo $this->translate("multiple choice(more)");
+                                        break;
+                                    case 'truefalse':
+                                        echo $this->translate("true or false");
+                                        break;
+                                    case 'association':
+                                        echo $this->translate("association");
+                                        break;
+                                    case 'keyword':
+                                        echo $this->translate("key word");
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td>
+                            <?=$rs->theme?>
+                        </td>
+                        <td>
+                            <p id="note-<?=$rs->id?>" style="width:100%;">
+                                <?php $note = substr($rs->note , 0 , 1);?>
+                                <?php if( $note == "," ):?>
+                                    <?="0".$rs->note?>
+                                <?php else:?>
+                                    <?=$rs->note?>
+                                <?php endif;?>
+                                <?php
+                                    $totalNote += str_replace( "," , "." , $rs->note );
+                                ?>
+                                &nbsp;&nbsp;
+                            </p>
+                            <script type="text/javascript">
+                                jQuery( '#note-<?=$rs->id?>' ).dblclick( function(){
+                                    var html = [];
+
+                                    html.push( '<form id="form-<?=$rs->id?>" action="#" method="post" >' );
+                                    html.push( '    <input type="hidden" name="evaluation_question_id" value="<?=$rs->id?>" />' );
+                                    html.push( '    <input type="text" id="input-note-<?=$rs->id?>" name="note" value="<?=$rs->note?>" style="width: 42px;" />' );
+                                    html.push( '    <input type="button" id="submit-note-<?=$rs->id?>" value="<?=$this->translate( "ok" )?>" style="width: 20px;" onclick="saveNote( <?=$rs->id?> )" />' );
+                                    html.push( '</form>' );
+
+                                    jQuery( this ).html( html.join( '' ) );
+                                }).mouseover( function(){
+                                    jQuery( 'body' ).css( 'cursor' , 'pointer' );
+                                }).mouseout( function(){
+                                    jQuery( 'body' ).css( 'cursor' , 'default' );
+                                });
+                            </script>
+                        </td>
+                        <td>
+                            <a href="#this" id="<?=$rs->evaluation_question_id?>-delete" class="ui-state-default ui-corner-all" title="<?=$this->translate( 'delete' )?>" style="width: 17px; display: block;">
+                                <span class="ui-icon ui-icon-trash"><?=$this->translate( 'delete' )?></span>
+                            </a>
+                            <script type="text/javascript">
+                                jQuery( "#<?=$rs->evaluation_question_id?>-delete" ).click( function(){
+                                    if( confirm( '<?=$this->translate( "really want to unlink the issue of evaluation?" )?>' ) ){
+                                        new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/question/delete-relation/id/<?=$rs->evaluation_question_id?>" );
+                                    }
+                                });
+                            </script>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+                </tbody>
+            </table>
+            <div class="right">
+                <?=$this->translate( 'total note' )?>: <b><?=str_replace( "." , "," , $totalNote )?></b>&nbsp;&nbsp;&nbsp;
+                <?=$this->translate( 'media for approval' )?>: <b><?=str_replace( "." , "," , ( $totalNote*70/100 ) )?></b>
+            </div>
+        <?php else:?>
+            <div><?=$this->translate( "there is issues related to this assessment" ) ?></div>
+        <?php endif;?>
+    </div>
+    <?php endif;?>
+	<br /><br />
+</div>
+	
+<script>
+	jQuery( "#menu-question > a" ).css({'margin-right':'7px'});
+	/**
+	* Clear messages of the validate
+      */
+      //jQuery('#<?=$this->model?>-name , #<?=$this->model?>-started').focus( function(){
+      //	<?=strtolower($this->model)?>.clearMessages();
+      //});
+
+	new Preceptor.util.Mask( "time_<?=$this->suffix ?>" , {func:'integer'} )
+	new Preceptor.util.Mask( "started_<?=$this->suffix ?>" , {mask:'00/00/0000'} )
+	new Preceptor.util.Mask( "finished_<?=$this->suffix ?>" , {mask:'00/00/0000'} )
+	
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formEvaliation_<?=$this->suffix?>' , 'submit' , function( ev ){
+			
+			if( this.verify( $( 'formEvaliation_<?=$this->suffix?>' ) ) )
+			{
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+
+    saveNote = function( id ){
+        var note = jQuery( "#input-note-" + id ).val();
+
+        if( note > 10 ){
+            alert( "<?=$this->translate( 'enter a note less than or equal to 10' )?>" );
+            return false;
+        }
+
+        if( validate ){
+            new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/question/alter-note" , { formId: "form-"+id } );
+        }
+
+        return false;
+   }
+
+   blurNote = function( id ){
+        var note = jQuery( "#input-note-" + id ).val();
+        jQuery( "#note-" + id ).html( note );
+   }
+</script>
+<?=$this->validate( "formEvaliation_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/evaluation/evaluation/save/" , "evaluation" ); ?>

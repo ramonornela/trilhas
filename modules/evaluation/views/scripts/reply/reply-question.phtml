@@ -1,0 +1,53 @@
+<?php if( isset( $this->rs ) ): ?>
+    <div style="background:#F4F4F4; padding:7px;">
+        <?php echo $this->translate('number questions')?>:
+        <?php
+            $button = true;
+            for($i = 1; $i <= 10; $i++){
+                if( $i <= $this->replys && (!$this->question_number || $this->question_number != $i) ){
+                    echo "<span class='question-green'><a href='#this' class='link-question' id='$i'>$i</a></span> ";
+                }else if($i == ($this->replys + 1) && !$this->question_number){
+                    echo "<span class='question-blue'><a href='#this' class='link-question' id='$i'>$i</a></span> ";
+                }else if(!empty($this->question_number) && $this->question_number == $i){
+                    echo "<span class='question-blue'><a href='#this' class='link-question' id='$i'>$i</a></span> ";
+                }else{
+                    echo "<span class='question-yellow'><a href='#this' class='link-question' id='$i'>$i</a></span> ";
+                }
+
+            }
+        ?>
+    </div>
+    <br/>
+    <div id="content-question" >
+        <div class="question">
+            <p class="question-alternative"><b><?php echo $this->evaluation->name?></b></p>
+            <p><?php echo $this->rs['labels']?></p>
+            <br />
+            <br />
+            <?php if($this->link_button):?>
+                <input type="button" id="reply-question" value=" <?php echo $this->translate( 'reply' )?> " />
+            <?php else:?>
+                <script type="text/javascript">
+                    new Preceptor.util.AjaxUpdate( "content-question" , "<?=$this->url?>/evaluation/reply/view/id/<?php echo $this->evaluation->id?>/question_id/<?php echo $this->rs['id']?>" );
+                </script>
+            <?php endif;?>
+        </div>
+    </div>
+<?php else: ?>
+<?php endif; ?>
+<script type="text/javascript">
+    jQuery('.link-question').click( function(){
+        new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/reply/reply-question/question-number/" + this.id );
+    });
+
+    jQuery('#reply-question').click( function(){
+        new Preceptor.util.AjaxUpdate( "content-question" , "<?=$this->url?>/evaluation/reply/question-confirmed/id/<?php echo $this->rs['id']?>");
+    });
+
+    jQuery(".question" )
+        .css({"background":"#F4F4F4" , "border":"#BBB 1px solid" , "padding":"5px"})
+        .mouseover( function(){
+            jQuery(this ).css({ "border":"#74A8CF dashed 1px" , "background":"#FFF" }); })
+        .mouseout( function(){
+            jQuery(this ).removeAttr("style").css({"background":"#F4F4F4" , "border":"#BBB 1px solid" , "padding":"5px"}); });
+</script>

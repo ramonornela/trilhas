@@ -1,0 +1,212 @@
+<div id="evaluation-bank-question">
+    <div class="right">
+        <?php if( !$this->tpl ):?>
+            <?=$this->ajax( $this->translate( 'create question' ) , "evaluation" , "$this->url/evaluation/question/input/" )?>
+        <?php endif;?>
+    </div>
+
+    <?php if( isset( $this->rs ) && $this->rs->count() ):?>
+        <div id="note-question" style="display:none;">
+            <div id="selected-question"></div>
+            <form id="question-rel">
+                <input type="hidden" id="evaluation_question_id" name="evaluation_question_id" />
+                <label for="note"><?=$this->translate( 'tell the question note' )?> ( 0 - 10 | Ex "8,2" ) :</label>
+                <input type="text" id="note" name="note" style="width: 42px;" />
+                <br /><br />
+                <input type="submit" id="submitQuestion" value="<?=$this->translate( 'save' )?>" />
+            </form>
+
+            <div id="message-validate" style="color: red;" ></div>
+        </div>
+        <br />
+        <hr />
+    <?php endif;?>
+
+    <div class="clear">&nbsp;</div>
+
+    <div class="left">
+        <form action="#" id="formSearchQuestion">
+            <label class="inline" for="<?="qQuestion"?>"><?=$this->translate( 'search' )?>: </label>
+            <input type="text" value="<?=isset( $this->q ) && $this->q?$this->q:null?>" name="q" id="qQuestion" style="width: 16em; margin-right: 4px;" />
+            <label class="inline" for="<?="type"?>"><?=$this->translate( 'type' )?>: </label>
+            <?=$this->formSelect( "type" , isset( $this->type ) && $this->type?$this->type:null , array( "id" => "type" ) , $this->types )?>
+            <label  class="margin inline"><input type="checkbox" value="1" name="fixed" id="fixed"/>&nbsp;<?=$this->translate( 'set filter' )?></label>
+            <input type="submit" value="OK" id="buttonQuestion" />
+        </form>
+        <br />
+    </div>
+
+    <?php if( isset( $this->rs ) && $this->rs->count() ):?>
+        <table class="datatable">
+            <thead>
+                <tr>
+                    <th><?=$this->translate( 'question comand' )?></th>
+                    <th width="150"><?=$this->translate( 'type' )?></th>
+                    <th width="200"><?=$this->translate( 'theme' )?></th>
+                    <th width="90"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <?php foreach( $this->rs as $key => $rs ):?>
+                <tr class="<?=$this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>">
+                    <td>
+                        <a href="#this" class="select-question" id="<?=$rs->id?>">
+                            <?php if( isset( $rs->label ) && $rs->label && !$rs->labels ):?>
+                                <?=substr( strip_tags( $rs->label ) , 0 , 80 )?>
+                                <?php if( strlen( strip_tags( $rs->label ) ) > 80 ):?>
+                                    ...
+                                <?php endif;?>
+                            <?php else:?>
+                                <?=substr( strip_tags( $rs->labels ) , 0 , 80 )?>
+                                <?php if( strlen( strip_tags( $rs->labels ) ) > 80 ):?>
+                                    ...
+                                <?php endif;?>
+                            <?php endif;?>
+                        </a>
+                    </td>
+                    <td>
+                        <?php
+                            switch( $rs->type ){
+                                case 'text':
+                                    echo $this->translate("default text");
+                                    break;
+
+                                case 'textarea':
+                                    echo $this->translate("discursive");
+                                    break;
+
+                                case 'radio':
+                                    echo $this->translate("multiple choice(uniq)");
+                                    break;
+
+                                case 'checkbox':
+                                    echo $this->translate("multiple choice(more)");
+                                    break;
+
+                                case 'truefalse':
+                                    echo $this->translate("true or false");
+                                    break;
+
+                                case 'association':
+                                    echo $this->translate("association");
+                                    break;
+
+                                case 'keyword':
+                                    echo $this->translate("key word");
+                                    break;
+                            }
+                          ?>
+                    </td>
+                    <td>
+                        <?php if( isset( $rs->theme ) && $rs->theme ):?>
+                                <?=substr( $rs->theme , 0 , 30  )?>
+                                <?php if( strlen( $rs->theme ) > 30 ):?>
+                                    ...
+                                <?php endif;?>
+                        <?php else:?>
+                            ---
+                        <?php endif;?>
+                    </td>
+                    <td>
+                        <a href="#this" id="<?=$rs->id?>" class="ui-state-default ui-corner-all left select-question" title="<?=$this->translate( 'choosing this issue' )?>" style="margin-right: 3px;" >
+                            <span class="ui-icon ui-icon-circle-check"><?=$this->translate( 'choosing this issue' )?></span>
+                        </a>
+
+                        <a href="#this" id="<?=$rs->id?>-input" class="ui-state-default ui-corner-all left" title="<?=$this->translate( 'edit' )?>" style="margin-right: 3px;" >
+                            <span class="ui-icon ui-icon-pencil"><?=$this->translate( 'edit' )?></span>
+                        </a>
+                        <script type="text/javascript">
+                            jQuery( "#<?=$rs->id?>-input" ).click( function(){
+                                new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/question/input/id/<?=$rs->id?>" );
+                            });
+                        </script>
+
+                        <a href="#this" id="<?=$rs->id?>-delete" class="ui-state-default ui-corner-all left" title="<?=$this->translate( 'delete' )?>" >
+                            <span class="ui-icon ui-icon-trash"><?=$this->translate( 'delete' )?></span>
+                        </a>
+
+                        <script type="text/javascript">
+                            jQuery( "#<?=$rs->id?>-delete" ).click( function(){
+                                if( confirm( '<?=$this->translate( "want to delete?" )?>' ) ){
+                                    new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/question/delete/id/<?=$rs->id?>" );
+                                }
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <?php if( $this->rs->key() == 20 ) break; ?>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+        <?=$this->pagination( "evaluation" , "/evaluation/question/bank-question/search/$this->search" , $this->to , $this->counts ) ?>
+    <?php else:?>
+        <div class="clear"></div>
+        <div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+    <?php endif;?>
+        <p><br /></p>
+    </div>
+
+    <script type="text/javascript">
+        /**
+         * whether there is a id of the question being passed, force the ajax.
+         */
+        <?php if( isset( $this->question ) && $this->question ):?>
+            jQuery( "#evaluation_question_id" ).val( <?=$this->question?> );
+            jQuery( "#note-question" ).show();
+            jQuery( "#note" ).focus();
+            new Preceptor.util.AjaxUpdate( "selected-question" , "<?=$this->url?>/evaluation/question/selected-question/id/<?=$this->question?>" );
+        <?php endif;?>
+
+        /**
+         * ajax for search question
+         */
+        YAHOO.util.Event.on( 'formSearchQuestion' , 'submit' , function( ev ){
+            new Preceptor.util.AjaxUpdate( "evaluation-bank-question" , "<?=$this->url?>/evaluation/question/bank-question/tpl/ajax" , { formId: this.id } );
+            YAHOO.util.Event.stopEvent( ev );
+            //return false;
+        });
+
+        /**
+         * brings the issue selected
+         */
+        jQuery( ".select-question" ).click( function(){
+            jQuery( "#evaluation_question_id" ).val( this.id );
+            jQuery( "#note-question" ).show();
+            jQuery( "#note" ).focus();
+            new Preceptor.util.AjaxUpdate( "selected-question" , "<?=$this->url?>/evaluation/question/selected-question/id/" + this.id );
+        });
+
+        /**
+         * validate
+         * checks whether note and question selected
+         */
+        jQuery( "#question-rel" ).submit( function(){
+            var validate = true;
+
+            jQuery( "#message-validate" ).html( "" );
+
+            if( !jQuery( "#evaluation_question_id" ).val() ){
+                jQuery( "#message-validate" ).append( "<p>* <?=$this->translate( 'select a question' )?></p>" );
+                validate = false;
+            }
+
+            var note = jQuery( "#note" ).val();
+            note = note.replace( "." , "," );
+            
+            if( !note ){
+                jQuery( "#message-validate" ).append( "<p>* <?=$this->translate( 'tell the question note' )?></p>" );
+                validate = false;
+            }else if( note < 0 || note > 10 ){
+                jQuery( "#message-validate" ).append( "<p>* <?=$this->translate( 'report a score between 0 and 10' )?></p>" );
+                validate = false;
+            }
+
+            if( jQuery( "#evaluation_question_id" ).val() && jQuery( "#note" ).val() && validate ){
+                new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/question/save-relation/" , {formId: 'question-rel'} );
+            }
+
+            return false;
+        });
+    </script>
+</div>

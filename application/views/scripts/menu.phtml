@@ -6,15 +6,15 @@
                     <?php if ($this->isAllowed($data)): ?>
                         <?php if ($parentName != $previousParentName):?>
                             <?php if($i > 0): ?>
-                                    </div>
-                                </ul>
+                                    </ul>
+                                </div>
                             <?php endif;?>
                                  <h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top"><?=$this->translate($parentName)?></h3>
                                  <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
                                 <ul>
                         <?php endif;?>
                         <li>
-                            <a href="#this" onclick="addElement('main', '<?=$data['controller']?>' , '<?=$this->url?>/<?=$data['module']?>/<?=$data['controller']?>/<?=$data['action']?>' )"  >
+                            <a href="<?=$data['module']?>/<?=$data['controller']?>/<?=$data['action']?>/layout/box">
                                 <?=$this->translate($name)?>
                             </a>
                         </li>
@@ -22,6 +22,12 @@
                     <?php $previousParentName = $parentName; $i++;?>
                 <?php endforeach; ?>
 		<?php endforeach; ?>
-            </div>
-        </ul>
+            </ul>
+        </div>
 </div>
+<script>
+    $('#menu a').click(function(){
+        $('#main').load(this.href);
+        return false;
+    });
+</script>

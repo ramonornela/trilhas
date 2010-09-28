@@ -1,0 +1,59 @@
+<h3><?php echo $this->parent->title?></h3>
+<table class="datatable">
+    <?php if ($this->page == 1):?>
+        <tr>
+            <td width="100">user</td>
+            <td><?php echo $this->parent->description?></td>
+        </tr>
+    <?php endif;?>
+    <?php $identity = Zend_Auth::getInstance()->getIdentity()?>
+    <?php if (count($this->data)):?>
+        <?php foreach ($this->data as $key => $data): ?>
+            <tr style="<?php echo $key%2 ? null : 'background: #eee'?>">
+                <td width="100">
+                    <img alt="<?php echo $data->name ?>" src="upload/<?php echo $this->thumbnail($data->image, 'small') ?>" /><br />
+                    <?php echo $data->name?><br />
+                    <?php
+                        if ($this->parent->status == 'Active') {
+                            if ($this->isAllowed('form') && $identity->id == $data->user_id) {
+                                echo $this->ajax("edit", 'forum/reply/form/id/'. $data->id, 2);
+                            }
+
+                            if (($this->isAllowed('delete') && $identity->id == $data->user_id) || $identity->role != 'student') {
+                                echo $this->ajax("delete", 'forum/reply/delete/id/' . $data->id . '/forumId/' . $data->forum_id, 2 , "want to delete?");
+                            }
+                        }
+                    ?>
+                </td>
+                <td><?php echo nl2br($data->description)?></td>
+            </tr>
+        <?php endforeach;?>
+    <?php endif;?>
+    <?php if ($this->parent->status == 'Active'):?>
+        <tr>
+            <td>
+                <img alt="<?php echo $identity->name ?>" src="upload/<?php echo $this->thumbnail($identity->image, 'small') ?>" /><br />
+                <?php echo $identity->name?><br />
+                <?php echo $this->date(time())?>
+            </td>
+            <td><div class="forumReply"><?php echo $this->form?></div></td>
+        </tr>
+    <?php endif;?>
+</table>
+<div id="forum-page">
+    <?php echo $this->paginationControl($this->data) ?>
+</div>
+<script type="text/javascript">
+    $('#forum-page a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+
+    $(".forumReply form").submit(function() {
+        var $this = $(this);
+		$.post('forum/reply/save', $(this).serialize(), function(data){
+            $this.parents('.content').html(data);
+        });
+        return false;
+	});
+</script>

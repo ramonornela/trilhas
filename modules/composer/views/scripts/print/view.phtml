@@ -1,0 +1,7 @@
+<div style="font-size: 100%;" id="content">
+    <?php
+        $search  = array('/www17/', '/www17dsv/');
+        $replace = "/{$_SERVER['HTTP_HOST']}/";
+        echo str_replace($search, $replace, $this->printLink( $this->contents ));
+    ?>
+</div>

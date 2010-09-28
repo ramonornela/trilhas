@@ -38,8 +38,8 @@ class Application_Form_Course extends Zend_Form
         $filters       = $course->getFilters();
         $where         = array("role = 'institution' OR role = 'Teacher' OR role = 'Creator'");
         $users         = $user->fetchPairs('id', 'name', $where, 'name');
-        $statusOptions = array_unique($course->fetchPairs('status', 'status'));
-        $categories    = array_unique($course->fetchPairs('category', 'category'));
+        $statusOptions = $course->fetchPairs('status', 'status');
+        $categories    = $course->fetchPairs('category', 'category');
 
         $this->setAction('course/save')
              ->setMethod('post')
@@ -70,10 +70,11 @@ class Application_Form_Course extends Zend_Form
                     ->addFilters($filters['description'])
                     ->setAllowEmpty(false);
 
-        if (isset($categories[''])) {
+        if (!$categories || isset($categories[''])) {
             $category = new Zend_Form_Element_Text('category');
         } else {
-            $category = new Zend_Form_Element_Select('category');
+            $categories = array_unique($categories);
+            $category   = new Zend_Form_Element_Select('category');
             $category->addMultiOptions(array('' => '[select]') + $categories)
                      ->setRegisterInArrayValidator(false);
         }
@@ -92,10 +93,11 @@ class Application_Form_Course extends Zend_Form
              ->addValidator('Size', false, 2097152)//2mb
              ->addValidator('Extension', false, 'jpg,png,gif');
 
-        if (isset($statusOptions[''])) {
+        if (!$statusOptions || isset($statusOptions[''])) {
             $status = new Zend_Form_Element_Text('status');
         } else {
-            $status = new Zend_Form_Element_Select('status');
+            $statusOptions = array_unique($statusOptions);
+            $status        = new Zend_Form_Element_Select('status');
             $status->addMultiOptions(array('' => '[select]') + $statusOptions)
                    ->setRegisterInArrayValidator(false);
         }

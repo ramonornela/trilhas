@@ -1,0 +1,36 @@
+<div class="right">
+	<?php if( $this->getPermission( "input" ) ): ?>
+		<?=$this->ajax( $this->translate("new") , "restriction" , "/restriction/restriction/input/type/" . Restriction::TIME , 2 ) ?>
+	<?php endif; ?>
+</div>
+<div class="clear"></div>
+<br />
+<?php if( $this->rs->count() ):?>
+		<table class="datatable">
+			<tr>
+                <th><?=$this->translate("date init")?></th>
+                <th><?=$this->translate("date expired")?></th>
+                <th><?=$this->translate("content")?></th>
+                <th><?=$this->translate("action")?></th>
+			</tr>
+			<?php foreach( $this->rs as $rs ): ?>
+				<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				
+				<tr class="<?=$class?>">
+					<td><?=$this->date( $rs->started ) ?></td>
+                    <td><?=$this->date( $rs->finished )?></td>
+                    <td nowrap="nowrap"><?=$rs->findParentRow('Restriction')->findParentRow('Content')->title?></td>
+                    <td width="100">
+                        <?=$this->ajax( $this->translate("edit") , "restriction" , "/restriction/restriction/input/id/" . $rs->id . "/type/" . Restriction::TIME )?> | 
+                        <?=$this->ajax( $this->translate("delete") , "restriction" , "/restriction/restriction/delete/id/" . $rs->id . "/type/" . Restriction::TIME , 1, $this->translate( "want to delete?" ) )?>
+                    </td>
+				</tr>
+			<?php endforeach;?>
+		</table>  
+<?php else:?>
+	<table class="datatable">
+		<tr class="<?=$class?>">
+			<td><?=$this->translate( "there are no records" );?></td>
+		</tr>
+	</table> 
+<?php endif;?>

@@ -1,0 +1,177 @@
+<div class="right">
+	<?=$this->ajax( $this->translate( 'back' ) , "evaluation" , "$this->url/evaluation/evaluation/input/id/{$this->evaluation->id}" )?>
+</div>
+<br />
+<div style="margin: 10px 0 30px 0;">
+<?php if( count( $this->rs ) ):?>
+	<?php $i = 1?>
+	<?php foreach( $this->rs as $rs ):?>
+        <div style="background: #fff; border: 1px solid #E6EEEE; padding: 3px 3px 7px 3px;">
+			<?php if( isset( $this->rs->label ) && $this->rs->label && !$this->rs->labels ):?>
+				<?=$i,") ",nl2br( $rs->label )?>
+			<?php else:?>
+				<?=$i,") ",nl2br( $rs->labels )?>
+			<?php endif;?>
+			
+			<?php if( $rs->type == "text" ): ?>
+                <div class="question">
+                    <?php
+                        $alternative = $rs->findDependentRowset( "EvaluationValue" )->current();
+                    ?>
+                    <br />
+                </div>
+
+                <div class="padding" style="background: #FFF; border: green solid 1px;">
+                    <b><?=$this->translate( "feedback" )?>:</b> <?=$alternative->value?>
+                    <?php if( isset( $alternative->justify ) && $alternative->justify ):?>
+                        <br />
+                        <b><?=$this->translate( "justify" )?>:</b> <?=$alternative->justify?>
+                    <?php endif;?>
+                </div>
+                <br />
+            <?php endif; ?>
+		
+            <?php if( $rs->type == "truefalse" ): ?>
+                <div class="question">
+                    <?php
+                        $alternatives = $rs->findDependentRowset( "EvaluationValue" , null , $rs->select()->order( "id" ) );
+                        $j = 0;
+                        $questions = 0;
+                        $feedback = "";
+                    ?>
+                    <?php foreach( $alternatives as $key => $alternative ):?>
+                    <div style="margin-bottom: 10px">
+                        <?=$this->letters[$j], ") ";?>
+                        <select name="<?=$rs->id?>[<?=$alternative->id?>]">
+                            <option value="" ></option>
+                            <option label="V" value="V" >V</option>
+                            <option label="F" value="F" >F</option>
+                        </select>
+                        <span><?=$alternative->value?></span>
+                        <br />
+                    </div>
+                    <?php $feedback .= "{$this->letters["$questions"]}) - $alternative->status, "?>
+                    <?php $j++;?>
+                    <?php $questions++;?>
+                    <?php endforeach;?>
+                    <br />
+                </div>
+                <div class="padding" style="background: #FFF; border: green solid 1px;">
+                    <b><?=$this->translate( "feedback" )?>:</b> <?=substr($feedback, 0 , -2)?>
+                </div>
+                <br />
+            <?php endif; ?>
+
+            <?php if( $rs->type == "association" ): ?>
+                <div class="question">
+                    <?php
+                        $alternatives = $rs->findDependentRowset( "EvaluationValue" , null , $rs->select()->order( "id" ) );
+                        $j = 0;
+                        $questions = 0;
+                        $feedback = "";
+                    ?>
+                    <?php foreach( $alternatives as $key => $alternative ):?>
+                    <div style="margin-bottom: 10px">
+                        <?=$this->letters[$j], ") ";?>
+                        <?=$this->formSelect( "{$rs->id[$alternative->id]}", null , null , $this->letters )?>
+                        <span><?=$alternative->value?></span>
+                        <br />
+                    </div>
+                    <?php $feedback .= "{$this->letters[$questions]}) - $alternative->status, "?>
+                    <?php $j++;?>
+                    <?php $questions++;?>
+                    <?php endforeach;?>
+                    <br />
+                </div>
+                <div class="padding" style="background: #FFF; border: green solid 1px;">
+                    <b><?=$this->translate( "feedback" )?>:</b> <?=substr($feedback, 0 , -2)?>
+                </div>
+                <br />
+            <?php endif; ?>
+
+            <?php if( $rs->type == "radio" ): ?>
+                <div class="question">
+                    <?php
+                        $alternatives = $rs->findDependentRowset( "EvaluationValue" , null , $rs->select()->order( "id" ) );
+                        $j = 0;
+                        $questions = 0;
+                        $feedback = "";
+                    ?>
+                    <?php foreach( $alternatives as $key => $alternative ):?>
+                    <div style="margin-bottom: 10px">
+                        <p>
+                            <?=$this->letters[$j], ") ";?>
+                            <label for="<?=$rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
+                        </p>
+                    </div>
+                    <?php
+                        if( $alternative->status == "V" ){
+                            $feedback = $this->letters["$questions"].") ";
+                        }
+                    ?>
+                    <?php $j++ ?>
+                    <?php $questions++;?>
+                    <?php endforeach;?>
+                    <br />
+                </div>
+                <div class="padding" style="background: #FFF; border: green solid 1px;">
+                    <b><?=$this->translate( "feedback" )?>:</b> <?=$feedback?>
+                    <?php if( isset( $alternative->justify ) && $alternative->justify ):?>
+                        <br />
+                        <b><?=$this->translate( "justify" )?>:</b> <?=$alternative->justify?>
+                    <?php endif;?>
+                </div>
+                <br />
+            <?php endif; ?>
+
+            <?php if( $rs->type == "checkbox" ): ?>
+                <div class="question">
+                    <br />
+                    <?php
+                        $alternatives = $rs->findDependentRowset( "EvaluationValue" , null , $rs->select()->order( "id" ) );
+                        $j = 0;
+                        $questions = 0;
+                        $feedback = "";
+                    ?>
+                    <?php foreach( $alternatives as $key => $alternative ):?>
+                        <?php
+                            if( $alternative->status == "V" ){
+                                $feedback .= "{$this->letters["$questions"]}), ";
+                            }
+                        ?>
+                        <div style="margin-bottom: 10px">
+                            <?=$this->letters[$j]. ") ";?>
+                            <label for="<?=$rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
+                        </div>
+                        <?php $j++; ?>
+                        <?php $questions++;?>
+                    <?php endforeach;?>
+                    <div class="padding" style="background: #FFF; border: green solid 1px;">
+                        <b><?=$this->translate( "feedback" )?>:</b> <?=substr($feedback, 0 , -2)?>
+                    </div>
+                    <br />
+                </div>
+                <br />
+            <?php endif; ?>
+
+            <?php if( $rs->type == "textarea" ): ?>
+                <br />
+            <?php endif; ?>
+
+            <?php if( $rs->type == "keyword" ): ?>
+                <?php
+                    $alternative = $rs->findDependentRowset( "EvaluationValue" )->current();
+                ?>
+                <div class="padding" style="background: #FFF; border: green solid 1px;">
+                    <b><?=$this->translate( "feedback" )?>:</b> <?=$alternative->value?>
+                </div>
+                <br />
+            <?php endif; ?>
+		</div>
+		<?php $i++?>
+		<br />
+	<?php endforeach;?>
+<?php else:?>
+		<?=$this->translate( "there are no records" );?>
+<?php endif;?>
+</div>

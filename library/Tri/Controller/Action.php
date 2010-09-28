@@ -36,18 +36,48 @@ class Tri_Controller_Action extends Zend_Controller_Action
      */
     public function init()
     {
+        $this->_security();
         $this->_locale();
 
-        if (!isset($theme)) {
-            $this->view->theme = 'cupertino';
-        }
+        $this->view->theme = THEME;
 
         $this->_helper->layout->disableLayout();
         if (!$this->_request->isXmlHttpRequest()) {
             $this->_helper->layout->enableLayout();
+            $this->_helper->layout->setLayout('solo');
         }
 
-        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+        if ($this->_hasParam('layout')) {
+            $this->_helper->layout->setLayout($this->_getParam('layout'));
+        }
+
+        $messages = $this->_helper->flashMessenger->getMessages();
+
+        if (count($messages)) {
+            $this->view->messages = $messages;
+            $this->getResponse()->prepend('messages', $this->view->render('message.phtml'));
+        }
+    }
+
+    protected function _security()
+    {
+        $acl      = Zend_Registry::get('acl');
+        $identity = Zend_Auth::getInstance()->getIdentity();
+
+        $role = 'all';
+        if ($identity) {
+            $role = $identity->role;
+        }
+
+        $resource  = $this->_getParam('module');
+        $privilege = $this->_getParam('controller')
+                   . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
+                   . $this->_getParam('action');
+
+        if (!$acl->isAllowed($role, $resource, $privilege)) {
+            $url = base64_encode($_SERVER['REQUEST_URI']);
+            $this->_redirect('/user/login/url/'. $url);
+        }
     }
 
     protected function _locale()

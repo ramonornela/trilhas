@@ -1,0 +1,5 @@
+<label for="ds_<?=$this->suffix?>"><strong><?=$this->translate("description")?>:</strong></label><br /><br />
+<?=$this->data->ds ?>
+<br /><br />
+<?=$this->ajax( $this->translate("back to correct") , "activity" , "/activity/correct/input/" , 2 );?>
+	

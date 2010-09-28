@@ -1,0 +1,23 @@
+<?=$this->render("search/menu.phtml")?>
+
+<?php if( $this->searchForum->count() ): ?>
+	<table class="datatable">
+		<th><?=$this->translate("result")?></th>
+		
+		<?php foreach( $this->searchForum as $key => $val ): ?>
+			<?php $class  = $this->changeClass( $this->searchForum->key() , array( "light_gray" , "white" ) );?>
+			<tr class="<?=$class?>">
+				<td nowrap="nowrap">
+					<a href="#this" onclick="addElement('main' , 'forum' , '<?=$this->url?>/forum/forum/view/id/<?=$val->id;?>')" ><?=$val->title;?></a>
+				</td>	
+			</tr> 
+		<?php endforeach;?>
+		
+	</table>
+<?php else:?>
+	<table class="datatable">
+		<tr class="<?=$class?>">
+			<td><?=$this->translate( "there are no records" );?></td>
+		</tr>
+	</table>
+<?php endif;?>

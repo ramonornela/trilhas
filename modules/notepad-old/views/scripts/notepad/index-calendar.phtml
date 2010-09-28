@@ -1,0 +1,137 @@
+<div>
+	<div id="calendar" style="margin-right: 10px;"></div>
+
+	<div id="notepad_text" style="margin-left: 177px;">
+		<a name="notepad_input"></a>
+		<form id="form_<?=$this->suffix?>" action="#">
+			<?=$this->formHidden( "id" , $this->data->id , array( "id" => "id_" . $this->suffix ) );  ?>
+			<?=$this->formTextarea( "ds" , $this->data->ds , array( "id" => "ds_" . $this->suffix ) );?>
+
+			<div class="clear">&nbsp;</div>
+
+			<?=$this->formSubmit( "SAVE" , $this->translate("save") , array( "id" => "submit_" . $this->suffix ) );?>
+		</form>
+	</div>
+</div>
+
+<div class="clear">&nbsp;</div>
+
+<div>
+	<?php if( $this->rs->count() ):?>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate("type")?></th>
+				<th><?=$this->translate("discipline")?></th>
+				<th><?=$this->translate("description")?></th>
+                <th><?=$this->translate("date")?></th>
+                <th></th>
+			</tr>
+			<?php foreach( $this->rs as $rs ): ?>
+
+				<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				<?php if ( $this->person_id == $rs->person_id ) : ?>
+					<?php $edit   = $this->ajax( $this->translate("edit") , 'notepad' , '/notepad/notepad/index/id/'. $rs->id ); ?>
+					<?php $delete = $this->ajax( $this->translate("delete") , 'notepad' , '/notepad/notepad/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );?>
+				<?php endif; ?>
+				<tr class="<?=$class?>">
+					<td><?=$this->status( $rs->type , array( "A" => $this->translate("annotation") , "R" => $this->translate("abstract") ) )?></td>
+					<td><?=$rs->findParentRow('Discipline')->title?></td>
+					<td>
+						<?php if( $rs->content_id ): ?>
+							<strong><?=$rs->findParentRow( "Content" )->title ?></strong> -
+						<?php endif; ?>
+						<?=$rs->ds?>
+
+					</td>
+                    <td><?=$this->date( $rs->created )?></td>
+					<td nowrap="nowrap"><?=$edit ." &nbsp; ". $delete?></td>
+
+				</tr>
+				<?php if( $this->rs->key() == 5 ) break; ?>
+			<?php endforeach; ?>
+		</table>
+		<?=$this->pagination( "notepad" , "/notepad/notepad/index" , $this->to , $this->counts ) ?>
+	<?php else : ?>
+		<?=$this->translate( "there are no records" );?>
+	<?php endif;?>
+</div>
+<br />
+<script type="text/javascript">
+
+	var oCalendar = new YAHOO.widget.Calendar( "oCalendar", "calendar" , { selected: "<?php echo $this->dt; ?>" } );
+
+	oCalendar.cfg.setProperty("MONTHS_SHORT" , ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"] );
+	oCalendar.cfg.setProperty("MONTHS_LONG" , ["Janeiro", "Fevereiro", "Mar&ccedil;o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"] );
+	oCalendar.cfg.setProperty("WEEKDAYS_1CHAR" , ["D", "S", "T", "Q", "Q", "S", "S"] );
+	oCalendar.cfg.setProperty("WEEKDAYS_SHORT" , ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa"] );
+	oCalendar.cfg.setProperty("WEEKDAYS_MEDIUM" , ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"] );
+	oCalendar.cfg.setProperty("WEEKDAYS_LONG" , ["Domingo", "Segunda", "Ter&ccedil;a", "Quarta", "Quinta", "Sexta", "Sabado"] );
+	oCalendar.cfg.setProperty("DATE_DELIMITER" , "," );
+	oCalendar.cfg.setProperty("DATE_FIELD_DELIMITER" , "/" );
+	oCalendar.cfg.setProperty("DATE_RANGE_DELIMITER" , "-" );
+	oCalendar.cfg.setProperty("MY_MONTH_POSITION" , 1 );
+	oCalendar.cfg.setProperty("MY_YEAR_POSITION" , 2 );
+	oCalendar.cfg.setProperty("MD_MONTH_POSITION" , 1 );
+	oCalendar.cfg.setProperty("MD_DAY_POSITION" , 2 );
+	oCalendar.cfg.setProperty("MDY_MONTH_POSITION" , 1 );
+	oCalendar.cfg.setProperty("MDY_DAY_POSITION" , 2 );
+	oCalendar.cfg.setProperty("MDY_YEAR_POSITION" , 3 );
+
+	function selectDate( select , selected )
+	{
+		new Preceptor.util.AjaxUpdate( 'notepad' , '<?=$this->url?>/notepad/notepad/find/date/' + selected );
+	}
+
+	oCalendar.selectEvent.subscribe( selectDate );
+
+	oCalendar.render();
+
+	oCalendar.selectCell = function( cellIndex ) {
+
+		var cell 	  = this.cells[cellIndex];
+		var cellDate  = this.cellDates[cellIndex];
+		var dCellDate = this._toDate(cellDate);
+
+		var selectable = YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE);
+
+		if (selectable) {
+
+			var cfgSelected = YAHOO.widget.Calendar._DEFAULT_CONFIG.SELECTED.key;
+			var selected = this.cfg.getProperty(cfgSelected);
+
+			var selectDate = cellDate.concat();
+
+			if (this._indexOfSelectedFieldArray(selectDate) == -1) {
+				selected[selected.length] = selectDate;
+			}
+			if (this.parent) {
+				this.parent.cfg.setProperty(cfgSelected, selected);
+			} else {
+				this.cfg.setProperty(cfgSelected, selected);
+			}
+
+			YAHOO.util.Dom.addClass( cell , "selection" );
+
+			this.selectEvent.fire([selectDate]);
+
+			this.doCellMouseOut.call(cell, null, this);
+		}
+
+		return this.getSelectedDates();
+	};
+
+	var NotepadValidate = new Preceptor.util.Validate();
+	NotepadValidate.addValidate( 'ds_<?=$this->suffix?>' , NotepadValidate.notEmpty , { notEmpty: '<?=$this->translate( "required field" );?>' } , false , "notEmpty" );
+
+	var Editor_<?=$this->suffix?> = new Preceptor.widget.Editor( "ds_<?=$this->suffix ?>" , { height:"117px" } );
+
+	YAHOO.util.Event.on( 'form_<?=$this->suffix?>' , 'submit' , function( ev ){
+		Editor_<?=$this->suffix?>.saveHTML();
+
+		if( NotepadValidate.verify( document.getElementById( 'form_<?=$this->suffix?>' ) ) )
+			new Preceptor.util.AjaxUpdate( 'notepad' , '<?=$this->url?>/notepad/notepad/save' , {formId:'form_<?=$this->suffix?>'} );
+
+		YAHOO.util.Event.stopEvent( ev );
+	});
+
+</script>

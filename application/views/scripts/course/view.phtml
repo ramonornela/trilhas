@@ -1,48 +1,41 @@
-<div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
-    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-        <h3><?php echo $this->translate('Course');?></h3>
+<?php if(isset($this->data)): ?>
+    <div class="course-image">
+        <img alt="<?php echo $this->data->name?>" src="upload/<?php echo $this->thumbnail($this->data->image, 'medium')?>" width="200" height="200" />
     </div>
-    <div class="ui-dialog-content ui-widget-content">
-        <?php if(isset($this->data)): ?>
-            <div class="course-image">
-                <img alt="<?php echo $this->data->name?>" src="upload/<?php echo $this->thumbnail($this->data->image, 'medium')?>" width="200" height="200" />
-            </div>
-            <div class="classroom-list">
-                <h3><?php echo $this->translate('Classroom')?></h3>
-            <?php if (count($this->classroom)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th><?php echo $this->translate('Begin')?></th>
-                            <th><?php echo $this->translate('End')?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach($this->classroom as $classroom): ?>
-                        <tr>
-                            <td><input name="classroom" type="radio" value="<?php echo $classroom->id?>" /></td>
-                            <?php if ($classroom->end): ?>
-                                <td><?php echo $this->date($classroom->begin)?></td>
-                                <td><?php echo $this->date($classroom->end)?></td>
-                            <?php else:?>
-                                <td colspan="2"><?php echo $this->translate('Open')?></td>
-                            <?php endif;?>
-                        </tr>
-                    <?php endforeach;?>
-                    </tbody>
-                </table>
-                <br />
-                <input type="submit" value="<?php echo $this->translate('Signup')?>" />
-            <?php else: ?>
-                <p><?php echo $this->translate('No register')?></p>
-            <?php endif; ?>
-            </div>
-            <h2><?php echo $this->data->name?></h2>
-            <span><?php echo $this->translate($this->data->category)?></span>
-            <p><?php echo nl2br($this->data->description)?></p>
-        <?php else: ?>
-            <p><?php echo $this->translate('No register')?></p>
-        <?php endif; ?>
+    <div class="classroom-list">
+        <h3><?php echo $this->translate('Classroom')?></h3>
+    <?php if (count($this->classroom)): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th><?php echo $this->translate('Begin')?></th>
+                    <th><?php echo $this->translate('End')?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($this->classroom as $classroom): ?>
+                <tr>
+                    <td><input name="classroom" type="radio" value="<?php echo $classroom->id?>" /></td>
+                    <?php if ($classroom->end): ?>
+                        <td><?php echo $this->date($classroom->begin)?></td>
+                        <td><?php echo $this->date($classroom->end)?></td>
+                    <?php else:?>
+                        <td colspan="2"><?php echo $this->translate('Open')?></td>
+                    <?php endif;?>
+                </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+        <br />
+        <input type="submit" value="<?php echo $this->translate('Signup')?>" />
+    <?php else: ?>
+        <p><?php echo $this->translate('No register')?></p>
+    <?php endif; ?>
     </div>
-</div>
+    <h2><?php echo $this->data->name?></h2>
+    <span><?php echo $this->translate($this->data->category)?></span>
+    <p><?php echo nl2br($this->data->description)?></p>
+<?php else: ?>
+    <p><?php echo $this->translate('No register')?></p>
+<?php endif; ?>

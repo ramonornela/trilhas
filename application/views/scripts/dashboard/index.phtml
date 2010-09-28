@@ -1,41 +1,53 @@
-	<div id="menu">
+<div id="menu">
+    <div class="box">
         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
             <div class="ui-dialog-content ui-widget-content">
                 <div style="overflow: hidden">
-                    <img alt="<?php echo $this->user->name?>" src="upload/<?php echo $this->thumbnail($this->user->image, 'medium')?>" />
+                    <img alt="<?php echo $this->user->name ?>" src="upload/<?php echo $this->thumbnail($this->user->image, 'medium') ?>" />
                 </div>
             </div>
         </div>
-		<div class="button">
-            <a href="/trails/public/person/input" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-person"></span>Dados
-            </a>
-            <a href="course/my-course" id="my-courses" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-folder-open"></span>Meus cursos
-            </a>
-            <a href="course/index/list/true" id="all-courses" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-folder-open"></span>Todos os cursos
-            </a>
-            <a href="discipline/input" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-document"></span>Criar curso
-            </a>
-		</div>
     </div>
+    <div class="button">
+        <a href="user/form" class="ui-state-default ui-corner-all">
+            <span class="ui-icon ui-icon-person"></span>Dados
+        </a>
+        <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'course', 'action' => 'form'))):?>
+            <a href="course" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('Course')?>
+            </a>
+        <?php endif;?>
+        <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'classroom', 'action' => 'form'))):?>
+            <a href="classroom" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('Classroom')?>
+            </a>
+        <?php endif;?>
+    </div>
+</div>
 
-	<div class="main index">
+<div class="box">
+    <div class="main">
         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <h3><?php echo $this->translate('Courses');?></h3>
+                <h3><?php echo $this->translate('Courses'); ?></h3>
             </div>
             <div class="courses ui-dialog-content ui-widget-content">
-                <?php foreach($this->courses as $course): ?>
-                    <div class="item">
-                        <img alt="<?php echo $course['name']?>" src="upload/<?php echo $this->thumbnail($course['image'], 'small')?>" width="40" height="40" />
-                        <a href="classroom/index/id/<?php echo $course['classroom_id']?>"><?php echo $course['name']?></a>
-                        <span><?php echo $this->translate($course['category'])?></span>
-                        <p class="light"><?php echo substr($course['description'], 0, strpos($course['description'], '.'))?></p>
-                    </div>
-                <?php endforeach;?>
+                <?php if (count($this->courses)) :?>
+                    <?php foreach ($this->courses as $course): ?>
+                        <div class="item">
+                            <img alt="<?php echo $course['name'] ?>" src="upload/<?php echo $this->thumbnail($course['image'], 'small') ?>" width="40" height="40" />
+                            <a href="classroom/view/id/<?php echo $course['classroom_id'] ?>"><?php echo $course['name'] ?></a>
+                            <span><?php echo $this->translate($course['category']) ?></span>
+                            <p class="light"><?php echo substr($course['description'], 0, strpos($course['description'], '.')) ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>
+                       <?php echo $this->translate('You are not registred in a classroom. See'); ?>
+                       <a href="index"><?php echo $this->translate('list of available courses')?></a>
+                    </p>
+                <?php endif;?>
             </div>
         </div>
-	</div>
+    </div>
+</div>

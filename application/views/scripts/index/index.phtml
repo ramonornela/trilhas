@@ -1,15 +1,24 @@
-	<div class="menu login">
-        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-dialog-content ui-widget-content">
+<div class="menu login">
+    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+        <div class="ui-dialog-content ui-widget-content">
+            <?php if (Zend_Auth::getInstance()->hasIdentity()): ?>
+                <div style="overflow: hidden">
+                    <img alt="<?php echo $this->user->name ?>" src="upload/<?php echo $this->thumbnail($this->user->image, 'medium') ?>" />
+                </div>
+            <?php else: ?>
                 <?php echo $this->form?>
-            </div>
+                <div class="forgot">
+                    <a href="user/form"><?php echo $this->translate('Forgot password') ?></a>
+                </div>
+                <a href="user/form"><?php echo $this->translate('New user') ?></a>
+                <br />
+            <?php endif;?>
         </div>
-		<div class="button">
-
-		</div>
     </div>
+</div>
 
-	<div class="main index">
+<div class="box">
+    <div class="main">
         <?php if(count($this->calendar)):?>
             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
@@ -56,4 +65,5 @@
                 <?php endforeach;?>
             </div>
         </div>
-	</div>
+    </div>
+</div>

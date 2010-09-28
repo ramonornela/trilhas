@@ -35,5 +35,7 @@ class IndexController extends Tri_Controller_Action
         $where = array('classroom_id IS NULL', 'end IS NULL OR end > ?' => date('Y-m-d'));
         $this->view->calendar = $calendar->fetchAll($where, 'begin', 10);
         $this->view->form = $form;
+        $this->view->user = Zend_Auth::getInstance()->getIdentity();
+        $this->_helper->layout->setLayout('layout');
     }
 }

@@ -1,0 +1,42 @@
+<?php $this->suffix = $this->controller ?>
+<div>
+	<form id="formActivity_<?=$this->suffix?>">
+		
+		<?=$this->formHidden( "id" , $this->data->id )?>
+		
+		<label for="title_<?=$this->suffix?>"><?=$this->translate("title")?>:</label>
+		<?=$this->formText( "title" , $this->data->title , array( "id" => "title_" . $this->suffix ) )?>
+			
+		<label for="started_<?=$this->suffix?>"><?=$this->translate("begin date")?>:</label>
+		<?=$this->formText( "started" , $this->date($this->data->started) , array( "id" => "started_" . $this->suffix ) )?>
+		
+		<label for="finished_<?=$this->suffix?>"><?=$this->translate("end date")?>:</label>
+		<?=$this->formText( "finished" , $this->date($this->data->finished) , array( "id" => "finished_" . $this->suffix ) )?>
+		
+		<label for="composition_type_<?=$this->suffix?>"><?=$this->translate("composition type")?>:</label>	
+		<?=$this->formSelect( "composition_type" , $this->data->composition_type , array( "id" => "composition_type" . $this->suffix ) , $this->composition )?>
+	
+		<br /><br />
+		
+		<input type="submit" value="<?=$this->translate("save")?>" />
+	</form>
+</div>
+<script>
+	
+	new Preceptor.util.Mask( "started_<?=$this->suffix ?>" , {mask:'00/00/0000'} )
+	new Preceptor.util.Mask( "finished_<?=$this->suffix ?>" , {mask:'00/00/0000'} )
+	
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formActivity_<?=$this->suffix?>' , 'submit' , function( ev ){
+			
+			if( this.verify( $( 'formActivity_<?=$this->suffix?>' ) ) )
+			{
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+</script>
+<?=$this->validate( "formActivity_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/activity/activity/save/" , "activity"  ); ?>

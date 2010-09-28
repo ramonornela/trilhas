@@ -1,0 +1,48 @@
+<div class="right">
+	<?php if( $this->getPermission( "input" ) ): ?>
+		<?=$this->ajax( $this->translate("new") , "restriction" , "/restriction/restriction/input/type/" . Restriction::EVALUATION , 2 ) ?>
+	<?php endif; ?>
+</div>
+<div class="clear"></div>
+<br />
+<?php if( $this->rs->count() ):?>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate("group")?></th>
+				<th><?=$this->translate("performance")?></th>
+                <th><?=$this->translate("note")?></th>
+                <th><?=$this->translate("content")?></th>
+                <th><?=$this->translate("action")?></th>
+			</tr>
+			<?php foreach( $this->rs as $rs ): ?>
+				<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				
+				<tr class="<?=$class?>">
+					<?php 
+						try{
+							$title = $rs->findParentRow('Restriction')->findParentRow('Group')->title;
+						}catch ( Exception $e ){}
+						if ( $title )
+							$title = $title;
+						else
+							$title = $this->translate('all');
+							
+					?>
+					<td><?=$title ?></td>
+					<td><?=$rs->findParentRow('BulletinGroup')->title?></td>
+                    <td><?=$rs->note?></td>
+                    <td nowrap="nowrap"><?=$rs->findParentRow('Restriction')->findParentRow('Content')->title?></td>
+                    <td width="100">
+                        <?=$this->ajax( $this->translate("edit") , "restriction" , "/restriction/restriction/input/id/" . $rs->id . "/type/" . Restriction::EVALUATION )?> | 
+                        <?=$this->ajax( $this->translate("delete") , "restriction" , "/restriction/restriction/delete/id/" . $rs->id . "/type/" . Restriction::EVALUATION , 1, $this->translate( "want to delete?" ) )?>
+                    </td>
+				</tr>
+			<?php endforeach;?>
+		</table>  
+<?php else:?>
+	<table class="datatable">
+		<tr class="<?=$class?>">
+			<td><?=$this->translate( "there are no records" );?></td>
+		</tr>
+	</table> 
+<?php endif;?>

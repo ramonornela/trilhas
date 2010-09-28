@@ -1,11 +1,5 @@
 <?php if ($this->pageCount): ?>
-    <?php $params = array('query'     => $this->query,
-                          'order'     => $this->order,
-                          'direction' => $this->direction,
-                          'status'    => $this->status,
-                          'begin'     => $this->end,
-                          'end'       => $this->end,
-                          'page'      => null)?>
+    <?php $params = array('layout' => null)?>
     <div class="paginationControl" style="text-align:center">
         <?php if (isset($this->previous)): ?>
             <?php $params['page'] = $this->previous?>

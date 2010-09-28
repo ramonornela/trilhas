@@ -1,0 +1,13 @@
+<?php if ( $this->rs ) : ?>
+	<?=$this->formSelect( "itens" , null , array( "id" => "itens_" . $this->suffix ) , $this->rs )?>
+	<span><input type="button" id="itens_button" value="<?=$this->translate("add")?>" /></span>
+         
+<?php else : ?>
+	<?=$this->translate( "there are no records" );?>
+<?php endif; ?>
+
+<script>
+	YAHOO.util.Event.on( "itens_button" , "click" , function(){
+		relation.add( $( "itens_<?=$this->suffix ?>" ).value , <?=$this->module ?> , $( "itens_<?=$this->suffix ?>" ).options[ $( "itens_<?=$this->suffix ?>" ).selectedIndex ].innerHTML  );
+	});
+</script>

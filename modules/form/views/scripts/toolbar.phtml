@@ -1,0 +1,29 @@
+<div id="toolbar">
+	<div style="float: right">
+	    <span style="padding-right: 58px;">
+		    <select id="select" >
+				<option>Selecione</option>
+				<option value="<?=$this->url?>/content/index/id/-3">Conteudo sem topico</option>
+				<option value="<?=$this->url?>/studants/list">Alunos Cadastrados</option>
+				<option value="<?=$this->url?>/contact/export/">Exportar (<?=$this->number->count()?>) contatos</option>
+				<option value="<?=$this->url?>/user/input/">Cadastrar Usuario para o site</option>
+				<option value="<?=$this->url?>/form/formfielddata/find/formId/<?=$this->form->id?>">Buscar usuarios cadastrados para este formulário</option>
+				<option value="<?=$this->url?>/boleto/boleto/input/formId/<?=$this->form->id?>">Cadastrar boleto</option>
+				<?php if( $this->form->status == 'A' ): ?>
+					<option value="<?=$this->url?>/form/form/updatestatus/id/<?=$this->form->id?>/contentId/<?=$this->rs->content_id?>/status/I" >Desativar Formulário</option>
+				<?php else : ?>
+					<option value="<?=$this->url?>/form/form/updatestatus/id/<?=$this->form->id?>/contentId/<?=$this->rs->content_id?>/status/A" >Ativar Formulário</option>
+				<?php endif; ?>
+			</select>
+		</span>
+		<a href="<?=$this->url?>/user/logout/">Sair</a>
+	</div>
+	<div style="float: left;">	
+	
+	</div>
+</div>
+<script>
+YAHOO.util.Event.on( "select" , "change" , function( ev ){
+		location.href =  $('select').value;
+	});
+</script>

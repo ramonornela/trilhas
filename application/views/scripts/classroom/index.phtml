@@ -1,20 +1,27 @@
-<?php echo $this->render('menu.phtml')?>
-<div id="main">
-
+<div class="right">
+    <a href="classroom/form"><?php echo $this->translate('New')?></a>
 </div>
-<div id="fixed">
-    <div class="main index">
-        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <h3><?php echo $this->translate('content');?></h3>
+<div class="search">
+    <form action="classroom/index" method="get">
+        <input type="text" name="query" value="<?php echo $this->params['query']?>" />
+        <input type="submit" value="<?php echo $this->translate('Search')?>" />
+    </form>
+</div>
+<br />
+<div class="courses">
+    <?php if (count($this->data)): ?>
+        <?php foreach($this->data as $data): ?>
+            <div class="item">
+                <a href="classroom/form/id/<?php echo $data->id?>"><?php echo $data->name?></a>
             </div>
-            <div class="courses ui-dialog-content ui-widget-content">
-                <div><?php echo $this->data->title?></div>
-                <div><?php echo $this->data->description?></div>
-            </div>
-        </div>
-    </div>
+        <?php endforeach; ?>
+        <?php echo $this->paginationControl($this->data, null, null, $this->params); ?>
+    <?php else:?>
+        <p><?php echo $this->translate('No register')?></p>
+    <?php endif;?>
 </div>
 <script type="text/javascript">
-
+    $('form').submit(function(){
+        this.action = this.action + '/query/' + $('input[type=text]').val();
+    });
 </script>

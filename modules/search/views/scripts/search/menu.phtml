@@ -1,0 +1,30 @@
+<?php ${$this->type} = "ativa"; ?>
+<div id="menuSearch">
+	<ul>
+		<!-- <li class="<?php echo $discipline; ?>">
+			<?php echo $this->ajax( $this->translate( "discipline" ) , "search" , "{$this->url}/search/search/find/type/curso/string/{$this->string}" , 1 ); ?>
+		</li>
+		 -->
+		 
+		<li class="<?php echo $glossary; ?>">
+			<?php echo $this->ajax( $this->translate( "glossary" ) , "search" , "{$this->url}/search/search/glossary/string/{$this->string}" , 1 ); ?>
+		</li>
+		
+		<li class="<?php echo $content; ?>">
+			<?php echo $this->ajax( $this->translate( "content" ) , "search" , "{$this->url}/search/search/content/string/{$this->string}" , 1 ); ?>
+		</li>
+		
+		<li class="<?php echo $forum; ?>">
+			<?php echo $this->ajax( $this->translate( "forum" ) , "search" , "{$this->url}/search/search/forum/string/{$this->string}"  , 1 ); ?>
+		</li>
+		
+		
+		<li class="<?php echo $weblibrary; ?>">
+			<?php echo $this->ajax( $this->translate( "weblibrary" ) , "search" , "{$this->url}/search/search/weblibrary/string/{$this->string}" , 1 ); ?>
+		</li>
+		
+	</ul>
+</div>
+<br />
+<div style="background: #EEEEEE; width: 99%; padding: 5px;">Procurar por: "<b><?=$this->string?></b>"</div>
+<br />

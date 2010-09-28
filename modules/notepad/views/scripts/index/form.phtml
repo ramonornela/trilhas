@@ -1,0 +1,11 @@
+<div class="glossary">
+<?php echo $this->form?>
+</div>
+<script type="text/javascript">
+	$(".glossary form").submit(function() {
+		$.post('glossary/index/save', $(this).serialize(), function(data){
+            $(this).parents('.content').html(data);
+        });
+        return false;
+	});
+</script>

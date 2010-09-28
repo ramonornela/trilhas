@@ -1,27 +1,30 @@
-<div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
-    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-        <h3><?php echo $this->translate('Course');?></h3>
-    </div>
-    <div class="courses ui-dialog-content ui-widget-content">
-        <div class="search">
-            <form action="course/index" method="get">
-                <input type="text" name="query" value="<?php echo $this->params['query']?>" />
-                <input type="submit" value="<?php echo $this->translate('Search')?>" />
-                <a href="course/form"><?php echo $this->translate('Create')?></a>
-            </form>
-        </div>
-        <?php if (count($this->data)): ?>
-            <?php foreach($this->data as $data): ?>
-                <div class="item">
-                    <img alt="<?php echo $data->name?>" src="upload/<?php echo $this->thumbnail($data->image, 'small')?>" width="40" height="40" />
-                    <a href="course/form/id/<?php echo $data->id?>"><?php echo $data->name?></a>
-                    <span><?php echo $this->translate($data->category)?>, <?php echo $this->translate($data->status)?></span>
-                    <p class="light"><?php echo substr($data->description, 0, strpos($data->description, '.'))?></p>
-                </div>
-            <?php endforeach; ?>
-            <?php echo $this->paginationControl($this->data, null, null, $this->params); ?>
-        <?php else:?>
-            <p><?php echo $this->translate('No register')?></p>
-        <?php endif;?>
-    </div>
+<div class="right">
+    <a href="course/form"><?php echo $this->translate('New')?></a>
 </div>
+<div class="search">
+    <form action="course/index" method="get">
+        <input type="text" name="query" value="<?php echo $this->params['query']?>" />
+        <input type="submit" value="<?php echo $this->translate('Search')?>" />
+    </form>
+</div>
+<br />
+<div class="courses">
+    <?php if (count($this->data)): ?>
+        <?php foreach($this->data as $data): ?>
+            <div class="item">
+                <img alt="<?php echo $data->name?>" src="upload/<?php echo $this->thumbnail($data->image, 'small')?>" width="40" height="40" />
+                <a href="course/form/id/<?php echo $data->id?>"><?php echo $data->name?></a>
+                <span><?php echo $this->translate($data->category)?>&nbsp;&nbsp;<?php echo $this->translate($data->status)?></span>
+                <p class="light"><?php echo substr($data->description, 0, strpos($data->description, '.'))?></p>
+            </div>
+        <?php endforeach; ?>
+        <?php echo $this->paginationControl($this->data, null, null, $this->params); ?>
+    <?php else:?>
+        <p><?php echo $this->translate('No register')?></p>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    $('form').submit(function(){
+        this.action = this.action + '/query/' + $('input[type=text]').val();
+    });
+</script>

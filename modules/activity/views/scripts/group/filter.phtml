@@ -1,0 +1,31 @@
+<div class="filter">
+	<div class="legend pos-relative"><?=$this->translate("filter")?></div>
+	
+	<div id="filter_course_activity">
+		<form id="form_course_activity">
+			
+			<label for="course"><?=$this->translate( "course" )?>:</label>
+			<?=$this->formSelect( "course" , $this->course , array( "id" => "course_" . $this->suffix ) , $this->courses ) ?>
+			<br /><br />
+			
+			<div id="select_discipline_activity"></div>
+			
+			<div id="select_group_activity"></div>
+			
+			<input type="submit" name="Submit" title="Iniciar busca" class="select" value="ok" />
+		</form>
+	</div>
+</div>
+<script>
+	
+	YAHOO.util.Event.on( "course_<?=$this->suffix?>" , "change" , function(){
+		if( this.value )
+			new Preceptor.util.AjaxUpdate( "select_discipline_activity" , "<?=$this->url?>/activity/group/input/discipline_id/" + this.value );
+	});
+	
+	
+	YAHOO.util.Event.on( "form_course_activity" , "submit" , function( ev ){
+		new Preceptor.util.AjaxUpdate( 'list_person_activity' , '<?=$this->url?>/activity/group/find/id/<?=$this->id ?>' , { formId:"form_course_activity" } );
+		YAHOO.util.Event.stopEvent( ev );
+	});
+</script>

@@ -52,7 +52,7 @@ class Tri_Filter_Date implements Zend_Filter_Interface
 
             $options = array('locale' => $locale, 'date_format' => $date_format);
         }
-
+        
         $this->setOptions($options);
     }
 

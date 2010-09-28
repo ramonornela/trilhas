@@ -1,0 +1,14 @@
+<?php
+    if( isset( $this->rs ) && $this->rs ){
+        $rs = $this->rs->current();
+    }else{
+        $rs = null;
+    }
+?>
+<label for="<?="text-$this->model"?>"><?=$this->translate( 'tell the correct answers' )?></label>
+<?=$this->formText( "value" , ( isset($rs->value) && $rs->value? $rs->value : null ) , array( "id" => "text-$this->model" ) )?>
+
+<script type="text/javascript">
+    window.validate_q = true;
+	window.QuestionValidate.addValidate( '<?="text-$this->model"?>' , window.QuestionValidate.notEmpty , <?=Zend_Json::encode( array ( 'notEmpty' => $this->translate("required field") ) )?> , null , 'notEmpty'  );
+</script>

@@ -1,0 +1,49 @@
+<?php $this->suffix = $this->controller ?>
+<div class="gray padding">
+	<form action="#" id="formForum_<?=$this->suffix?>">
+	
+		<?=$this->formHidden( "id" , $this->data->id )?>
+		<?=$this->formHidden( "forum_id" , $this->data->forum_id )?>
+		<?=$this->formHidden( "forum_reply_id" , $this->data->forum_reply_id )?>
+						
+		<label for="title_<?=$this->suffix?>"><?=$this->translate( "title" )?></label>
+		<?=$this->formText( "title" , $this->data->title , array( "style" => "width: 400px;" , "id" => "title_" . $this->suffix ) );  ?>
+		
+		<label for="ds_<?=$this->suffix?>"><?=$this->translate( "message" )?></label>
+		<?=$this->formTextarea( "ds" , $this->data->ds , array( "id" => "ds_" . $this->suffix ) );  ?>
+
+        <div>
+            <label for="started_<?=$this->suffix?>"><?=$this->translate( "begin date" )?></label>
+            <?=$this->formText( "started" , $this->date( $this->data->started ) , array( "id" => "started_" . $this->suffix , 'style' => 'width: 120px;' ) );  ?>
+        </div>
+        
+        <label for="finished_<?=$this->suffix?>"><?=$this->translate( "end date" )?></label>
+		<?=$this->formText( "finished" , $this->date( $this->data->finished ) , array( "id" => "finished_" . $this->suffix , 'style' => 'width: 120px;' ) );  ?>
+
+		<br /><br />
+		
+		<?=$this->formSubmit( "submitForum" , $this->translate( "save" ) );?>
+	</form>
+
+</div>
+<script>
+    new Preceptor.util.Mask( 'finished_<?=$this->suffix?>' , {mask:"00/00/0000"} );
+	new Preceptor.util.Mask( 'started_<?=$this->suffix?>'  , {mask:"00/00/0000"} );
+	
+	var Editor_<?=$this->suffix?> = new Preceptor.widget.Editor( "ds_<?=$this->suffix ?>" , { addButton:["insertHtml"] } );
+	
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formForum_<?=$this->suffix?>' , 'submit' , function( ev ){
+			
+			Editor_<?=$this->suffix?>.saveHTML();
+			
+			if( this.verify( $( 'formForum_<?=$this->suffix?>' ) ) ){
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+</script>
+<?=$this->validate( "formForum_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/forum/forum/save/" , "forum"  ); ?>

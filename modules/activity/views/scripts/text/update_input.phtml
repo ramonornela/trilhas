@@ -1,0 +1,49 @@
+<div id="text_update" class="left" style="width: 86%">
+	<form id="formText_<?=$this->suffix?>">
+		
+		<label for="ds_<?=$this->suffix?>"><?=$this->translate("description")?>:</label>
+		<?=$this->formTextarea( "ds" , $this->data->ds , array( "id" => "ds_" . $this->suffix ) )?>
+		<br /><br />
+		<input id="textSubmit" type="submit" value="<?=$this->translate("save")?>" />
+		<input id="finalizingSubmit" type="button" value="<?=$this->translate("save and finalizing")?>" />
+		
+	</form>
+</div>
+
+<script>
+	
+	var Editor_<?=$this->suffix?> = new Preceptor.widget.Editor( "ds_<?=$this->suffix ?>" , { addButton:["createPaleta", "insertHtml"] } );
+	
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formText_<?=$this->suffix?>' , 'submit' , function( ev ){
+			
+			Editor_<?=$this->suffix?>.saveHTML();
+			
+			if( this.verify( $( 'formText_<?=$this->suffix?>' ) ) )
+			{
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+	
+	 
+	YAHOO.util.Event.on( 'finalizingSubmit' , 'click' , function( ev ){
+		
+		Editor_<?=$this->suffix?>.saveHTML();
+		
+		if( formText_<?=$this->suffix ?>_validate.verify( $( 'formText_<?=$this->suffix?>' ) ) )
+		{
+			if( confirm( "<?=$this->translate("really finish?")?>" ) )
+				new Preceptor.util.AjaxUpdate( "activity" , "<?=$this->url ?>/activity/text/finalizing" , { formId:"formText_<?=$this->suffix?>" } );
+			
+		}	
+		
+		YAHOO.util.Event.stopEvent( ev );
+		
+	} );
+	
+</script>
+<?=$this->validate( "formText_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/activity/text/save/" , "version"  ); ?>

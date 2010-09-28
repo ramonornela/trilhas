@@ -1,0 +1,71 @@
+<div>
+	<form id="formBulletinGroup_<?=$this->suffix?>" >
+		<?=$this->formHidden( "id" , $this->data->id ); ?>
+		
+		<label for="title_<?=$this->suffix?>"><?=$this->translate("title")?>:</label>
+		<?=$this->formText( "title" , $this->data->title , array( "id" => "title_" . $this->suffix ) )?>
+		<br /><br />
+		
+		<fieldset>
+			<legend><?=$this->translate("select the modules to be assessed")?></legend>
+			<br />
+			
+			<label for="modules_<?=$this->suffix?>"><?=$this->translate("modules without items")?>:</label>
+			<?=$this->formSelect( "modules" , null , array( "id" => "modules_" . $this->suffix ) , $this->modules )?>
+			<span><input type="button" id="modules_button" value="<?=$this->translate("add")?>" /></span>
+			
+			<br /><br />
+			
+			<label for="modules_itens_<?=$this->suffix?>"><?=$this->translate("modules with items")?>:</label>
+			<?=$this->formSelect( "modules_itens_" , null , array( "id" => "modules_itens_" . $this->suffix ) , $this->modules_itens )?>
+			
+			<br /><br />
+			
+			<div id="module"></div>
+			
+			<br /><br />
+		</fieldset>
+		<br />
+		<input name="json_relation" id="json_relation_<?=$this->suffix?>" type="hidden" />
+		<div class="filter padding">
+			<div class="legend pos-relative"><?=$this->translate("added")?></div>
+			<div id="added" class="clear"></div>
+		</div>
+		
+		<input type="submit" value="<?=$this->translate("save")?>" />
+		<?php if( ( $this->getPermission( "delete" ) ) && ( $this->data->id ) ) : ?>
+			<?=$this->ajax( $this->translate("delete") , 'bulletin' , '/bulletin/bulletin/delete/id/' . $this->data->id , 2 , $this->translate("want to delete?") );?>
+		<?php endif; ?>
+	</form>
+</div>
+<script>
+	
+	relation = new Relation( '<?=$this->jsonRelation?>' );
+	
+	YAHOO.util.Event.on( "modules_button" , "click" , function(){
+		relation.add( "0" , $( "modules_<?=$this->suffix ?>" ).value , $( "modules_<?=$this->suffix ?>" ).options[ $( "modules_<?=$this->suffix ?>" ).selectedIndex ].innerHTML  );
+	});
+	
+	YAHOO.util.Event.on( "modules_itens_<?=$this->suffix?>" , "change" , function(){
+		if( this.value )
+			new Preceptor.util.AjaxUpdate( 'module' , '<?=$this->url?>/bulletin/bulletin/list/modules/' + $( "modules_itens_<?=$this->suffix?>" ).value + '/group_id/<?=$this->data->id ?>' );
+	});
+	
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formBulletinGroup_<?=$this->suffix?>' , 'submit' , function( ev ){
+			
+			if( this.verify( $( 'formBulletinGroup_<?=$this->suffix?>' ) ) )
+			{
+				var json = relation.save();
+				
+				$( 'json_relation_<?=$this->suffix?>' ).value = json;
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+
+</script>
+<?=$this->validate( "formBulletinGroup_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/bulletin/bulletin/save/" , "bulletin"  ); ?>

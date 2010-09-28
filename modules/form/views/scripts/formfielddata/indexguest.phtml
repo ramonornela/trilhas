@@ -1,0 +1,34 @@
+<div id="user">
+    <?php if(count($this->ajaxUp)):?>
+        <script type="text/javascript">
+            new Preceptor.util.AjaxUpdate( 'user' , '<?php echo $this->url?>/form/formfielddata/inputguest/formId/<?php echo $this->ajaxUp['form_id']?>/courseId/<?php echo $this->ajaxUp['course_id']?>/periodId/<?php echo $this->ajaxUp['period_id']?>');
+        </script>
+    <?php else:?>
+        <?php if( $this->messages ): ?>
+            <div class="message" id="message">
+                <ul>
+                    <?php foreach( $this->messages as $key => $val ): ?>
+                        <li><?=$val?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <?php if( $this->rs->count() ):?>
+            <table class="datatable">
+                <tr>
+                    <th><?=$this->translate("name")?></th>
+                </tr>
+                <?php foreach( $this->rs as $rs ): ?>
+                    <?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+
+                    <tr class="<?=$class?>">
+                        <td nowrap="nowrap"><?=$this->ajax( $rs->name , 'user' , "/form/formfielddata/inputguest/formId/{$rs->form_id}/courseId/{$rs->course_id}/periodId/{$rs->period_id}" );?></td>
+                    </tr>
+                <?php endforeach;?>
+            </table>
+        <?php else:?>
+            <?=$this->translate( "there are no records" );?>
+        <?php endif;?>
+    <?php endif;?>
+</div>

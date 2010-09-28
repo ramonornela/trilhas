@@ -1,0 +1,71 @@
+<div>
+	<div id="notepad_text" >
+		<a name="notepad_input"></a>
+		<form id="form_<?=$this->suffix?>" action="#">
+			<?=$this->formHidden( "id" , $this->data->id , array( "id" => "id_" . $this->suffix ) );  ?>
+			<?=$this->formTextarea( "ds" , $this->data->ds , array( "id" => "ds_" . $this->suffix ) );?>
+			<div class="clear">&nbsp;</div>
+
+			<?=$this->formSubmit( "SAVE" , $this->translate("save") , array( "id" => "submit_" . $this->suffix ) );?>
+		</form>
+	</div>
+</div>
+
+<div class="clear">&nbsp;</div>
+
+<div>
+	<?php if( $this->rs->count() ):?>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate("discipline")?></th>
+				<th><?=$this->translate("description")?></th>
+                <th><?=$this->translate("date")?></th>
+                <th></th>
+			</tr>
+			<?php foreach( $this->rs as $rs ): ?>
+
+				<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				<?php if ( $this->person_id == $rs->person_id ) : ?>
+					<?php $edit   = $this->ajax( $this->translate("edit") , 'notepad' , '/notepad/notepad/index/id/'. $rs->id ); ?>
+					<?php $delete = $this->ajax( $this->translate("delete") , 'notepad' , '/notepad/notepad/delete/id/' . $rs->id , 1 , $this->translate("want to delete?") );?>
+				<?php endif; ?>
+				<tr class="<?=$class?>">
+					<td><?=$rs->findParentRow('Discipline')->title?></td>
+					<td>
+						<?php if( $rs->content_id ): ?>
+							<strong><?=$rs->findParentRow( "Content" )->title ?></strong> -
+						<?php endif; ?>
+						<?=$rs->ds?>
+
+					</td>
+                    <td width="80"><?=$this->date( $rs->created )?></td>
+					<td width="100" nowrap="nowrap"><?=$edit ." &nbsp; ". $delete?></td>
+				</tr>
+				<?php if( $this->rs->key() == 5 ) break; ?>
+			<?php endforeach; ?>
+		</table>
+		<?=$this->pagination( "notepad" , "/notepad/notepad/index" , $this->to , $this->counts ) ?>
+	<?php else : ?>
+		<?=$this->translate( "there are no records" );?>
+	<?php endif;?>
+</div>
+<br />
+<script type="text/javascript">
+
+	
+	var NotepadValidate = new Preceptor.util.Validate();
+	NotepadValidate.addValidate( 'ds_<?=$this->suffix?>' , NotepadValidate.notEmpty , { notEmpty: '<?=$this->translate( "required field" );?>' } , false , "notEmpty" );
+
+    var Editor_<?=$this->suffix?> = new Preceptor.widget.Editor( "ds_<?=$this->suffix ?>" , { height:"117px" } );
+    
+
+	YAHOO.util.Event.on( 'form_<?=$this->suffix?>' , 'submit' , function( ev ){
+		Editor_<?=$this->suffix?>.saveHTML();
+
+		if( NotepadValidate.verify( document.getElementById( 'form_<?=$this->suffix?>' ) ) )
+			new Preceptor.util.AjaxUpdate( 'notepad' , '<?=$this->url?>/notepad/notepad/save' , {formId:'form_<?=$this->suffix?>'} );
+
+		YAHOO.util.Event.stopEvent( ev );
+	});
+
+</script>

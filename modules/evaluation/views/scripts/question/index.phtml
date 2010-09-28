@@ -1,0 +1,14 @@
+<div class="right">
+	<?php if( $this->getPermission( "input" ) ): ?>
+		<?=$this->ajax( $this->translate("new") , "evaluation-evaluation" , "/evaluation/question/input" , 2 ) ?>
+	<?php endif; ?>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div id="form_fields">
+	<div id="list_field">
+		<div id="fields">
+			<?=$this->showEvaluation( $this->rs , true , $this->evaluation ) ?>
+		</div>
+    </div>
+</div>

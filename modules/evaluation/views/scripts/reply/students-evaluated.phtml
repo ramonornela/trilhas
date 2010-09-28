@@ -1,0 +1,65 @@
+<p><b><?php echo mb_strtoupper($this->evaluation_name, APP_CHARSET)?></b></p>
+<?php if( count( $this->students ) ): ?>
+    <form id="search-students-evaluated" action="#">
+        <?php echo $this->formText('search')?>
+        <?php echo $this->formSubmit( 'search-submit' ,$this->translate('search'))?>
+    </form>
+    <br/><br/>
+    <script type="text/javascript">
+        jQuery("#search-students-evaluated").submit( function(){
+            new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/reply/students-evaluated/id/<?php echo $this->evaluation_id?>", {formId: this.id} );
+            return false;
+        });
+    </script>
+	<table class="datatable">
+        <tr>
+            <th style="width: 75px;"></th>
+            <th><?=$this->translate("name");?></th>
+            <th style="width: 80px;"><?=$this->translate("note");?></th>
+            <th style="width: 80px;"><?=$this->translate("certificate");?></th>
+            <th style="width: 80px;"><?=$this->translate("date");?></th>
+            <th style="width: 30px;"></th>
+        </tr>
+        
+        <?php foreach ( $this->students as $key => $rs ): ?>
+        <tr class="<?=$this->changeClass( $key , array( "light_gray" , "white" ) )?>">
+            <?php $person = $rs->findParentRow( "Person" )?>
+            <td nowrap="nowrap">
+                <?=$this->image( "../upload/thumb_small" . $person->findParentRow( "File" )->location, array( 'width' => 50 ) )?><br />
+            </td>
+            <td nowrap="nowrap"><?php echo mb_strtoupper($person->name, APP_CHARSET)?></td>
+            <td nowrap="nowrap"><?=$person->findDependentRowset( 'EvaluationNote' , null , $person->getTable()->select()->where( 'group_id =?' , $this->user->group_id )->where( 'evaluation_id =?' , $this->evaluation_id) )->current()->note?></td>
+            <td nowrap="nowrap">
+                <?php $certificate = $person->findDependentRowset( 'PersonGroup' , null , $person->getTable()->select()->where( 'group_id =?' , $this->user->group_id ))->current()->certificate ?>
+                <?php if(!empty($certificate)):?>
+                    <a href="<?php echo $this->url?>/file/file/download/file/<?=base64_encode('/certificates/'.$certificate.'.pdf')?>"><?=$this->image('icones/certificate.gif');?></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" id="<?php echo $rs->person_id?>-certificate" value="<?php echo $this->translate('refresh')?>">
+                    <script type="text/javascript">
+                        jQuery( "#<?php echo $rs->person_id?>-certificate" ).click( function(){
+                            new Preceptor.util.AjaxUpdate( "refresh" , "<?=$this->url?>/evaluation/reply/certificate-refresh/person_id/<?=$rs->person_id?>" );
+                        }).css({'position':'relative', 'top':'-8px'});
+                    </script>
+                <?php endif?>
+            </td>
+            <td nowrap="nowrap"><?=$rs->dt?></td>
+                            <td nowrap="nowrap">
+                <a href="#this" id="<?=$rs->person_id?>-delete" class="ui-state-default ui-corner-all left" title="<?=$this->translate( 'delete' )?>" style="width: 17px; display: block;">
+                    <span class="ui-icon ui-icon-trash"></span>
+                </a>
+            </td>
+        </tr>
+            
+            <script type="text/javascript">
+                jQuery( "#<?=$rs->person_id?>-delete" ).click( function(){
+                    if( confirm( '<?=$this->translate( "want to delete response of student?" )?>' ) ){
+                        new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/reply/delete/person_id/<?=$rs->person_id?>" );
+                    }
+                });
+            </script>
+		<?php endforeach;?>
+	</table>
+        <div id="refresh"></div>
+<?php else: ?>
+	<div class="message-table-sorter"><?=$this->translate( "there are no records" ) ?></div>
+<?php endif; ?>

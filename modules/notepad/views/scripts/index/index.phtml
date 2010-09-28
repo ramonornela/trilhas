@@ -1,0 +1,36 @@
+<div class="notepad">
+    <?php echo $this->form?>
+</div>
+<?php if(count($this->data)):?>
+    <table class="datatable">
+        <?php foreach($this->data as $data): ?>
+            <tr>
+                <td><?php echo nl2br($data->description)?></td>
+                <td><?php echo $this->date($data->created)?></td>
+                <td nowrap="nowrap">
+                    <?php echo $this->ajax("edit", 'notepad/index/index/id/'. $data->id, 2); ?>
+                    <?php echo $this->ajax("delete", 'notepad/index/delete/id/' . $data->id, 2 , "want to delete?");?>
+                </td>
+            </tr>
+        <?php endforeach;?>
+        </table>
+        <div id="notepad-page">
+            <?php echo $this->paginationControl($this->data) ?>
+        </div>
+<?php else:?>
+    <p><?=$this->translate( "there are no records" );?></p>
+<?php endif;?>
+<script type="text/javascript">
+    $(".notepad form").submit(function() {
+        var $this = $(this);
+		$.post('notepad/index/save', $(this).serialize(), function(data){
+            $this.parents('.content').html(data);
+        });
+        return false;
+	});
+    
+    $('#notepad-page a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+</script>

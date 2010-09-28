@@ -1,0 +1,228 @@
+<p><?php echo $this->translate('title')?>: <b><?php echo$this->evaluation->name?></b></p><br/>
+<?php if( isset( $this->rs ) && $this->rs->count() ): ?>
+    <?php
+        $i = 1;
+        $editorIds = array();
+        $letters = array( 1 => 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' );
+    ?>
+
+    <form action="#" method="post" id="evaliation-reply">
+    <?php foreach( $this->rs as $key => $rs ):?>
+        <?php if( $rs->type == "text" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <?php
+                    $alternative = $rs->findDependentRowset( "EvaluationValue" )->current();
+                ?>
+                <?=$this->formText( "$rs->id[$alternative->id]" , null , array( "id" => $i ) )?>
+                <br />
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "truefalse" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <?php
+                    $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                    $j = 1;
+                ?>
+                <?php foreach( $alternatives as $key => $alternative ):?>
+                <div style="margin-bottom: 10px">
+                    <select name="<?=$rs->id?>[<?=$alternative->id?>]">
+                        <option value="" ></option>
+                        <option label="V" value="V" >V</option>
+                        <option label="F" value="F" >F</option>
+                    </select>
+                    <span><?=$letters["$j"]?>) <?=$alternative->value?></span>
+                    <br />
+                </div>
+                <?php $j++;?>
+                <?php endforeach;?>
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "association" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <?php
+                    $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                    $j = 1;
+                ?>
+                <?php foreach( $alternatives as $key => $alternative ):?>
+                <div style="margin-bottom: 10px">
+                    <?=$this->formSelect( "$rs->id[$alternative->id]", null , null , $this->letters )?>
+                    <span><?=$letters["$j"]?>) <?=$alternative->value?></span>
+                    <br />
+                </div>
+                <?php $j++;?>
+                <?php endforeach;?>
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "radio" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <?php
+                    $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                    $j = 1;
+                ?>
+                <?php foreach( $alternatives as $key => $alternative ):?>
+                <div style="margin-bottom: 10px">
+                    <p>
+                        <?=$letters["$j"]?>)
+                        <input type="radio" id="<?=$rs->id."-".$j?>" name="<?=$rs->id?>" value="<?=$alternative->id?>"/>
+                        <label for="<?=$rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
+                    </p>
+                </div>
+                <?php $j++ ?>
+                <?php endforeach;?>
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "checkbox" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <?php
+                    $alternatives = $rs->findDependentRowset( "EvaluationValue" );
+                    $j = 1;
+                ?>
+                <?php foreach( $alternatives as $key => $alternative ):?>
+                <div style="margin-bottom: 10px">
+                    <?=$letters["$j"]?>)
+                    <input type="checkbox" id="<?=$rs->id."-".$j?>" name="<?=$rs->id?>[<?=$alternative->id?>]" value="V" />
+                    <label for="<?=$rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
+                </div>
+                <?php $j++; ?>
+                <?php endforeach;?>
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "textarea" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <div class="yui-skin-sam">
+                    <?=$this->formTextarea( "$rs->id" , null , array( "id" => "$rs->id-label" , "style" => "width:98%;height:100px;" ) )?>
+                </div>
+                <div>Total de caracteres: <span id="number-string-<?=$rs->id?>">4000</span></div>
+                <script type="text/javascript">
+                    //Editor_Question<?=$rs->id?> = new Preceptor.widget.Editor( "<?=$rs->id?>-label" , { addButton:['insertHtml'] , height: '80px' } );
+                    jQuery('#<?=$rs->id?>-label').keyup( function(){
+                        var text    = jQuery( this ).val(),
+                        nString = 4000 - text.length;
+
+                        if( nString <= 0 ){
+                            jQuery(this).val( text.substr('0', 4000) );
+                            jQuery('#number-string-<?=$rs->id?>').html( '0' );
+                        }else{
+                            jQuery('#number-string-<?=$rs->id?>').html( nString );
+                        }
+                    });
+                    <?php
+                        $editorIds[] = "Editor_Question$rs->id";
+                    ?>
+                </script>
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php if( $rs->type == "keyword" ): ?>
+            <div class="question">
+                <p class="question-alternative"><b><?php echo $this->translate('question')." ".$i;?></b></p>
+                <p><?php echo $rs->labels?></p>
+                <br />
+                <div>
+                    <?=$this->formTextarea( "$rs->id[$alternative->id]" , null , array( "id" => "$rs->id-label" ) )?>
+                </div>
+                <br />
+            </div>
+            <br />
+        <?php endif; ?>
+
+        <?php $i++; ?>
+    <?php endforeach;?>
+    <input type="submit" id="submit-evaliation" value="<?=$this->translate( "save" )?>" />
+    </form>
+<?php else: ?>
+<?php endif; ?>
+<script type="text/javascript">
+    jQuery("#evaliation-reply" ).submit( function(){
+        <?php if( count( $editorIds ) ):?>
+            <?php foreach( $editorIds as $key => $val ):?>
+                //<?=$val?>.saveHTML();
+                var id = "<?=$val?>";
+                id = id.replace(/Editor_Question/gi, "");
+                var text    = jQuery( "#"+id+"-label" ).val(),
+                nString = 4000;
+
+                text = text.replace(/(<([^>]+)>)/ig,"");
+                nString -= text.length;
+                if( nString < 0 ){
+                    jQuery( "#"+id+"-label" ).html('');
+                    jQuery('#number-string-'+id)
+                        .html( 'Por favor, sua reposta deve ser mais sucinta.' )
+                        .css({'padding':'10px', 'color':'red'});
+                    alert('Por favor, sua reposta deve ser mais sucinta.');
+                    return false;
+                }
+            <?php endforeach;?>
+        <?php endif; ?>
+        jQuery("#load_evaluation" ).remove();
+        new Preceptor.util.AjaxUpdate( "evaluation" , "<?=$this->url?>/evaluation/reply/save" , {formId: this.id} )
+        return false;
+    });
+
+    jQuery( "#close-reply" ).click( function(){
+        jQuery("#load_evaluation" ).remove();
+    });
+
+    jQuery(".question" )
+        .css({"background":"#F4F4F4" , "border":"#BBB 1px solid" , "padding":"5px"})
+        .mouseover( function(){
+            jQuery(this ).css({ "border":"#74A8CF dashed 1px" , "background":"#FFF" }); })
+        .mouseout( function(){
+            jQuery(this ).removeAttr("style").css({"background":"#F4F4F4" , "border":"#BBB 1px solid" , "padding":"5px"}); });
+
+<?php if( isset( $this->evaluation->time ) && $this->evaluation->time ):?>
+    /*var time = document.createElement('DIV');
+    time.id = 'load_evaluation';
+    YAHOO.util.Dom.setStyle( time , 'top' , document.documentElement.scrollTop + 'px' );
+    YAHOO.util.Dom.setStyle( time , 'right' , 0 );
+    YAHOO.util.Dom.setStyle( time , 'position' , 'absolute' );
+    YAHOO.util.Dom.setStyle( time , 'backgroundColor' , '#FFF1A8' );
+    YAHOO.util.Dom.setStyle( time , 'padding' , '5px' );
+    YAHOO.util.Event.on( window , 'scroll' , function(){
+        YAHOO.util.Dom.setStyle( time , 'top' , document.documentElement.scrollTop + 'px' );
+    });
+
+    document.getElementById( 'main' ).appendChild( time );
+    timeOutAvaliation = '';
+
+    clearTimeout( timeOutAvaliation );
+    timeOutAvaliation = setTimeout( 'jQuery("#evaliation-reply").trigger("submit")' , <?=$this->evaluation->time?> * 60000 );
+
+    tempRegressiveAvaliation( 'load_evaluation' , (<?=$this->evaluation->time?>) * 60 );*/
+<?php endif;?>
+</script>

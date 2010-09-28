@@ -1,0 +1,12 @@
+<div>
+	<?php foreach( $this->users as $val ): ?>
+		<div class="users">
+			<a href="/page/index" onclick="new Preceptor.util.AjaxUpdate( 'page' , 'page/page/index/id/<?=$val->usuario_id ?>' );return false;">
+				<div class="usersImg"><img src="<?=URL?>upload/thumb_small<?php echo $val->findParentRow('File')->arquivo_caminho;?>" /></div>
+				<?php echo $val->usuario_nome;?>
+			</a>
+		</div>
+	<?php endforeach; ?>
+	<div style="clear: both;"></div>
+</div>
+	

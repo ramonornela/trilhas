@@ -1,0 +1,25 @@
+<?=$this->render("search/menu.phtml")?>
+	
+<?php if( $this->searchMap->count() ): ?>
+	<table class="datatable">
+		<th><?=$this->translate("result")?></th>
+		
+		<?php foreach( $this->searchMap as $key => $val ): ?>
+			<?php $class  = $this->changeClass( $this->searchMap->key() , array( "light_gray" , "white" ) );?>
+			<tr class="<?=$class?>">
+				<td nowrap="nowrap">
+					<a href="#this" onclick="addElement('main' , 'map' , '<?=$this->url?>/map/map/view/id/<?=$val->id;?>')" ><?=$val->title;?></a>
+				</td>
+			</tr> 
+		<?php endforeach;?>
+		
+	</table>
+<?php else:?>
+	<table class="datatable">
+		<tr class="<?=$class?>">
+			<td><?=$this->translate( "there are no records" );?></td>
+		</tr>
+	</table>
+<?php endif;?>
+
+<div class="clear"></div>
