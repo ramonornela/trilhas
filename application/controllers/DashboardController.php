@@ -28,8 +28,12 @@ class DashboardController extends Tri_Controller_Action
     public function indexAction()
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
-        $this->view->courses = Application_Model_Classroom::getAllByUser($identity->id);
-        $this->view->user = $identity;
+        $calendar = new Tri_Db_Table('calendar');
+        $courses  = Application_Model_Classroom::getAllByUser($identity->id);
+
+        $this->view->courses = $courses;
+        $this->view->calendar = Calendar_Model_Calendar::getByClassroom($courses);
+        $this->view->user     = $identity;
         $this->_helper->layout->setLayout('layout');
     }
 }

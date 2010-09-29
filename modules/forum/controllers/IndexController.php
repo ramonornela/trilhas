@@ -15,7 +15,8 @@ class Forum_IndexController extends Tri_Controller_Action
         $query    = Zend_Filter::filterStatic($this->_getParam("q"), 'stripTags');
         $select   = $table->select();
 
-        $select->where('classroom_id = ?', $session->classroom_id);
+        $select->where('classroom_id = ?', $session->classroom_id)
+               ->where('status = ?', 'active');
 
         if ($query) {
             $select->where('UPPER(title) LIKE UPPER(?)', "%$query%");
@@ -55,6 +56,10 @@ class Forum_IndexController extends Tri_Controller_Action
             $data['user_id']      = Zend_Auth::getInstance()->getIdentity()->id;
             $data['classroom_id'] = $session->classroom_id;
 
+            if (!$data['end']) {
+                unset($data['end']);
+            }
+
             if (isset($data['id']) && $data['id']) {
                 $row = $table->find($data['id'])->current();
                 $row->setFromArray($data);
@@ -72,18 +77,5 @@ class Forum_IndexController extends Tri_Controller_Action
         $this->_helper->_flashMessenger->addMessage('Error');
         $this->view->form = $form;
         $this->render('form');
-    }
-
-    public function deleteAction()
-    {
-        $table = new Tri_Db_Table('forum');
-        $id    = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-
-        if ($id) {
-            $table->delete(array('id = ?' => $id));
-            $this->_helper->_flashMessenger->addMessage('Success');
-        }
-
-        $this->_redirect('forum/index/');
     }
 }

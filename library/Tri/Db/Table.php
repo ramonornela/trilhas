@@ -109,6 +109,7 @@ class Tri_Db_Table extends Zend_Db_Table
                     $this->_validators[$key][] = 'Digits';
                     break;
                 case 'numeric':
+                case 'decimal':
                     $this->_validators[$key][] = 'Float';
                     break;
                 case 'timestamp':
@@ -159,7 +160,7 @@ class Tri_Db_Table extends Zend_Db_Table
                     $this->_filters[$key][] = 'Int';
                     break;
                 case 'numeric':
-                    $this->_filters[$key][] = array('LocalizedToNormalized', array('locale'=>"pt_BR"));
+                case 'decimal':
                     break;
                 case 'timestamp':
                 case 'time':

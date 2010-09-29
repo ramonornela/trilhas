@@ -1,4 +1,4 @@
-<?php
+    <?php
 class Forum_ReplyController extends Tri_Controller_Action
 {
     public function init()
@@ -19,7 +19,8 @@ class Forum_ReplyController extends Tri_Controller_Action
         $select = $table->select(true)
                         ->setIntegrityCheck(false)
                         ->join('user', 'user.id = user_id', array('user.id as uid','user.name','user.image'))
-                        ->where('forum_id = ?', $id);
+                        ->where('forum_id = ?', $id)
+                        ->order('id');
 
         $form->populate(array('forum_id' => $id));
 
@@ -33,13 +34,10 @@ class Forum_ReplyController extends Tri_Controller_Action
     public function formAction()
     {
         $id      = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $forumId = Zend_Filter::filterStatic($this->_getParam('forumId'), 'int');
         $form    = new Forum_Form_Reply();
 
-        $form->populate(array('forum_id' => $forumId));
-
         if ($id) {
-            $table = new Tri_Db_Table('forum');
+            $table = new Tri_Db_Table('forum_reply');
             $row   = $table->find($id)->current();
 
             if ($row) {

@@ -1,8 +1,8 @@
 <div class="right">
-    <a href="classroom/form"><?php echo $this->translate('New')?></a>
+    <a href="user/form"><?php echo $this->translate('New')?></a>
 </div>
 <div class="search">
-    <form action="classroom/index" method="get">
+    <form action="user/index" method="get">
         <input type="text" name="query" value="<?php echo $this->params['query']?>" />
         <input type="submit" value="<?php echo $this->translate('Search')?>" />
     </form>
@@ -12,16 +12,14 @@
     <table class="datatable">
         <tr>
             <th><?php echo $this->translate('Name')?></th>
-            <th><?php echo $this->translate('Course')?></th>
-            <th><?php echo $this->translate('Status')?></th>
-            <th></th>
+            <th><?php echo $this->translate('Email')?></th>
+            <th><?php echo $this->translate('Role')?></th>
         </tr>
         <?php foreach($this->data as $data): ?>
             <tr>
-                <td><a href="classroom/form/id/<?php echo $data->id?>"><?php echo $data->name?></a></td>
-                <td><?php echo $data->cname?></td>
-                <td><?php echo $this->translate($data->status)?></td>
-                <td><a href="classroom/list-user/id/<?php echo $data->id?>"><?php echo $this->translate('users')?></a></td>
+                <td><a href="user/form/id/<?php echo $data->id?>"><?php echo $data->name?></a></td>
+                <td><?php echo $data->email?></td>
+                <td><?php echo $this->translate($data->role)?></td>
             </tr>
         <?php endforeach; ?>
     </table>

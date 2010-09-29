@@ -1,65 +1,57 @@
-<table style="width: 100%">
-	<tr>
-		<td style="background: #EFEFEF; border: dashed #6F6F6F 1px;">
-			<?=$this->ajax( $this->translate( "my messages" ) , 'message' , "{$this->url}/chat/message/view/id/{$this->person}" );?>
-			(<?=$this->rsMessages->count(); ?>)
-		</td>
-	</tr>
-</table>
-<hr />
-<table class="datatable">
-	<tr>
-		<th><?=$this->translate( "teacher" )?></th>
-	</tr>
-</table>
-
-<?php if ( $this->teachers->count() ) :?>
-	<?php foreach( $this->teachers as $teacher ): ?>
-		<?php $teacherRow = $teacher->findParentRow("Person"); ?>
-		<div align="center" class="left" style="background: #CDEFC2; width: 109px; heigth: 100px; margin: 3px;">
-			<a href="/message/input" onclick="new Preceptor.util.AjaxUpdate( 'message' , '<?=$this->url;?>/chat/message/view/id/<?=$teacherRow->id;?>' );return false;">
-				<div align="center" style="margin: 2px; ">
-					<?=$this->image('../upload/thumb_small'.$teacherRow->findParentRow("File")->location , array( 'width'=> 63 ) );?>
-					<div id="messageProfile_<?=$this->suffix;?>" class="messageProfile"><div><?=$teacherRow->name;?></div></div>
-				</div>
-			</a>
-		</div>
-	<?php endforeach; ?>
-<?php else: ?>
-	<table class="datatable">
-		<tr class="<?=$class?>">
-			<td><?=$this->translate( "there are no records" );?></td>
-		</tr>
-	</table>
-<?php endif; ?>
-
-<div class="clear"></div>
-<br />
-
-<table class="datatable">
-	<tr>
-		<th><?=$this->translate( "friend" )?></th>
-	</tr>
-</table>
-
-<?php if ( $this->friends->count() ) :?>
-	<?php foreach( $this->friends as $friend ): ?>
-		<?php $friendRow = $friend->findParentRow("Person"); ?>
-		<div align="center" class="left" style="background: #CDEFC2; width: 109px; heigth: 100px; margin: 3px;">
-			<a href="/message/index" onclick="new Preceptor.util.AjaxUpdate( 'message' , '<?=$this->url;?>/chat/message/view/id/<?=$friendRow->id;?>' );return false;">
-				<div align="center" style="margin: 2px; ">
-					<?=$this->image('../upload/thumb_small'.$friendRow->findParentRow("File")->location , array( 'width'=> 63 ) );?>
-					<div id="messageProfile_<?=$this->suffix;?>" class="messageProfile"><div><?=$friendRow->name;?></div></div>
-				</div>
-			</a>
-		</div>
-	<?php endforeach; ?>
-<?php else: ?>
-	<table class="datatable">
-		<tr class="<?=$class?>">
-			<td><?=$this->translate( "there are no records" );?></td>
-		</tr>
-	</table>
-<?php endif; ?>
-
-<div class="clear"></div>
+<div class="list-user" >
+    <h3><?php echo $this->translate('User list')?></h3>
+    <div class="list">
+        <?php if ($this->users) :?>
+            <?php foreach($this->users as $user):?>
+                <div class="item">
+                    <img alt="<?php echo $user->name ?>" src="upload/<?php echo $this->thumbnail($user->image, 'small') ?>" />
+                    <?php $text = $user->name . ' (' . $this->translate($user->role).')';?>
+                    <?php echo $this->ajax($text, 'chat/message/index/userId/'.$user->id)?>
+                </div>
+            <?php endforeach;?>
+        <?php endif;?>
+    </div>
+</div>
+<div class="notepad">
+    <?php echo $this->form?>
+</div>
+<?php if(count($this->data)):?>
+    <table class="datatable">
+        <?php foreach($this->data as $data): ?>
+            <tr>
+                <td>
+                    <img alt="<?php echo $data->name ?>" src="upload/<?php echo $this->thumbnail($data->image, 'small') ?>" /><br />
+                    <?php echo $data->name ?>
+                </td>
+                <td><?php echo nl2br($data->description)?></td>
+                <td><?php echo $this->date($data->created)?></td>
+                <td nowrap="nowrap">
+                    <?php $id = Zend_Auth::getInstance()->getIdentity()->id;?>
+                    <?php if ($data->sender == $id || $this->userId == $id) :?>
+                        <?php echo $this->ajax("edit", 'notepad/index/index/id/'. $data->id, 2); ?>
+                        <?php echo $this->ajax("delete", 'notepad/index/delete/id/' . $data->id, 2 , "want to delete?");?>
+                    <?php endif;?>
+                </td>
+            </tr>
+        <?php endforeach;?>
+        </table>
+        <div id="notepad-page">
+            <?php echo $this->paginationControl($this->data) ?>
+        </div>
+<?php else:?>
+    <p><?=$this->translate( "there are no records" );?></p>
+<?php endif;?>
+<script type="text/javascript">
+    $(".notepad form").submit(function() {
+        var $this = $(this);
+		$.post(this.action, $(this).serialize(), function(data){
+            $this.parents('.content').html(data);
+        });
+        return false;
+	});
+    
+    $('#notepad-page a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+</script>

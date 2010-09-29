@@ -58,7 +58,7 @@ class Notepad_IndexController extends Tri_Controller_Action
             $this->_redirect('notepad/index/index/');
         }
 
-        $this->_helper->_flashMessenger->addMessage('Error');
+        $this->view->messages = array('Error');
         $this->view->form = $form;
         $this->render('index');
     }

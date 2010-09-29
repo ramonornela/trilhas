@@ -31,6 +31,25 @@ class UserController extends Tri_Controller_Action
         $this->view->title = "User";
     }
 
+    public function indexAction()
+    {
+        $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
+        $query = $this->_getParam('query');
+        $table = new Zend_Db_Table('user');
+        $select = $table->select()->order('name');
+
+        if ($query) {
+            $parts = explode(' ', $query);
+            foreach($parts as $part){
+                $select->where('name LIKE ?', "%$part%");
+            }
+            $select->orWhere('email LIKE ?', "%$query%");
+        }
+
+        $paginator = new Tri_Paginator($select, $page);
+        $this->view->data = $paginator->getResult();
+    }
+
     public function loginAction()
     {
         $this->view->title = "Login";
@@ -85,6 +104,10 @@ class UserController extends Tri_Controller_Action
 
         if ($identity) {
             $id = $identity->id;
+
+            if ($identity->role == 'institution') {
+                $id = 0;
+            }
 
             if ($userId && $identity->role == 'institution') {
                 $id = $userId;

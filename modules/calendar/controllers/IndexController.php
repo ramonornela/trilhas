@@ -25,18 +25,24 @@
  */
 class Calendar_IndexController extends Tri_Controller_Action
 {
+    public function init()
+    {
+        parent::init();
+        $this->view->title = "Calendar";
+    }
+
     public function indexAction()
     {
         $calendar = new Tri_Db_Table('calendar');
         $id       = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $where = array('classroom_id IS NULL');
+        $where    = array('classroom_id IS NULL');
 
         if ($id) {
             $where = array('classroom_id = ?' => $id);
         }
 
         $where['end IS NULL OR end > ?'] = date('Y-m-d');
-        $this->view->calendar = $calendar->fetchAll($where, 'begin');
+        $this->view->data = $calendar->fetchAll($where, 'begin');
     }
 
     public function formAction()
@@ -64,7 +70,11 @@ class Calendar_IndexController extends Tri_Controller_Action
 
         if ($form->isValid($data)) {
             $data = $form->getValues();
-            $data['user_id'] = 1;
+            $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
+
+            if (!$data['classroom_id']) {
+                unset($data['classroom_id']);
+            }
 
             if (isset($data['id']) && $data['id']) {
                 $row = $table->find($data['id'])->current();

@@ -18,10 +18,6 @@
                     <?php if ($this->isAllowed('form')): ?>
                         <?php echo $this->ajax("edit", 'forum/index/form/id/'. $data->id, 2); ?>
                     <?php endif;?>
-
-                    <?php if($this->isAllowed("delete")): ?>
-                        <?php echo $this->ajax("delete", 'forum/index/delete/id/' . $data->id, 2 , "want to delete?");?>
-                    <?php endif;?>
                 </td>
             </tr>
         <?php endforeach;?>

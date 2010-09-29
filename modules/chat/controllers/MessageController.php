@@ -1,81 +1,95 @@
 <?php
-class Chat_MessageController extends Controller 
+class Chat_MessageController extends Tri_Controller_Action
 {
-	//public $uses = array( "Message" , "User" , "Chat", "Logged" , "ChatMessage" , "ChatRoomMessage" , "Person" , "File", "PersonGroup" );
-	
-	public function indexAction()
-	{
-		$user = new Zend_Session_NameSpace( 'user' );
+	public function init()
+    {
+        parent::init();
+        $this->view->title = "Message";
+    }
 
-		$id = Zend_Filter::filterStatic( $this->_getParam( "id" ) , "int" );
-		$id = ( $id )?( $id ):( $user->person_id );
+    public function indexAction()
+    {
+        $id      = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $userId  = Zend_Filter::filterStatic($this->_getParam('userId'), 'int');
+        $page    = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
+        $session = new Zend_Session_Namespace('data');
+        $table   = new Tri_Db_Table('message');
+        $form    = new Chat_Form_Message();
+        $classroomUser = new Tri_Db_Table('classroom_user');
+        $select  = $table->select(true)
+                        ->setIntegrityCheck(false)
+                        ->join('user', 'message.sender = user.id', array('name','image'));
 
-		$this->view->person 	= $id;
-		$this->view->rsMessages = $this->Message->fetchAll( array( "person_receiver_id = ?" => $id ) );
-		$this->view->teachers 	= $this->PersonGroup->fetchAll( array( "group_id = ?" => $user->group_id , "role_id = ?" => Role::TEACHER  ) );
-		$this->view->friends 	= $this->PersonGroup->fetchAllStudents($user->group_id, true, true, 200);
+        if (!$userId) {
+            $userId = Zend_Auth::getInstance()->getIdentity()->id;
+        }
 
-		$this->render();
-	}
-	
-	public function viewAction()
-	{
-		$user 		= new Zend_Session_NameSpace( 'user' );
-		$id 		= Zend_Filter::filterStatic( $this->_getParam( "id" ) , "int" );
-		$idMessage 	= Zend_Filter::filterStatic( $this->_getParam( "idMessage" ) , "int" );
-		
-		$this->view->rs 		= $this->Person->find( $id )->current();
-		$this->view->rsMessages = $this->Message->fetchAll( array( "person_receiver_id = ?" => $id ), 'id DESC' );
-		$this->view->person 	= $user->person_id;
-		
-		if( $idMessage )
-			$this->view->data = $this->Message->fetchRow( array( "id = ?" => $idMessage ) );
-		
-		$this->render( null , $this->getLayout() );
-	}
-	
-	public function saveAction()
-	{
-		$user = new Zend_Session_NameSpace( 'user' );
-		$id   = Zend_Filter::filterStatic( $this->_getParam( "id" ) , "int" );
-				
-		$input  = $this->preSave();
-		if( $input->isValid() )
-		{
-			$data = $input->toArray();
-			$data["person_sender_id"] = $user->person_id;
+        $form->populate(array('receiver' => $userId));
+        $select->where('receiver = ?', $userId);
 
-            try{
-                $id = $this->Message->save( $data );
+        if ($id) {
+            $table = new Tri_Db_Table('message');
+            $row   = $table->find($id)->current();
 
-                if( $id )
-                {
-                    $this->_helper->_flashMessenger->addMessage( $this->view->translate( "registered successfully" ) );
-                    $this->_redirect( "/chat/message/view/id/" . $data["person_receiver_id"] );
-                }
+            if ($row) {
+                $form->populate($row->toArray());
             }
-            catch(Exception $e){
-                $this->_helper->_flashMessenger->addMessage( $this->view->translate( "error save" ) );
-                $this->_redirect( "/chat/message/index/" );
+        }
+
+
+        $selectUser = $classroomUser->select(true)
+                                    ->setIntegrityCheck(false)
+                                    ->join('user', 'classroom_user.user_id = user.id')
+                                    ->where('classroom_user.classroom_id = ?', $session->classroom_id)
+                                    ->order('name');
+        $this->view->users = $classroomUser->fetchAll($selectUser);
+
+        $paginator = new Tri_Paginator($select, $page);
+        $this->view->data = $paginator->getResult();
+        $this->view->form = $form;
+        $this->view->userId = $userId;
+    }
+
+    public function saveAction()
+    {
+        $form  = new Chat_Form_Message();
+        $table = new Tri_Db_Table('message');
+        $session = new Zend_Session_Namespace('data');
+        $data  = $this->_getAllParams();
+
+        if ($form->isValid($data)) {
+            $data = $form->getValues();
+            $data['sender'] = Zend_Auth::getInstance()->getIdentity()->id;
+
+            if (isset($data['id']) && $data['id']) {
+                $row = $table->find($data['id'])->current();
+                $row->setFromArray($data);
+                $id = $row->save();
+            } else {
+                unset($data['id']);
+                $row = $table->createRow($data);
+                $id = $row->save();
             }
-		}
-		else
-		{
-			$this->_helper->_flashMessenger->addMessage( $this->view->translate( "save error" ) );
-			$this->_redirect( "/chat/message/index/" );
-		}
-	}
-	
-	public function deleteAction()
-	{
-		$id = Zend_Filter::filterStatic( $this->_getParam( "id" ) , "int" );
-		$userId = Zend_Filter::filterStatic( $this->_getParam( "userId" ) , "int" );
-		
-		if( $id )
-		{
-			$this->Message->delete( $id );
-			$this->_helper->_flashMessenger->addMessage( $this->view->translate( "deleted successfully" ) );
-			$this->_redirect( "/chat/message/view/id/" . $userId );
-		}
-	}
+
+            $this->_helper->_flashMessenger->addMessage('Success');
+            $this->_redirect('chat/message/index/userId/'.$data['receiver']);
+        }
+
+        $this->view->messages = array('Error');
+        $this->view->form = $form;
+        $this->render('index');
+    }
+
+    public function deleteAction()
+    {
+        $table = new Tri_Db_Table('message');
+        $id    = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+
+        if ($id) {
+            $table->delete(array('id = ?' => $id));
+            $this->_helper->_flashMessenger->addMessage('Success');
+        }
+
+        $this->_redirect('chat/message/index/');
+    }
 }

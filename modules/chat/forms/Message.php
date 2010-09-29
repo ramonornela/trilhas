@@ -18,12 +18,12 @@
  */
 
 /**
- * @category   Forum
- * @package    Forum_Form_Reply
+ * @category   Chat
+ * @package    Chat_Form_Message
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Forum_Form_Reply extends Zend_Form
+class Chat_Form_Message extends Zend_Form
 {
     /**
      * (non-PHPdoc)
@@ -31,11 +31,11 @@ class Forum_Form_Reply extends Zend_Form
      */
     public function init()
     {
-        $table         = new Tri_Db_Table('forum_reply');
-        $validators    = $table->getValidators();
-        $filters       = $table->getFilters();
+        $table      = new Tri_Db_Table('message');
+        $validators = $table->getValidators();
+        $filters    = $table->getFilters();
 
-        $this->setAction('forum/reply/save')
+        $this->setAction('chat/message/save')
              ->setMethod('post');
 
         $id = new Zend_Form_Element_Hidden('id');
@@ -44,23 +44,21 @@ class Forum_Form_Reply extends Zend_Form
            ->removeDecorator('Label')
            ->removeDecorator('HtmlTag');
 
-        $forumId = new Zend_Form_Element_Hidden('forum_id');
-        $forumId->addValidators($validators['forum_id'])
-                ->addFilters($filters['forum_id'])
-                ->removeDecorator('Label')
-                ->removeDecorator('HtmlTag');
+        $receiver = new Zend_Form_Element_Hidden('receiver');
+        $receiver->addValidators($validators['receiver'])
+                 ->addFilters($filters['receiver'])
+                 ->removeDecorator('Label')
+                 ->removeDecorator('HtmlTag');
 
-        $filters['description'][] = 'StripTags';
         $description = new Zend_Form_Element_Textarea('description');
         $description->setLabel('Description')
                     ->addValidators($validators['description'])
                     ->addFilters($filters['description'])
-                    ->setAttrib('rows', 6)
-                    ->setAttrib('cols', 60)
+                    ->setAttrib('rows', 10)
                     ->setAllowEmpty(false);
 
         $this->addElement($id)
-             ->addElement($forumId)
+             ->addElement($receiver)
              ->addElement($description)
              ->addElement('submit', 'Save');
    }

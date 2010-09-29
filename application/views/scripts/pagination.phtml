@@ -1,6 +1,6 @@
 <?php if ($this->pageCount): ?>
     <?php $params = array('layout' => null)?>
-    <div class="paginationControl" style="text-align:center">
+    <div class="paginationControl">
         <?php if (isset($this->previous)): ?>
             <?php $params['page'] = $this->previous?>
             <a href="<?php echo $this->url($params); ?>">

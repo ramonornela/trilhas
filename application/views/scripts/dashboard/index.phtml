@@ -10,7 +10,7 @@
     </div>
     <div class="button">
         <a href="user/form" class="ui-state-default ui-corner-all">
-            <span class="ui-icon ui-icon-person"></span>Dados
+            <span class="ui-icon ui-icon-contact"></span>Dados
         </a>
         <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'course', 'action' => 'form'))):?>
             <a href="course" class="ui-state-default ui-corner-all">
@@ -19,7 +19,17 @@
         <?php endif;?>
         <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'classroom', 'action' => 'form'))):?>
             <a href="classroom" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('Classroom')?>
+                <span class="ui-icon ui-icon-note"></span><?php echo $this->translate('Classroom')?>
+            </a>
+        <?php endif;?>
+        <?php if ($this->isAllowed(array('module' => 'calendar', 'controller' => 'index', 'action' => 'form'))):?>
+            <a href="calendar" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-calendar"></span><?php echo $this->translate('Calendar')?>
+            </a>
+        <?php endif;?>
+        <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'institution'):?>
+            <a href="user" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-person"></span><?php echo $this->translate('User')?>
             </a>
         <?php endif;?>
     </div>
@@ -27,6 +37,37 @@
 
 <div class="box">
     <div class="main">
+        <?php if(count($this->calendar)):?>
+            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                    <h3><?php echo $this->translate('Calendar');?></h3>
+                </div>
+                <div class="calendar ui-dialog-content ui-widget-content">
+                    <?php $begin = null;?>
+                    <?php foreach($this->calendar as $calendar): ?>
+                        <?php if ($calendar->begin != $begin):?>
+                            <?php if ($begin != null):?>
+                                </ul></div>
+                            <?php endif;?>
+                            <div class="item">
+                                <div class="date">
+                                    <div><?php echo date('d', strtotime($calendar->begin))?></div>
+                                    <div><?php echo $this->translate(date('M', strtotime($calendar->begin)))?></div>
+                                </div>
+                                <ul>
+                        <?php endif;?>
+                        <li>
+                            <?php echo $calendar->description?>
+                            <?php $begin = $calendar->begin;?>
+                        </li>
+                    <?php endforeach;?>
+                            </ul></div>
+                    <div class="clear">
+                        <a href="calendar"><?php echo $this->translate('View all');?></a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                 <h3><?php echo $this->translate('Courses'); ?></h3>
@@ -41,12 +82,14 @@
                             <p class="light"><?php echo substr($course['description'], 0, strpos($course['description'], '.')) ?></p>
                         </div>
                     <?php endforeach; ?>
+                    <p>
                 <?php else: ?>
                     <p>
                        <?php echo $this->translate('You are not registred in a classroom. See'); ?>
+                <?php endif;?>
+
                        <a href="index"><?php echo $this->translate('list of available courses')?></a>
                     </p>
-                <?php endif;?>
             </div>
         </div>
     </div>

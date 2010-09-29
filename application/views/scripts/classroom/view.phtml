@@ -17,8 +17,14 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(".ui-dialog-titlebar-close").live("click", function(){
+    $(".close").live("click", function(){
         $(this).parents('.box').remove();
+        return false;
+    });
+
+    $(".fix").live("click", function(){
+        $('#fixed').prepend($(this).parents('.box'));
+        $(this).remove();
         return false;
     });
 </script>

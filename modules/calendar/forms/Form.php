@@ -27,12 +27,13 @@ class Calendar_Form_Form extends Zend_Form
 {
     public function init()
     {
+        $session   = new Zend_Session_Namespace('data');
         $calendar  = new Tri_Db_Table('calendar');
         $classroom = new Tri_Db_Table('classroom');
 
         $validators = $calendar->getValidators();
         $filters    = $calendar->getFilters();
-        $options    = $classroom->fetchPairs('id', 'name', "status = 'Active'");
+        $options    = $classroom->fetchPairs('id', 'name', array('id IN(?)' => $session->classrooms));
 
         $this->setAction('calendar/index/save')
              ->setMethod('post');

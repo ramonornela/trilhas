@@ -1,20 +1,27 @@
 <h3><?php echo $this->parent->title?></h3>
 <table class="datatable">
     <?php if ($this->page == 1):?>
+        <?php $table = new Tri_Db_Table('user');?>
+        <?php $user = $table->fetchRow(array('id = ?' => $this->parent->user_id));?>
         <tr>
-            <td width="100">user</td>
+            <td width="100">
+                <img alt="<?php echo $user->name ?>" src="upload/<?php echo $this->thumbnail($user->image, 'small') ?>" /><br />
+                <?php echo $user->name?><br />
+                <?php echo $this->date($this->parent->created)?>
+            </td>
             <td><?php echo $this->parent->description?></td>
         </tr>
     <?php endif;?>
     <?php $identity = Zend_Auth::getInstance()->getIdentity()?>
     <?php if (count($this->data)):?>
         <?php foreach ($this->data as $key => $data): ?>
-            <tr style="<?php echo $key%2 ? null : 'background: #eee'?>">
+            <tr>
                 <td width="100">
                     <img alt="<?php echo $data->name ?>" src="upload/<?php echo $this->thumbnail($data->image, 'small') ?>" /><br />
                     <?php echo $data->name?><br />
+                    <?php echo $this->date($data->created)?><br />
                     <?php
-                        if ($this->parent->status == 'Active') {
+                        if ($this->parent->status == 'active') {
                             if ($this->isAllowed('form') && $identity->id == $data->user_id) {
                                 echo $this->ajax("edit", 'forum/reply/form/id/'. $data->id, 2);
                             }
@@ -29,7 +36,7 @@
             </tr>
         <?php endforeach;?>
     <?php endif;?>
-    <?php if ($this->parent->status == 'Active'):?>
+    <?php if ($this->parent->status == 'active'):?>
         <tr>
             <td>
                 <img alt="<?php echo $identity->name ?>" src="upload/<?php echo $this->thumbnail($identity->image, 'small') ?>" /><br />

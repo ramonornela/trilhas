@@ -52,6 +52,7 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .box .ui-dialog-titlebar h3{margin: 0px;}
 .ui-widget{font-size: 0.9em;}
 
+.login{float: left;}
 .login .ui-dialog{ width: 137px;}
 .login input{display: block; width: 105px;}
 .login dd{margin: 0;}
@@ -65,10 +66,10 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 
 .course-image{float: left; margin: 0 10px 10px 0;}
 
-.classroom-list{border: 1px solid #eee; float: right; padding: 5px 10px; margin: 0 0 5px 5px; background: #fff;}
+.classroom-list{border: 1px solid #eee; float: right; padding: 0 10px 5px 10px; margin: 0 0 5px 5px; background: #fff;}
 .classroom-list table{border-collapse: collapse;}
 .classroom-list table thead{background: #ddd;}
-.classroom-list table td, .classroom-list table th{padding: 3px; border: 1px solid #ddd;}
+.classroom-list table td, .classroom-list table th{padding: 5px; border: 1px solid #ddd;}
 
 .calendar .item{clear: left; margin-bottom: 15px;}
 .calendar ul{margin: 0 0 0 65px; padding: 0;}
@@ -78,7 +79,9 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .zend_form dt{margin-top: 5px;}
 .zend_form dd{margin: 0;}
 
-.datatable{width: 99%;}
+.datatable{width: 99%; border-collapse: collapse;}
+.datatable tr{border-bottom: 1px solid #eee;}
+.datatable th{text-align: left;}
 .datatable td{padding: 5px;}
 
 .message{padding: 5px;}
@@ -86,3 +89,10 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .message ul{margin: 0; padding: 0; list-style: none;}
 
 .forgot{ padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px dotted; font-size: 0.8em;}
+
+.paginationControl{text-align: center; margin-top: 10px;}
+
+.list-user{float: right; width: 180px;}
+.list-user .list{overflow: auto; height: 140px;}
+.list-user .item{clear: both; margin-bottom: 15px;}
+.list-user .item img{float: left; margin-right: 5px;}

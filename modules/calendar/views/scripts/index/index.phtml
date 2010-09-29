@@ -1,11 +1,12 @@
-<?php if(count($this->calendar)):?>
-    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
-        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-            <h3><?=$this->translate('Calendar');?></h3>
-        </div>
-        <div class="calendar ui-dialog-content ui-widget-content">
+<?php if ($this->isAllowed('form')):?>
+    <div class="right">
+        <a href="calendar/index/form"><?php echo $this->translate('New')?></a>
+    </div>
+<?php endif;?>
+<div class="calendar">
+<?php if(count($this->data)):?>
             <?php $begin = null;?>
-            <?php foreach($this->calendar as $calendar): ?>
+            <?php foreach($this->data as $calendar): ?>
                 <?php if ($calendar->begin != $begin):?>
                     <?php if ($begin != null):?>
                         </ul></div>
@@ -22,7 +23,6 @@
                     <?php $begin = $calendar->begin;?>
                 </li>
             <?php endforeach;?>
-                    </ul></div>
-        </div>
-    </div>
+            </ul></div>
 <?php endif; ?>
+</div>

@@ -33,37 +33,68 @@ class Application_Model_Classroom
      */
     public static function getAllByUser($userId)
     {
+        $session   = new Zend_Session_Namespace('data');
         $db        = Zend_Db_Table::getDefaultAdapter();
         $cols      = array('cr.*', 'c.*', 'c.id as id', 'cr.id as classroom_id');
         $course    = array('c' => 'course');
         $classroom = array('cr' => 'classroom');
         $classUser = array('cu' => 'classroom_user');
-        $response  = array();
+        $data      = array();
         
         //by course or classroom responsible
         $select = $db->select()
                      ->from($classroom, $cols)
                      ->join($course, 'c.id = cr.course_id', array())
-                     ->where('c.responsible = ? OR cr.responsible = ?', $userId);
-        $rsResponsible = $db->fetchAll($select);
+                     ->where('c.responsible = ? OR cr.responsible = ?', $userId)
+                     ->where('cr.status = ?', 'active');
+        $responsibles = $db->fetchAll($select);
 
         //by registration
         $select = $db->select()
                      ->from($classroom, $cols)
                      ->join($course, 'c.id = cr.course_id', array())
                      ->join($classUser, 'cr.id = cu.classroom_id', array())
-                     ->where('cu.user_id = ?', $userId);
-        $rsRegistry = $db->fetchAll($select);
+                     ->where('cu.user_id = ?', $userId)
+                     ->where('cr.status = ?', 'active');
+        $registries = $db->fetchAll($select);
 
-        foreach ($rsResponsible as $responsible) {
-            foreach ($rsRegistry as $key => $registry) {
-                if ($responsible === $registry) {
-                    continue;
-                }
-                $response[] = $registry;
-            }
-            $response[] = $responsible;
+        foreach ($responsibles as $responsible) {
+            $data[] = $responsible;
+            $session->classrooms[] = $responsible['classroom_id'];
         }
-        return $response;
+
+        foreach ($registries as $registry) {
+            if (in_array($registry, $data)) {
+                continue;
+            }
+            $data[] = $registry;
+            $session->classrooms[] = $registry['classroom_id'];
+        }
+        
+        return $data;
+    }
+
+    public static function isAvailable($id)
+    {
+        $classroom     = new Tri_Db_Table('classroom');
+        $classroomUser = new Tri_Db_Table('classroom_user');
+
+        $row = $classroom->fetchRow(array('id = ?' => $id));
+
+        if (!$row) {
+            return false;
+        }
+
+        $select = $classroomUser->select(true)
+                                ->columns(array('COUNT(0) as total'))
+                                ->where('classroom_id = ?', $id);
+
+        $total = $classroom->fetchRow($select)->total;
+
+        if ($row->max_student > 0 && $row->max_student <= $total) {
+            return false;
+        }
+
+        return true;
     }
 }
