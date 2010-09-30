@@ -28,8 +28,8 @@
                 <td nowrap="nowrap">
                     <?php $id = Zend_Auth::getInstance()->getIdentity()->id;?>
                     <?php if ($data->sender == $id || $this->userId == $id) :?>
-                        <?php echo $this->ajax("edit", 'notepad/index/index/id/'. $data->id, 2); ?>
-                        <?php echo $this->ajax("delete", 'notepad/index/delete/id/' . $data->id, 2 , "want to delete?");?>
+                        <?php echo $this->ajax("edit", 'chat/message/index/id/'. $data->id.'/userId/'.$this->userId, 2); ?>
+                        <?php echo $this->ajax("delete", 'chat/message/delete/id/' . $data->id.'/userId/'.$this->userId, 2 , "want to delete?");?>
                     <?php endif;?>
                 </td>
             </tr>
