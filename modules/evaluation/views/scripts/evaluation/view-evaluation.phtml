@@ -8,9 +8,9 @@
 	<?php foreach( $this->rs as $rs ):?>
         <div style="background: #fff; border: 1px solid #E6EEEE; padding: 3px 3px 7px 3px;">
 			<?php if( isset( $this->rs->label ) && $this->rs->label && !$this->rs->labels ):?>
-				<?=$i,") ",nl2br( $rs->label )?>
+				<?php  echo $i,") ",nl2br( $rs->label )?>
 			<?php else:?>
-				<?=$i,") ",nl2br( $rs->labels )?>
+				<?php echo $i,") ",nl2br( $rs->labels )?>
 			<?php endif;?>
 			
 			<?php if( $rs->type == "text" ): ?>
@@ -41,7 +41,7 @@
                     ?>
                     <?php foreach( $alternatives as $key => $alternative ):?>
                     <div style="margin-bottom: 10px">
-                        <?=$this->letters[$j], ") ";?>
+                        <?php echo $this->letters[$j], ") ";?>
                         <select name="<?=$rs->id?>[<?=$alternative->id?>]">
                             <option value="" ></option>
                             <option label="V" value="V" >V</option>
@@ -72,8 +72,8 @@
                     ?>
                     <?php foreach( $alternatives as $key => $alternative ):?>
                     <div style="margin-bottom: 10px">
-                        <?=$this->letters[$j], ") ";?>
-                        <?=$this->formSelect( "{$rs->id[$alternative->id]}", null , null , $this->letters )?>
+                        <?php echo $this->letters[$j], ") ";?>
+                        <?php echo $this->formSelect( "{$rs->id[$alternative->id]}", null , null , $this->letters )?>
                         <span><?=$alternative->value?></span>
                         <br />
                     </div>
@@ -100,7 +100,7 @@
                     <?php foreach( $alternatives as $key => $alternative ):?>
                     <div style="margin-bottom: 10px">
                         <p>
-                            <?=$this->letters[$j], ") ";?>
+                            <?php echo $this->letters[$j], ") ";?>
                             <label for="<?=$rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
                         </p>
                     </div>

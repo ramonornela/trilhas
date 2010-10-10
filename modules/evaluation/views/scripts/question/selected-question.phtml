@@ -39,7 +39,7 @@
                 ?>
                 <?php foreach( $alternatives as $key => $alternative ):?>
                 <div style="margin-bottom: 10px">
-					<?=$letters[$j], ") ";?>
+					<?php echo $letters[$j], ") ";?>
                     <select name="<?=$this->rs->id?>[<?=$alternative->id?>]">
                         <option value="" ></option>
                         <option label="V" value="V" >V</option>
@@ -69,7 +69,7 @@
                 ?>
                 <?php foreach( $alternatives as $key => $alternative ):?>
                 <div style="margin-bottom: 10px">
-					<?=$letters[$j], ") ";?>
+					<?php echo $letters[$j], ") ";?>
                     <?=$this->formSelect( "{$this->rs->id[$alternative->id]}", null , null , $letters )?>
                     <span><?=$alternative->value?></span>
                     <br />
@@ -97,7 +97,7 @@
                 <?php foreach( $alternatives as $key => $alternative ):?>
                 <div style="margin-bottom: 10px">
                     <p>
-						<?=$letters[$j], ") ";?>
+						<?php echo $letters[$j], ") ";?>
                         <label for="<?=$this->rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
                     </p>
                 </div>
@@ -137,7 +137,7 @@
 					}
 				?>
                 <div style="margin-bottom: 10px">
-					<?=$letters[$j], ") ";?>
+					<?php echo $letters[$j], ") ";?>
                     <label for="<?=$this->rs->id."-".$j?>" class="inline"><?=$alternative->value?></label>
                 </div>
                 <?php $j++; ?>
