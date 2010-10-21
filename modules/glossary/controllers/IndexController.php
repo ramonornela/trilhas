@@ -69,6 +69,7 @@ class Glossary_IndexController extends Tri_Controller_Action
                 unset($data['id']);
                 $row = $table->createRow($data);
                 $id = $row->save();
+                Application_Model_Timeline::save('saved a new word in the glossary', $data['word']);
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');

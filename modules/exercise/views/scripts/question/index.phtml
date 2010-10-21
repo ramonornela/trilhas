@@ -1,0 +1,33 @@
+<div class="right">
+    <?php 
+        if ($this->isAllowed('form')) {
+           echo $this->ajax('new', 'exercise/question/form', 2);
+        }
+    ?>
+</div>
+<br /><br />
+<?php if(count($this->data)):?>
+	<table class="datatable">
+		<tr>
+			<th width="250"><?php echo $this->translate("Description")?></th>
+            <th><?php echo $this->translate("Note")?></th>
+			<?php if($this->isAllowed("form")): ?>
+				<th></th>
+			<?php endif;?>
+		</tr>
+		<?php foreach($this->data as $data):?>
+			<tr>
+                <td><?php echo $data->description?></td>
+                <td><?php echo $data->note?></td>
+				<?php if($this->isAllowed("form")): ?>
+					<td><?php echo $this->ajax("edit", 'exercise/question/form/id/' . $data->id);?></td>
+				<?php endif;?>
+			</tr>
+		<?php endforeach;?>
+	</table>
+<?php else:?>
+	<?=$this->translate( "there are no records" );?>
+<?php endif;?>
+<script type="text/javascript">
+    $('input[type=button], input[type=submit]').button();
+</script>

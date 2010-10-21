@@ -33,7 +33,17 @@ class DashboardController extends Tri_Controller_Action
 
         $this->view->courses = $courses;
         $this->view->calendar = Calendar_Model_Calendar::getByClassroom($courses);
+        $this->view->timeline = Application_Model_Timeline::getByClassroom($courses, 1);
         $this->view->user     = $identity;
         $this->_helper->layout->setLayout('layout');
+    }
+
+    public function moreAction()
+    {
+        $page = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        $courses  = Application_Model_Classroom::getAllByUser($identity->id);
+
+        $this->view->timeline = Application_Model_Timeline::getByClassroom($courses, $page);
     }
 }

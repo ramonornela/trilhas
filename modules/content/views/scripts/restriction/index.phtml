@@ -1,0 +1,72 @@
+<div class="padding left">
+    <label for="type"><?=$this->translate("type")?>:</label>&nbsp;
+    
+    <input id="restriction-bulletin" checked='checked' name="type" type="radio" value="<?=Content_Model_Restriction::EVALUATION ?>" > <?=$this->translate("performance")?>&nbsp;
+	<input id="restriction-time" name="type" type="radio" value="<?=Content_Model_Restriction::TIME ?>" > <?=$this->translate("time")?>&nbsp;
+</div>	
+
+<div id="evaluation_time">
+	<div class="right">
+		<?php if( $this->getPermission( "input" ) ): ?>
+			<?=$this->ajax( $this->translate("new") , "content-restriction" , $this->url . "/content/restriction/input/type/" . Content_Model_Restriction::EVALUATION , 2 ) ?>
+		<?php endif; ?>
+	</div>
+	<div class="clear"></div>
+	<br />
+	<?php if( $this->rs->count() ):?>
+		<table class="datatable">
+			<tr>
+				<th><?=$this->translate("group")?></th>
+				<th><?=$this->translate("performance")?></th>
+                <th><?=$this->translate("note")?></th>
+                <th><?=$this->translate("content")?></th>
+                <th><?=$this->translate("action")?></th>
+			</tr>
+			<?php foreach( $this->rs as $rs ): ?>
+				<?php $class  = $this->changeClass( $this->rs->key() , array( "light_gray" , "white" ) );?>
+				
+				<tr class="<?=$class?>">
+					<?php
+						$title = null;
+						try{
+							$title = $rs->findParentRow('Content_Model_Restriction')
+										->findParentRow('Station_Model_ClassModel')
+										->name;
+						}catch ( Exception $e ){}
+						if ( $title == "" ){
+							$title = $this->translate('all');
+						}	
+					?>
+					<td><?=$title ?></td>
+					<td><?=$rs->findParentRow('Bulletin_Model_BulletinGroup')->title?></td>
+                    <td><?=$rs->note?></td>
+                    <td nowrap="nowrap">
+						<?=$rs->findParentRow('Content_Model_Restriction')
+							  ->findParentRow('Content_Model_Content')
+							  ->title?>
+					</td>
+                    <td width="100">
+                        <?=$this->ajax( $this->translate("edit") , "content-restriction" , $this->url . "/content/restriction/input/id/" . $rs->id . "/type/" . Content_Model_Restriction::EVALUATION )?> |
+                        <?=$this->ajax( $this->translate("delete") , "content-restriction" , $this->url . "/content/restriction/delete/id/" . $rs->id . "/type/" . Content_Model_Restriction::EVALUATION , 1, $this->translate( "want to delete?" ) )?>
+                    </td>
+				</tr>
+			<?php endforeach;?>
+		</table>  
+	<?php else:?>
+		<table class="datatable">
+			<tr class="<?=$class?>">
+				<td><?=$this->translate( "there are no records" );?></td>
+			</tr>
+		</table> 
+	<?php endif;?>
+</div>
+		
+<script>
+	$('#restriction-bulletin').click(function(){
+		new Preceptor.util.AjaxUpdate( "content-restriction" , "<?=$this->url?>/content/restriction/index/" );
+	});
+	
+	$('#restriction-time').click(function(){
+		new Preceptor.util.AjaxUpdate( "content-restriction" , "<?=$this->url?>/content/restriction/index/type/" + this.value );
+	});
+</script>

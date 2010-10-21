@@ -1,0 +1,8 @@
+#message
+"Error";"Erro"
+"Success";"Realizado com sucesso"
+
+#Validate
+"Value is required and can't be empty";"Campo obrigatório. Não pode ser vazio"
+"'%value%' is more than %max% characters long";"'%value%' é maior que %max%"
+"'%value%' does not appear to be a float";"'%value%' parece não ser decimal"

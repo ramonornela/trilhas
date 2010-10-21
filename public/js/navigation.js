@@ -3,16 +3,10 @@
  */
 (function ($) {
 
-$.fn.navigation = function(contentJson , options)
+$.fn.navigation = function(contentJson, options)
 {
-	var content,current,
-		defaults = {
-			baseUrl: "/trails",
-			url: "/",
-			cache: true
-		},
+	var content,current,url,
 		context = this,
-		options = $.extend({}, defaults, options),
 
 		next = function(){
 			if( content[(current+1)] ){
@@ -38,7 +32,7 @@ $.fn.navigation = function(contentJson , options)
 			for( i = 0; i < length ; i++ ){
 				if( content[i+1] ){
 					if( content[i+1].level > content[i].level ){
-						html += '<li><img src="' + options.baseUrl + '/img/icons/minus.jpg" />&nbsp;';
+						html += '<li><img src="img/minus.jpg" />&nbsp;';
 						html += '<a href="#" id="content_' + i + '">';
 						html += content[i].title;
 						html += '</a><ul>';
@@ -98,28 +92,12 @@ $.fn.navigation = function(contentJson , options)
 		},
 
 		update = function(){
-			var $cache = $('.content_text_'+current,context),
-				$cacheDiv = $('.cache',context),
-				$content = $('.content',context);
+			var $content = $('.text',context);
 			
-			if( $cache.length ){
-				$content.html( $cache.html() );
-			}else{
-//				$content.load(
-//					options.baseUrl + options.url + content[current].id,
-//					null,
-//					function(){
-//						if( context.cache ){
-//							$cacheDiv.append('<div class="content_text_'+current+'">'
-//											+ $content.html() + '</div>' );
-//						}
-//					}
-//				);
-                new Preceptor.util.AjaxUpdate($content[0].id, options.baseUrl + options.url + content[current].id);
-			}
+            $('#'+$content[0].id).load(url + content[current].id);
 
-			$.data( window ,'current_id'   , content[current].id );
-			$.data( window ,'current_index', current );
+			$.data(window, 'current_id'   , content[current].id);
+			$.data(window, 'current_index', current);
 			
 			updateBreadCrumb();
 		},
@@ -167,12 +145,12 @@ $.fn.navigation = function(contentJson , options)
 
 	return this.each(function(){
 		var $breadImg = $('.bread img',this),
-			$buttons = $('.buttons a',this),
-			$previousButton = $buttons.eq(0),
-			$nextButton = $buttons.eq(1);
+			$nextButton = $('.buttons a.next',this),
+			$previousButton = $('.buttons a.previous',this);
 			
 		content = YAHOO.lang.JSON.parse(contentJson) || ['No content'];
 		current = options.current || 0;
+		url     = options.url || 'content/index/view/id/';
 		
 		$nextButton.click( function(){
 			next.apply(context);

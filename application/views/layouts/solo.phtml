@@ -7,25 +7,22 @@
         <base href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/" />
         <link rel="shortcut icon" href="favicon.ico" />
 
-        <?php echo $this->headLink()->appendStylesheet('js/editor/stylesheets/xq_ui.css')
-							->appendStylesheet('js/editor/stylesheets/xq_contents.css')
-							->appendStylesheet('css/themes/' . $this->theme . '/jquery-ui.css')
+        <?php echo $this->headLink()->appendStylesheet('css/themes/' . $this->theme . '/jquery-ui.css')
 							->appendStylesheet('css/main.css')
 							->appendStylesheet('css/utils.css'); ?>
 
-        <?php $this->headScript()->appendFile('js/jquery/jquery.min.js');
+        <?php $this->headScript()->appendFile('js/jquery/jquery.min.js')
+                                 ->appendFile('js/jquery/jquery-ui.min.js')
+                                 ->appendFile('js/ckeditor/ckeditor.js');
               if ($locale != 'en') { $this->headScript()->appendFile('js/jquery/ui/i18n/jquery.ui.datepicker-' . $locale . '.js'); }
-		      echo $this->headScript()->appendFile('js/jquery/jquery-ui.min.js')
-							          ->appendFile('js/jquery/jquery.other.js')
-                                      ->appendFile('js/editor/all.js')
-                                      ->appendFile('js/editor/plugin/FileGalleryPlugin.js')
-                                      ->appendFile('js/editor/plugin/CustomStylePlugin.js')
-                                      ->appendFile('js/editor/plugin/EditorResizePlugin.js')
-                                      ->appendFile('js/editor/plugin/FlashMovieMacroPlugin.js')
-                                      ->appendFile('js/editor/plugin/LinkToImagePlugin.js')
-                                      ->appendFile('js/editor/plugin/ContextoPlugin.js')
-                                      ->appendFile('js/chat.js')
-                                      ->appendFile('js/navigation.js'); ?>
+              if ($locale != 'en') { $this->headScript()->appendFile('js/ckeditor/lang/' . strtolower($locale) . '.js'); }
+		      $this->headScript()->appendFile('js/jquery/jquery-ui.min.js')
+                                  ->appendFile('js/jquery/jquery.other.js')
+                                  ->appendFile('js/yahoo/yahoo-dom-event.js')
+                                  ->appendFile('js/yahoo/json-min.js')
+                                  ->appendFile('js/chat.js')
+                                  ->appendFile('js/navigation.js');
+              echo $this->headScript();?>
 	</head>
     <body>
         <div id="hd">
@@ -68,7 +65,7 @@
         </div>
         <div id="ft">
             <a href="http://www.preceptoread.com.br">
-                <img src="img/logo.png" alt="Logo Preceptor" />
+                <img border="0" src="img/logo.png" alt="Logo Preceptor" />
             </a>
         </div>
     </body>

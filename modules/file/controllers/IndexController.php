@@ -50,6 +50,7 @@ class File_IndexController extends Tri_Controller_Action
 
             $row = $table->createRow($data);
             $id = $row->save();
+            Application_Model_Timeline::save('saved a new file', $data['name']);
 
             $this->_helper->_flashMessenger->addMessage('Success');
             echo $this->view->translate('Sended');

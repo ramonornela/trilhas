@@ -1,0 +1,16 @@
+<label for="type"><?=$this->translate("type")?>:</label><br /><br />
+
+<input id="evaluation_<?=$this->suffix?>" name="type" type="radio" value="AV" > <?=$this->translate("evaluation")?>&nbsp;
+<input id="time_<?=$this->suffix?>" name="type" type="radio" value="CT" > <?=$this->translate("time")?>&nbsp;
+<br /><br />
+<div id="evaluation_time"></div>
+		
+<script>
+	YAHOO.util.Event.on( "evaluation_<?=$this->suffix?>" , "click" , function(){
+		new Preceptor.util.AjaxUpdate( "evaluation_time" , "<?=$this->url?>/restriction/restriction/input/type/" + this.value );
+	});
+	
+	YAHOO.util.Event.on( "time_<?=$this->suffix?>" , "click" , function(){
+		new Preceptor.util.AjaxUpdate( "evaluation_time" , "<?=$this->url?>/restriction/restriction/input/type/" + this.value );
+	});
+</script>

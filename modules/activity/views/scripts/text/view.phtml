@@ -1,62 +1,9 @@
-<?php if ( $this->rs->current()->status == ActivityTextPerson::FINALITY_TEACHER ) : ?>
-<?php if( $this->stage->count() ): ?>
-	<ul class="bread">
-		<?php foreach( $this->stage as $rs ): ?>
-			<?php $arrow = "&raquo;"?>
-			<a href="#this" onclick="Toogle.showOneHiddenAll( 'stage<?=$rs->id?>' )"><?=$rs->title?></a> <?=$arrow ?>
-			<script>Preceptor.util.elements.push( "stage<?=$rs->id?>" );</script>
-			<?php if( ( $this->role == Role::STUDENT ) && ( ($this->rs->key() + 1) == $this->rs->count() ) && ( $this->getPermission( array( "module" => "activity" , "controller" => "text" , "action" => "input"  ) ) ) ): ?>
-				<a href="#this" onclick='new Preceptor.util.AjaxUpdate( "text" , "<?=$this->url ?>/activity/text/input/" );' ><?=$this->translate("make")?></a>
-			<?php endif; ?>
-		<?php endforeach;?>
-	</ul>
-
-	<?php $this->stage->rewind(); ?>
-	<?php foreach( $this->stage as $rs ): ?>
-		<div id="stage<?=$rs->id?>" class="gray padding">
-                    <h4><?=$rs->title?></h4>
-                    <p><?=$rs->dss?></p>
-                    <br /><br />
-                    <?php if( $this->stage->key() > 0 ): ?>
-                            <input type="button" onclick="Toogle.previous();" value="<?=$this->translate("previous")?>" />
-                    <?php endif; ?>
-
-                    <?php if( ($this->stage->key() + 1) < $this->rs->count() ): ?>
-                            <input type="button" onclick="Toogle.next();" value="<?=$this->translate("next")?>" />
-                    <?php endif; ?>
-		</div>
-
-	<?php endforeach;?>
-<?php endif; ?>
-	<h3><?=$this->translate("finished activity")?></h3>
-	<hr>
-	<br />
-	
-	<?php if ( ! $this->data->ds ) : ?>
-		<?=$this->rs->current()->ds ?>
-	<?php else : ?>
-		<?=$this->data->ds ?>
-	<?php endif; ?>
-	<br /><br />
-	
-	<div id="version">
-		<h3><?=$this->translate("versions")?></h3>
-		<hr />
-		<?php if( $this->rs->count() ): ?>
-			<ul>
-				<?php foreach( $this->rs as $rs ): ?>
-					<li>
-						<?=$this->ajax( $this->date( $rs->created , "d/m/Y H:i:s" ) , "activity" , "/activity/text/view/version_id/{$rs->id}" );?> - 
-						<?=$rs->findParentRow( "Person" , "SP" )->name?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		<?php else: ?>
-			<p><?=$this->translate("there are no records")?></p>
-		<?php endif; ?>
-	</div>
-<?php else: ?>
-	<div class="message">
-		<p><?=$this->translate("activity is not yet finalized")?></p>
-	</div>
-<?php endif; ?>
+<p>
+<?php 
+    if ($this->status == 'final') {
+        echo $this->translate('Sent. Wait corretion.');
+    } elseif ($this->status == 'close') {
+        echo $this->translate('Finalized. See your note in panel.');
+    }
+?>
+</p>

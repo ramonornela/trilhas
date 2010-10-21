@@ -1,0 +1,35 @@
+<div>
+    <?php
+        if ($this->id) {
+            echo $this->ajax('back', 'content/organizer/');
+        }
+    ?>
+	<?php if( count( $this->data ) ): ?>
+		<form action="content/organizer/save" id="form_organizer">
+			<ul class="organizer" id="organizer">
+				<?php foreach( $this->data as $key => $rs ): ?>
+					<li id="organizer_li_<?=$rs['id']?>"><?=$this->ajax($rs['title'], "content/organizer/index/id/" . $rs['id'] )?>
+                    <input name="position[<?=$rs['id']?>]" type="hidden" value="" /></li>
+                <?php endforeach; ?>
+			</ul>
+			<br />
+			<input type="hidden" name="json" id="organizer_hidden" />
+			<input type="submit" id="organizer_submit" value="<?=$this->translate("save")?>" />
+		</form>
+        
+		<script>
+			$("#organizer").sortable();
+
+            $("#form_organizer").submit(function() {
+                var $this = $(this);
+                $.post(this.action, $(this).serialize(), function(data){
+                    $this.parents('.content').html(data);
+                });
+                return false;
+            });
+            $('input[type=button], input[type=submit]').button();
+		</script>
+	<?php else: ?>
+		<p><?=$this->translate( "there are no records" );?></p>
+	<?php endif; ?>
+</div>

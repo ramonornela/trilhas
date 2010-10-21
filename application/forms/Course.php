@@ -84,7 +84,7 @@ class Application_Form_Course extends Zend_Form
 
 
         $file = new Zend_Form_Element_File('image');
-        $file->setLabel('Upload an image:')
+        $file->setLabel('Image')
              ->setDestination(UPLOAD_DIR)
              ->setMaxFileSize(2097152)//2mb
              ->setValueDisabled(true)

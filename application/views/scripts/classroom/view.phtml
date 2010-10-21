@@ -9,8 +9,27 @@
                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                     <h3><?php echo $this->translate('content'); ?></h3>
                 </div>
-                <div class="courses ui-dialog-content ui-widget-content">
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                <div id="content" class="ui-dialog-content ui-widget-content">
+                    <div class="nav">
+                        <div class="bread">
+                            <img src="img/treeview.gif" />
+                            <div class="treeview"></div>
+                            <span></span>
+                        </div>
+                        <div class="buttons">
+                            <a class="previous" href="content/previous"><?php echo $this->translate('previous') ?></a>&nbsp;&nbsp;
+                            <a class="next" href="content/next"><?php echo $this->translate('next content') ?></a>
+                        </div>
+                    </div>
+                    <div id="content-main-content" class="text">
+
+                    </div>
+                    <div class="nav">
+                        <div class="buttons">
+                            <a class="previous" href="content/previous"><?php echo $this->translate('previous') ?></a>&nbsp;&nbsp;
+                            <a class="next" href="content/next"><?php echo $this->translate('next content') ?></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -27,4 +46,6 @@
         $(this).remove();
         return false;
     });
+
+    $('#content').navigation('<?=str_replace("\'", "'", $this->data)?>', {current: 0});
 </script>

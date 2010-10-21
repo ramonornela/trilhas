@@ -3,8 +3,9 @@
 <?php endif; ?>	
 <div class="left">
     <form id="formFindGlossary" action="#">
+        <span class="ui-icon ui-icon-search magnifier"></span>
         <input type="text" name="q" id="qGlossary" style="width: 16em" />
-        <input type="submit" value="OK" /> &nbsp;&nbsp;&nbsp;
+        <input type="submit" value="ok" /> &nbsp;&nbsp;&nbsp;
     </form>
 </div>
 <div class="alphabet">
@@ -64,4 +65,6 @@
 		$(this).parents('.content').load('glossary/index/index/text/' + $('#qGlossary').val());
         return false;
 	});
+
+    $('input[type=button], input[type=submit]').button();
 </script>

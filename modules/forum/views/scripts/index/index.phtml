@@ -3,8 +3,9 @@
 <?php endif; ?>	
 <div class="left">
     <form id="formFindForum" action="#">
+        <span class="ui-icon ui-icon-search magnifier"></span>
         <input type="text" name="q" id="qForum" style="width: 16em" />
-        <input type="submit" value="OK" /> &nbsp;&nbsp;&nbsp;
+        <input type="submit" value="ok" /> &nbsp;&nbsp;&nbsp;
     </form>
 </div>
 <div class="clear">&nbsp;</div>
@@ -38,4 +39,6 @@
 		$(this).parents('.content').load('forum/index/index/q/' + $('#qForum').val());
         return false;
 	});
+
+    $('input[type=button], input[type=submit]').button();
 </script>

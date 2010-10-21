@@ -18,7 +18,7 @@ class Forum_ReplyController extends Tri_Controller_Action
 
         $select = $table->select(true)
                         ->setIntegrityCheck(false)
-                        ->join('user', 'user.id = user_id', array('user.id as uid','user.name','user.image'))
+                        ->join('user', 'user.id = user_id', array('user.id as uid','user.name','user.image','user.role'))
                         ->where('forum_id = ?', $id)
                         ->order('id');
 

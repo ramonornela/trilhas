@@ -10,26 +10,26 @@
     </div>
     <div class="button">
         <a href="user/form" class="ui-state-default ui-corner-all">
-            <span class="ui-icon ui-icon-contact"></span>Dados
+            <span class="ui-icon ui-icon-contact"></span><?php echo $this->translate('data')?>
         </a>
         <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'course', 'action' => 'form'))):?>
             <a href="course" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('Course')?>
+                <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('course')?>
             </a>
         <?php endif;?>
         <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'classroom', 'action' => 'form'))):?>
             <a href="classroom" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-note"></span><?php echo $this->translate('Classroom')?>
+                <span class="ui-icon ui-icon-note"></span><?php echo $this->translate('classroom')?>
             </a>
         <?php endif;?>
         <?php if ($this->isAllowed(array('module' => 'calendar', 'controller' => 'index', 'action' => 'form'))):?>
             <a href="calendar" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-calendar"></span><?php echo $this->translate('Calendar')?>
+                <span class="ui-icon ui-icon-calendar"></span><?php echo $this->translate('calendar')?>
             </a>
         <?php endif;?>
         <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'institution'):?>
             <a href="user" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-person"></span><?php echo $this->translate('User')?>
+                <span class="ui-icon ui-icon-person"></span><?php echo $this->translate('user')?>
             </a>
         <?php endif;?>
     </div>
@@ -40,7 +40,7 @@
         <?php if(count($this->calendar)):?>
             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                    <h3><?php echo $this->translate('Calendar');?></h3>
+                    <h3><?php echo $this->translate('calendar');?></h3>
                 </div>
                 <div class="calendar ui-dialog-content ui-widget-content">
                     <?php $begin = null;?>
@@ -70,7 +70,7 @@
         <?php endif; ?>
         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <h3><?php echo $this->translate('Courses'); ?></h3>
+                <h3><?php echo $this->translate('course'); ?></h3>
             </div>
             <div class="courses ui-dialog-content ui-widget-content">
                 <?php if (count($this->courses)) :?>
@@ -88,8 +88,30 @@
                        <?php echo $this->translate('You are not registred in a classroom. See'); ?>
                 <?php endif;?>
 
-                       <a href="index"><?php echo $this->translate('list of available courses')?></a>
+                       <a href="index"><?php echo $this->translate('List of available courses')?></a>
                     </p>
+            </div>
+        </div>
+        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                <h3><?php echo $this->translate('timeline'); ?></h3>
+            </div>
+            <div class="courses ui-dialog-content ui-widget-content">
+                <?php if (count($this->timeline)) :?>
+                    <?php foreach ($this->timeline as $timeline): ?>
+                        <div class="item">
+                            <img alt="<?php echo $timeline['name'] ?>" src="upload/<?php echo $this->thumbnail($timeline['image'], 'small') ?>" width="40" height="40" />
+                            <?php echo $timeline['name'] ?>
+                            <span><?php echo $this->date($timeline['created'])?></span>
+                            <p class="light"><?php echo $timeline['description']?>
+                            (<a href="classroom/view/id/<?php echo $timeline['classroom_id'] ?>"><?php echo $timeline['cname']?></a>)</p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>
+                       <?php echo $this->translate('there are no records'); ?>
+                    </p>
+                <?php endif;?>
             </div>
         </div>
     </div>

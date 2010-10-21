@@ -48,9 +48,9 @@ class Tri_Filter_Date implements Zend_Filter_Interface
 
         if (null === $options) {
             $locale = key(Zend_Registry::get('Zend_Locale')->getDefault());
-            $date_format = Zend_Locale_Data::getContent($locale, 'date');
+            $dateFormat = Zend_Locale_Data::getContent($locale, 'date');
 
-            $options = array('locale' => $locale, 'date_format' => $date_format);
+            $options = array('locale' => $locale, 'date_format' => $dateFormat);
         }
         
         $this->setOptions($options);
@@ -87,7 +87,7 @@ class Tri_Filter_Date implements Zend_Filter_Interface
     public function filter($value)
     {
         if ($value) {
-            $date = new Zend_Date($value);
+            $date = new Zend_Date($value, null, $this->_options['locale']);
             if (Zend_Date::isDate($value, $this->_options['date_format'], $this->_options['locale'])) {
                 return $date->toString('yyyy-MM-dd');
             } else {

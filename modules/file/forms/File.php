@@ -47,7 +47,7 @@ class File_Form_File extends Zend_Form
              ->addFilters($filters['name']);
 
         $file = new Zend_Form_Element_File('location');
-        $file->setLabel('Upload an file:')
+        $file->setLabel('File')
              ->setDestination(APPLICATION_PATH . '/../data/upload/')
              ->setMaxFileSize(10485760)//10mb
              ->setValueDisabled(true)

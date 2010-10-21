@@ -68,6 +68,7 @@ class Forum_IndexController extends Tri_Controller_Action
                 unset($data['id']);
                 $row = $table->createRow($data);
                 $id = $row->save();
+                Application_Model_Timeline::save('created a new forum', $data['title']);
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');

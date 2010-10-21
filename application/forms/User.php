@@ -95,7 +95,7 @@ class Application_Form_User extends Zend_Form
                 ->setAllowEmpty(false);
 
         $file = new Zend_Form_Element_File('image');
-        $file->setLabel('Upload an image:')
+        $file->setLabel('Image')
                 ->setDestination(UPLOAD_DIR)
                 ->setMaxFileSize(2097152)//2mb
                 ->setValueDisabled(true)
@@ -112,7 +112,7 @@ class Application_Form_User extends Zend_Form
             $role->addMultiOptions(array('' => '[select]') + $roles)
                     ->setRegisterInArrayValidator(false);
         }
-        $role->setLabel('role')
+        $role->setLabel('Role')
                 ->addValidators($validators['role'])
                 ->addFilters($filters['role']);
 

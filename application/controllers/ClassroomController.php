@@ -52,18 +52,28 @@ class ClassroomController extends Tri_Controller_Action
 
     public function viewAction()
     {
-        $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $classroom = new Zend_Db_Table('classroom');
-        $rowset = $classroom->find($id);
+        $id        = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $rowset    = $classroom->find($id);
 
         if (!count($rowset)) {
             $this->_redirect('/dashboard');
         }
-        $row = $rowset->current();
-        $content = new Zend_Db_Table('content');
+
+        $row     = $rowset->current();
         $session = new Zend_Session_Namespace('data');
         $session->classroom_id = $row->id;
-        $this->view->data = $content->fetchRow(array('course_id = ?' => $row->course_id));
+        $session->course_id = $row->course_id;
+        $data = Application_Model_Content::fetchAllOrganize($row->course_id);
+
+        if (!$data) {
+            Application_Model_Content::createInitialContent($row->course_id);
+            $data = Application_Model_Content::fetchAllOrganize($row->course_id);
+        }
+        $this->view->data = Zend_Json::encode($data);
+
+        $session->contents = $this->view->data;
+        
         $this->_helper->layout->setLayout('layout');
     }
 

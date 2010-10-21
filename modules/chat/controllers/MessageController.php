@@ -18,12 +18,13 @@ class Chat_MessageController extends Tri_Controller_Action
         $classroomUser = new Tri_Db_Table('classroom_user');
         $select  = $table->select(true)
                         ->setIntegrityCheck(false)
-                        ->join('user', 'message.sender = user.id', array('name','image'));
+                        ->join('user', 'message.sender = user.id', array('name','image'))
+                        ->order('id DESC');
 
         if (!$userId) {
             $userId = Zend_Auth::getInstance()->getIdentity()->id;
         }
-
+        
         $form->populate(array('receiver' => $userId));
         $select->where('receiver = ?', $userId);
 

@@ -96,3 +96,7 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .list-user .list{overflow: auto; height: 140px;}
 .list-user .item{clear: both; margin-bottom: 15px;}
 .list-user .item img{float: left; margin-right: 5px;}
+
+.magnifier{float: left; margin: 4px 8px 0 0;}
+
+.nav .buttons{margin: 5px 0; text-align: right;}

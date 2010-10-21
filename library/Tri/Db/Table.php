@@ -119,6 +119,9 @@ class Tri_Db_Table extends Zend_Db_Table
                 case 'time':
                     break;
                 default:
+                    if (strpos($value['DATA_TYPE'], 'enum') !== false) {
+                        break;
+                    }
                     throw new Exception('Tipo de dado não existe! ' . $value['DATA_TYPE']);
                     break;
             }
@@ -171,6 +174,9 @@ class Tri_Db_Table extends Zend_Db_Table
                case 'bytea':
                    break;
                 default:
+                    if (strpos($value['DATA_TYPE'], 'enum') !== false) {
+                        break;
+                    }
                     throw new Exception('Tipo de dado não existe!'.$value['DATA_TYPE']);
                     break;
             }
