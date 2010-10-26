@@ -31,8 +31,8 @@ class Content_IndexController extends Tri_Controller_Action
         $string = $this->_getParam('string');
 
         $restriction = Content_Model_Restriction::verify($id);
-
-        if(!$restriction['has']) {
+		
+        if(empty($restriction['has'])) {
             $table = new Tri_Db_Table('content');
             $contentAccess = new Tri_Db_Table('content_access');
             $this->view->data = $table->find($id)->current();
