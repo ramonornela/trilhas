@@ -19,7 +19,7 @@
 
 /**
  * @category   Exercise
- * @package    Exercise_Form_Exercise
+ * @package    Exercise_Form
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */

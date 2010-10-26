@@ -1,8 +1,11 @@
-<div class="exercise">
-<?php echo $this->form?>
+<div class="exercise-question">
+    <div class="right">
+        <?php echo $this->ajax('back', 'exercise/question', 2) ?>
+    </div>
+    <?php echo $this->form?>
 </div>
 <script type="text/javascript">
-	$(".exercise form").submit(function() {
+	$(".exercise-question form").submit(function() {
         var $this = $(this);
 		$.post(this.action, $this.serialize(), function(data) {
             $this.parents('.content').html(data);
@@ -13,4 +16,30 @@
     $('#status').other();
 
     $('input[type=button], input[type=submit]').button();
+
+    var $a = $('<a href="">');
+    $a.text('<?php echo $this->translate('add option')?>');
+    $a.click(function(){
+        var $this = $(this),
+            $div = $this.prev().prev(),
+            $newDiv = $div.clone(),
+            $right = $newDiv.find('input[name=right_option]'),
+            $id = $newDiv.find('input[type=hidden]'),
+            $area = $newDiv.find('textarea');
+
+        $area.empty();
+        $id.val('');
+        $right.val(parseInt($right.val())+1);
+
+        $this.prev().before('<br />')
+                    .before($newDiv);
+        return false;
+    });
+    
+    $('#option-element').append('<br />')
+                        .append($a);
+
+    <?php if ($this->update) :?>
+        $('.exercise').parents('.content').load('exercise/index/form/id/<?php echo $this->exerciseId?>');
+    <?php endif;?>
 </script>

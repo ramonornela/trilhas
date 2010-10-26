@@ -52,14 +52,8 @@ class Exercise_Form_Question extends Zend_Form
                     ->setAttrib('rows', 10)
                     ->setAllowEmpty(false);
 
-        $note = new Zend_Form_Element_Text('note');
-        $note->setLabel('Note')
-             ->addValidators($validators['note'])
-             ->addFilters($filters['note']);
-
         $this->addElement($id)
-             ->addElement($description)
-             ->addElement($note);
+             ->addElement($description);
     }
 
     public function addMultipleText($questionId = null)
@@ -78,16 +72,19 @@ class Exercise_Form_Question extends Zend_Form
             $option = new Tri_Db_Table('exercise_option');
             $options = $option->fetchAll(array('exercise_question_id = ?' => $questionId));
 
-            foreach ($options as $value) {
-                if ($value->status == 'right') {
-                    $multiple->setAttrib('checked', $value->id);
+            if (count($options)) {
+                foreach ($options as $value) {
+                    if ($value->status == 'right') {
+                        $multiple->setAttrib('checked', (int) $value->id);
+                    }
+                    $multiple->addMultiOption($value->id, $value->description);
                 }
-                $multiple->addMultiOption($value->id, $value->description);
-            }
+            } 
         } else {
-           $multiple->setMultiOptions(array(''));
+           $multiple->setAttrib('checked', 0);
+           $multiple->setMultiOptions(array('','' => '',' ' => ''));
         }
-
+        
         if (!$statusOptions || isset($statusOptions[''])) {
             $status = new Zend_Form_Element_Text('status');
         } else {
@@ -97,10 +94,17 @@ class Exercise_Form_Question extends Zend_Form
                    ->setRegisterInArrayValidator(false);
         }
 
+        $note = new Zend_Form_Element_Text('note');
+        $note->setLabel('Note')
+             ->addValidators($validators['note'])
+             ->addFilters($filters['note']);
+
         $status->setLabel('Status')
                ->addValidators($validators['status'])
                ->addFilters($filters['status']);
+
         $this->addElement($multiple)
+             ->addElement($note)
              ->addElement($status)
              ->addElement('submit', 'Save');
    }

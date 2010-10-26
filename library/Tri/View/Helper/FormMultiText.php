@@ -87,8 +87,10 @@ class Tri_View_Helper_FormMultiText extends Zend_View_Helper_FormElement
         }
 
         //get cehcked
-        $checkedId = $attribs['checked'];
-        unset($attribs['checked']);
+        if (isset($attribs['checked'])) {
+            $checkedId = $attribs['checked'];
+            unset($attribs['checked']);
+        }
         // ensure value is an array to allow matching multiple times
         $value = (array) $value;
 
@@ -101,6 +103,7 @@ class Tri_View_Helper_FormMultiText extends Zend_View_Helper_FormElement
         // add radio buttons to the list.
         require_once 'Zend/Filter/Alnum.php';
         $filter = new Zend_Filter_Alnum();
+        $i = 0;
         foreach ($options as $opt_value => $opt_label) {
 
             // Should the label be escaped?
@@ -110,10 +113,10 @@ class Tri_View_Helper_FormMultiText extends Zend_View_Helper_FormElement
 
             //checked
             $checked = '';
-            if ($checkedId == $opt_value) {
+            if ($checkedId === $opt_value) {
                 $checked = 'checked="checked"';
             }
-
+        
             // is it disabled?
             $disabled = '';
             if (true === $disable) {
@@ -126,9 +129,10 @@ class Tri_View_Helper_FormMultiText extends Zend_View_Helper_FormElement
             $optId = $id . '-' . $filter->filter($opt_value);
 
             // Wrap the textareas
-            $radio = '<input style="float: left;" type="radio" '
+            $radio = '<div>'
+                    . '<input style="float: left;" type="radio" '
                     . ' name="right_' . substr($name, 0, -2) . '"'
-                    . ' value="' . $this->view->escape($opt_value) . '"'
+                    . ' value="' . $i . '"'
                     . $checked
                     . $endTag
                     . '<textarea '
@@ -141,10 +145,12 @@ class Tri_View_Helper_FormMultiText extends Zend_View_Helper_FormElement
                     . '<input type="hidden" '
                     . ' name="id_' . $name . '"'
                     . ' value="' . $this->view->escape($opt_value) . '"'
-                    . $endTag;
+                    . $endTag
+                    . '</div>';
 
             // add to the array of radio buttons
             $list[] = $radio;
+            $i++;
         }
 
         // done!

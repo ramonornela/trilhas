@@ -34,6 +34,10 @@ class Exercise_IndexController extends Tri_Controller_Action
 
             if ($row) {
                 $form->populate($row->toArray());
+                $question = new Tri_Db_Table('exercise_question');
+                $where    = array('exercise_id = ?' => $id);
+                $this->view->questions = $question->fetchAll($where, 'position');
+                $this->view->id = $id;
             }
         }
 
@@ -46,7 +50,9 @@ class Exercise_IndexController extends Tri_Controller_Action
         $table = new Tri_Db_Table('exercise');
         $session = new Zend_Session_Namespace('data');
         $data  = $this->_getAllParams();
-
+        $questionIds = $data['question_id'];
+        $removeIds = $data['remove_id'];
+        
         if ($form->isValid($data)) {
             $data = $form->getValues();
             $data['user_id']      = Zend_Auth::getInstance()->getIdentity()->id;
@@ -60,6 +66,9 @@ class Exercise_IndexController extends Tri_Controller_Action
                 $row = $table->find($data['id'])->current();
                 $row->setFromArray($data);
                 $id = $row->save();
+
+                Exercise_Model_Question::remove($removeIds);
+                Exercise_Model_Question::associate($id, $questionIds);
             } else {
                 unset($data['id']);
                 $row = $table->createRow($data);

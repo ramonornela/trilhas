@@ -48,6 +48,9 @@
 "users";"Matriculados"
 "back";"Voltar"
 "all";"Todos"
+"add";"Adicionar"
+"remove";"Remover"
+"Question bank";"Banco de perguntas"
 
 #message
 "there are no records";"Não existem registros"
@@ -117,3 +120,4 @@
 "User list";"Lista de usuários"
 "last versions";"Últimas versões"
 "Free";"Livre"
+"Question's list";"Lista de perguntas"
