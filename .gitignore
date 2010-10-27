@@ -25,6 +25,10 @@
 *.log
 *.sqlite
 
+# Default files
+####################
+*.default
+
 # OS generated files #
 ######################
 .DS_Store?
