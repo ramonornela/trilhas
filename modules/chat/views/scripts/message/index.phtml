@@ -13,6 +13,13 @@
     </div>
 </div>
 <?php if ($this->userId != Zend_Auth::getInstance()->getIdentity()->id):?>
+	<span class="left">
+		<img alt="<?php echo $this->userName ?>" title="<?php echo $this->userName ?>" width="30" src="upload/<?php echo $this->thumbnail($this->userImage, 'small') ?>" />
+	</span>
+	<span class="left margin">
+		<b><?php echo $this->userName?></b>
+	</span>
+	<br /><br />
     <div class="message">
         <?php echo $this->form?>
     </div>
@@ -20,23 +27,43 @@
 <?php if(count($this->data)):?>
 <table class="datatable" style="width: 75%">
         <?php foreach($this->data as $data): ?>
-            <tr>
+			<tr>
                 <td>
-                    <img alt="<?php echo $data->name ?>" src="upload/<?php echo $this->thumbnail($data->image, 'small') ?>" /><br />
-                    <?php echo $data->name ?><br />
-                    <?php echo $this->date($data->created)?>
+					<?php
+						$image = "<img alt='{$data->name}' title='{$data->name}' width='100' src='upload/" .$this->thumbnail($data->image, 'medium'). "' />";
+					?>
+					
+					<?php echo $this->ajax($image, 'chat/message/index/userId/'.$data->sender)?>
+					</a><br />
                 </td>
-                <td><?php echo nl2br($data->description)?></td>
+                <td>
+					<?php echo nl2br($data->description)?>
+					<div class="message-reply-textarea"></div>
+				</td>
                 <td nowrap="nowrap">
                     <?php $id = Zend_Auth::getInstance()->getIdentity()->id;?>
+					<?php if ($this->userId == $id):?>
+                        <input type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all message-reply" value="<?php echo $this->translate('reply') ?>" />
+						<input type="hidden" name="person-receiver" value="<?php echo $data->sender?>">
+                    <?php endif; ?>
                     <?php if ($data->sender == $id || $this->userId == $id) :?>
-                        <?php if ($this->userId != Zend_Auth::getInstance()->getIdentity()->id):?>
+                        <?php if ($this->userId != $id):?>
                             <?php echo $this->ajax("edit", 'chat/message/index/id/'. $data->id.'/userId/'.$this->userId, 2); ?>
                         <?php endif; ?>
                         <?php echo $this->ajax("delete", 'chat/message/delete/id/' . $data->id.'/userId/'.$this->userId, 2 , "want to delete?");?>
                     <?php endif;?>
                 </td>
             </tr>
+			<tr>
+				<td colspan="3" class="message-reply">
+					Enviado: <?php echo $this->date($data->created, "chat")?>
+				</td>	
+			</tr>
+			<tr>
+				<td colspan="3">
+					<br/>
+				</td>	
+			</tr>
         <?php endforeach;?>
         </table>
         <div id="notepad-page">
@@ -55,4 +82,13 @@
 	});
     
     $('input[type=button], input[type=submit]').button();
+
+	$('.message-reply').click(function(){
+		var $el = $(this).parent().prev().find('.message-reply-textarea'),
+			receiver = $(this).next().val();
+		    url = "chat/message/reply/receiverId/"+receiver;
+
+        $el.load(url);
+        return false;
+    });
 </script>

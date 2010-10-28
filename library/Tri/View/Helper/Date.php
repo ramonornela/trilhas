@@ -30,8 +30,17 @@ require_once 'Zend/View/Helper/Abstract.php';
  */
 class Tri_View_Helper_Date extends Zend_View_Helper_Abstract
 {
-    public function date($value)
+    public function date($value, $type = "")
     {
-        return Zend_Filter::filterStatic($value, 'date', array(), 'Tri_Filter');
+		if ('chat' === $type) {
+			$date = new Zend_Date($value);
+			if ($date->isToday()) {
+				return $date->toString('H:m');
+			} else {
+				return $date->toString('d/MM/y H:m');
+			}
+		}
+        
+		return Zend_Filter::filterStatic($value, 'date', array(), 'Tri_Filter');
     }
 }
