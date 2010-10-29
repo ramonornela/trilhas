@@ -25,12 +25,24 @@
  */
 class UserController extends Tri_Controller_Action
 {
+	/**
+	 * Init
+ 	 *
+	 * Call parent init and set title box.
+	 *
+	 * @return void
+	 */
     public function init()
     {
         parent::init();
         $this->view->title = "User";
     }
-
+	
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
@@ -49,7 +61,12 @@ class UserController extends Tri_Controller_Action
         $paginator = new Tri_Paginator($select, $page);
         $this->view->data = $paginator->getResult();
     }
-
+	
+	/**
+	 * Action login.
+	 *
+	 * @return void
+	 */
     public function loginAction()
     {
         $this->view->title = "Login";
@@ -95,7 +112,12 @@ class UserController extends Tri_Controller_Action
         }
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action form.
+	 *
+	 * @return void
+	 */
     public function formAction()
     {
         $userId   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -122,7 +144,12 @@ class UserController extends Tri_Controller_Action
         }
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action save.
+	 *
+	 * @return void
+	 */
     public function saveAction()
     {
         $form  = new Application_Form_User();
@@ -162,12 +189,23 @@ class UserController extends Tri_Controller_Action
         $this->render('form');
     }
     
+	/**
+	 * Action logout.
+	 *
+	 * @return void
+	 */
     public function logoutAction()
     {
 		Zend_Auth::getInstance()->clearIdentity();
 		$this->_redirect( "/index" );
     }
-
+	
+	/**
+	 * Action reset.
+	 *
+	 * @todo implement functionality. 
+	 * @return void
+	 */
     public function resetAction()
     {
 

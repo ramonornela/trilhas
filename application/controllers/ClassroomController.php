@@ -25,12 +25,25 @@
  */
 class ClassroomController extends Tri_Controller_Action
 {
+   /**
+    * Init
+    *
+	* Call parent init and set title box.
+	*
+    * @return void
+	**/
     public function init()
     {
         parent::init();
         $this->view->title = "Classroom";
     }
-
+	
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 * @author Italo Queiroz
+	 */
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
@@ -49,7 +62,11 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->data = $paginator->getResult();
     }
 
-
+	/**
+	 * Action view.
+	 *
+	 * @return void
+	 */
     public function viewAction()
     {
         $classroom = new Zend_Db_Table('classroom');
@@ -76,7 +93,12 @@ class ClassroomController extends Tri_Controller_Action
         
         $this->_helper->layout->setLayout('layout');
     }
-
+	
+	/**
+	 * Action form.
+	 *
+	 * @return void
+	 */
     public function formAction()
     {
         $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -93,7 +115,12 @@ class ClassroomController extends Tri_Controller_Action
 
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action save.
+	 *
+	 * @return void
+	 */
     public function saveAction()
     {
         $form  = new Application_Form_Classroom();
@@ -126,7 +153,12 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->form = $form;
         $this->render('form');
     }
-
+	
+	/**
+	 * Action sign.
+	 *
+	 * @return void
+	 */
     public function signAction()
     {
         $data = array();
@@ -146,7 +178,12 @@ class ClassroomController extends Tri_Controller_Action
         }
         $this->view->messages = array('Unavailable');
     }
-
+	
+	/**
+	 * Action pay.
+	 *
+	 * @return void
+	 */
     public function payAction()
     {
         $classroom = new Tri_Db_Table('classroom');
@@ -159,7 +196,12 @@ class ClassroomController extends Tri_Controller_Action
         
         $this->view->data = $classroom->fetchRow($select);
     }
-
+	
+	/**
+	 * Action register.
+	 *
+	 * @return void
+	 */
     public function registerAction()
     {
         $session = new Zend_Session_Namespace('data');
@@ -174,7 +216,11 @@ class ClassroomController extends Tri_Controller_Action
         $this->_redirect('/dashboard');
     }
 
-
+	/**
+	 * Action list user.
+	 *
+	 * @return void
+	 */
     public function listUserAction()
     {
         $id = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -197,7 +243,12 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->classroom = $classroom->fetchRow($select);
         $this->view->id = $id;
     }
-
+	
+	/**
+	 * Action matriculate.
+	 *
+	 * @return void
+	 */
     public function matriculateAction()
     {
         $id = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -219,7 +270,12 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->data = $paginator->getResult();
         $this->view->id = $id;
     }
-
+	
+	/**
+	 * Action search user.
+	 *
+	 * @return void
+	 */
     public function searchUserAction()
     {
         $id    = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -241,7 +297,12 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->id = $id;
         $this->render('matriculate');
     }
-
+	
+	/**
+	 * Action delete.
+	 *
+	 * @return void
+	 */
     public function deleteAction()
     {
         $id     = Zend_filter::filterStatic($this->_getParam('id'), 'int');

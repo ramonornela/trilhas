@@ -54,7 +54,14 @@ class Application_Model_Timeline
         
         return $table->fetchAll($select);
     }
-
+	
+	/**
+	 * Save timeline
+	 *
+	 * @param string $description 
+	 * @param string $postInfo 
+	 * @return void
+	 */
     public static function save($description, $postInfo = null)
     {
         $timeline  = new Tri_Db_Table('timeline');

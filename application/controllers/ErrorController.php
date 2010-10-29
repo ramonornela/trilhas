@@ -25,6 +25,13 @@
  */
 class ErrorController extends Tri_Controller_Action
 {
+	/**
+	 * Action error.
+	 *
+	 * Implement layout for treatment of error.
+	 *
+	 * @return void
+	 */
 	public function errorAction()
 	{
         $e = $this->_getParam('error_handler')->exception;

@@ -25,6 +25,11 @@
  */
 class DashboardController extends Tri_Controller_Action
 {
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
@@ -37,7 +42,12 @@ class DashboardController extends Tri_Controller_Action
         $this->view->user     = $identity;
         $this->_helper->layout->setLayout('layout');
     }
-
+	
+	/**
+	 * Action more.
+	 *
+	 * @return void
+	 */
     public function moreAction()
     {
         $page = Zend_Filter::filterStatic($this->_getParam('page'), 'int');

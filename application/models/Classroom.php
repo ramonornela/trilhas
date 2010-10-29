@@ -73,7 +73,13 @@ class Application_Model_Classroom
         
         return $data;
     }
-
+	
+	/**
+	 * Verify if class it's available
+	 *
+	 * @param int $id 
+	 * @return boolean
+	 */
     public static function isAvailable($id)
     {
         $classroom     = new Tri_Db_Table('classroom');

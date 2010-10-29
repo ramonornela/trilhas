@@ -25,12 +25,24 @@
  */
 class CourseController extends Tri_Controller_Action
 {
+	/**
+	 * Init
+ 	 *
+	 * Call parent init and set title box.
+	 *
+	 * @return void
+	 */
     public function init()
     {
         parent::init();
         $this->view->title = "Course";
     }
-
+	
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
@@ -45,7 +57,12 @@ class CourseController extends Tri_Controller_Action
         $paginator = new Tri_Paginator($select, $page);
         $this->view->data = $paginator->getResult();
     }
-
+	
+	/**
+	 * Action view
+	 *
+	 * @return void
+	 */
     public function viewAction()
     {
         $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -59,7 +76,12 @@ class CourseController extends Tri_Controller_Action
             $this->view->classroom = $classroom->fetchAll($where, 'begin');
         }
     }
-
+	
+	/**
+	 * Action form
+	 *
+	 * @return void
+	 */
     public function formAction()
     {
         $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -76,7 +98,12 @@ class CourseController extends Tri_Controller_Action
 
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action save
+	 *
+	 * @return void
+	 */
     public function saveAction()
     {
         $form  = new Application_Form_Course();

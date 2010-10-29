@@ -25,6 +25,11 @@
  */
 class IndexController extends Tri_Controller_Action
 {
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
         $course   = new Tri_Db_Table('course');
