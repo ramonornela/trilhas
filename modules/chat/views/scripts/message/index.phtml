@@ -43,7 +43,7 @@
                 <td nowrap="nowrap">
                     <?php $id = Zend_Auth::getInstance()->getIdentity()->id;?>
 					<?php if ($this->userId == $id):?>
-                        <input type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all message-reply" value="<?php echo $this->translate('reply') ?>" />
+                        <input type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all message-reply-button" value="<?php echo $this->translate('reply') ?>" />
 						<input type="hidden" name="person-receiver" value="<?php echo $data->sender?>">
                     <?php endif; ?>
                     <?php if ($data->sender == $id || $this->userId == $id) :?>
@@ -83,7 +83,7 @@
     
     $('input[type=button], input[type=submit]').button();
 
-	$('.message-reply').click(function(){
+	$('.message-reply-button').click(function(){
 		var $el = $(this).parent().prev().find('.message-reply-textarea'),
 			receiver = $(this).next().val();
 		    url = "chat/message/reply/receiverId/"+receiver;
