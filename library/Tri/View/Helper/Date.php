@@ -30,9 +30,9 @@ require_once 'Zend/View/Helper/Abstract.php';
  */
 class Tri_View_Helper_Date extends Zend_View_Helper_Abstract
 {
-    public function date($value, $type = "")
+    public function date($value, $displayTime = false)
     {
-		if ('chat' === $type) {
+		if ($displayTime) {
 			$date = new Zend_Date($value);
 			if ($date->isToday()) {
 				return $date->toString('H:m');
