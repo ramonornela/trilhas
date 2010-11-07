@@ -10,18 +10,12 @@ class Exercise_QuestionController extends Tri_Controller_Action
     public function indexAction()
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
-        $table    = new Tri_Db_Table('exercise_question');
         $session  = new Zend_Session_Namespace('data');
         $page     = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
         $id       = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
 
-        $select = $table->select(true)->setIntegrityCheck(false)
-                        ->joinLeft('exercise', 'exercise.id = exercise_question.exercise_id', array('name'))
-                        ->where('exercise_question.status = ?', 'active')
-                        ->where('(exercise.id = exercise_question.exercise_id AND classroom_id = ?)
-                                  OR exercise_question.exercise_id IS NULL', $session->classroom_id)
-                        ->order('id DESC');
-
+        $select = Exercise_Model_Question::available($session->classroom_id);
+        
         $session->exercise_id = null;
         
         if ($id) {
@@ -61,9 +55,10 @@ class Exercise_QuestionController extends Tri_Controller_Action
         $session = new Zend_Session_Namespace('data');
         $allData = $this->_getAllParams();
 
+        $form->addMultipleText();
+
         if ($form->isValid($allData)) {
             $data = $form->getValues();
-
             if (isset($data['id']) && $data['id']) {
                 $row = $table->find($data['id'])->current();
                 $row->setFromArray($data);
@@ -71,7 +66,7 @@ class Exercise_QuestionController extends Tri_Controller_Action
             } else {
                 unset($data['id']);
                 if (isset($session->exercise_id) && $session->exercise_id) {
-                    $data['exercise_id'] = $session->exercise_id;
+                    $exerciseId = $data['exercise_id'] = $session->exercise_id;
                 }
                 $row = $table->createRow($data);
                 $id = $row->save();
@@ -83,24 +78,30 @@ class Exercise_QuestionController extends Tri_Controller_Action
                     if ($allData['right_option'] == $key) {
                         $status = "right";
                     }
-                    
-                    if (isset($allData['id_option'][$key]) && $allData['id_option'][$key] != 0) {
-                        $row = $option->find($allData['id_option'][$key])->current();
-                        $row->setFromArray(array('description' => $value,
-                                                 'status' => $status));
-                        $row->save();
+
+                    if ($value) {
+                        if (isset($allData['id_option'][$key]) && $allData['id_option'][$key] != 0) {
+                            $row = $option->find($allData['id_option'][$key])->current();
+                            $row->setFromArray(array('description' => $value,
+                                                     'status' => $status));
+                            $row->save();
+                        } else {
+                            $data = array('description' => $value,
+                                          'exercise_question_id' => $id,
+                                          'status' => $status);
+                            $row = $option->createRow($data);
+                            $row->save();
+                        }
                     } else {
-                        $data = array('description' => $value,
-                                      'exercise_question_id' => $id,
-                                      'status' => $status);
-                        $row = $option->createRow($data);
-                        $row->save();
+                        if (isset($allData['id_option'][$key]) && $allData['id_option'][$key] != 0) {
+                            $option->find($allData['id_option'][$key])->current()->delete();
+                        }
                     }
                 }
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('exercise/question/form/update/true/id/'.$id);
+            $this->_redirect('exercise/question/index/id/'. $exerciseId);
         }
 
         $this->view->messages = array('Error');

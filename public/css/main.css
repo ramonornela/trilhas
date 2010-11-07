@@ -66,6 +66,12 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 
 .course-image{float: left; margin: 0 10px 10px 0;}
 
+.reply ol li{margin-bottom: 30px;}
+.reply ul{margin: 10px 0; padding: 0; list-style: none;}
+.reply ul li{margin-bottom: 10px;}
+.reply li.right{color: green; float: none; font-weight: bold;}
+.reply li.wrong{color: red; font-weight: bold;}
+
 .classroom-list{border: 1px solid #eee; float: right; padding: 0 10px 5px 10px; margin: 0 0 5px 5px; background: #fff;}
 .classroom-list table{border-collapse: collapse;}
 .classroom-list table thead{background: #ddd;}
@@ -90,11 +96,13 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 
 .message-reply{text-align:right; font-size:80%; color:#BBB; border-bottom:1px solid #BBB; margin-bottom:10px;}
 
+.forum .name{color: #ccc;}
+
 .forgot{ padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px dotted; font-size: 0.8em;}
 
 .paginationControl{text-align: center; margin-top: 10px;}
 
-.list-user{float: right; width: 180px; border-left:dashed 1px; padding-left: 5px;}
+.list-user{float: right; width: 180px; border-left:dashed 1px; padding-left: 10px;}
 .list-user .list{overflow: auto; height: 140px;}
 .list-user .item{clear: both; margin-bottom: 15px;}
 .list-user .item img{float: left; margin-right: 5px;}

@@ -77,8 +77,9 @@ class Tri_View_Helper_FormMultiText extends Zend_View_Helper_FormElement
         // the radio button values and labels
         $options = (array) $options;
         // build the element
-        $xhtml = '';
-        $list  = array();
+        $xhtml     = '';
+        $list      = array();
+        $checkedId = null;
 
         // should the name affect an array collection?
         $name = $this->view->escape($name);

@@ -43,4 +43,9 @@ class IndexController extends Tri_Controller_Action
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
         $this->_helper->layout->setLayout('layout');
     }
+
+    public function keepSessionAction()
+    {
+        exit('ok');
+    }
 }

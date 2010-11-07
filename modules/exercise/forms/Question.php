@@ -61,7 +61,8 @@ class Exercise_Form_Question extends Zend_Form
         $table         = new Tri_Db_Table('exercise_question');
         $validators    = $table->getValidators();
         $filters       = $table->getFilters();
-        $statusOptions = $table->fetchPairs('status', 'status');
+        $statusOptions = array('active' => 'active',
+                               'inactive' => 'inactive');
 
         $multiple = new Tri_Form_Element_MultiText('option');
         $multiple->setLabel('Options')
@@ -79,7 +80,10 @@ class Exercise_Form_Question extends Zend_Form
                     }
                     $multiple->addMultiOption($value->id, $value->description);
                 }
-            } 
+            } else {
+               $multiple->setAttrib('checked', 0);
+               $multiple->setMultiOptions(array('','' => '',' ' => ''));
+            }
         } else {
            $multiple->setAttrib('checked', 0);
            $multiple->setMultiOptions(array('','' => '',' ' => ''));

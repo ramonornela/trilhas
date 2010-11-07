@@ -103,6 +103,7 @@ class Tri_Db_Table extends Zend_Db_Table
                 case 'int4':
                 case 'int2':
                 case 'bigint':
+                case 'tinyint':
                 case 'smallint':
                 case 'bigint':
                 case 'integer':
@@ -157,6 +158,7 @@ class Tri_Db_Table extends Zend_Db_Table
                 case 'int2':
                 case 'bigint':
                 case 'smallint':
+                case 'tinyint':
                 case 'numeric':
                 case 'bigint':
                 case 'integer':

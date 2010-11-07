@@ -12,6 +12,7 @@
 			<th width="250"><?php echo $this->translate("Title")?></th>
             <th><?php echo $this->translate("Begin")?></th>
             <th><?php echo $this->translate("End")?></th>
+            <th><?php echo $this->translate("Attemps")?></th>
             <th><?php echo $this->translate("Time")?></th>
 			<?php if($this->isAllowed("form")): ?>
 				<th></th>
@@ -31,15 +32,24 @@
                 <td><?php echo $this->date($data->begin)?></td>
                 <td>
                     <?php if (isset($data->end) && $data->end): ?>
-                            <?php echo $this->date($data->end) ?>
+                        <?php echo $this->date($data->end) ?>
                     <?php else: ?>
-                            ---
+                        ---
                     <?php endif;?>
                 </td>
                 <td>
+                    <?php
+                        if ($data->attempts) {
+                            echo $data->attempts;
+                        } else {
+                            echo $this->translate('Free');
+                        }
+                    ?>
+                </td>
+                <td>
                     <?php 
-                        if (isset($data->time) && $data->time) {
-                            echo $this->date($data->time);
+                        if ($data->time) {
+                            echo $data->time . ' ' . $this->translate('minutes');
                         } else {
                             echo $this->translate('Free');
                         }

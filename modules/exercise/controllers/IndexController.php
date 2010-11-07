@@ -16,7 +16,6 @@ class Exercise_IndexController extends Tri_Controller_Action
 
         if ($identity->role == 'student') {
             $where['begin  <= ?'] = date('Y-m-d');
-            $where['end >= ? OR end IS NULL'] = date('Y-m-d');
             $where['status IN(?)'] = array('active','final');
         }
         

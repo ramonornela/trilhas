@@ -28,7 +28,7 @@
 <table class="datatable" style="width: 75%">
         <?php foreach($this->data as $data): ?>
 			<tr>
-                <td>
+                <td width="110">
 					<?php
 						$image = "<img alt='{$data->name}' title='{$data->name}' width='100' src='upload/" .$this->thumbnail($data->image, 'medium'). "' />";
 					?>
@@ -56,12 +56,7 @@
             </tr>
 			<tr>
 				<td colspan="3" class="message-reply">
-					Enviado: <?php echo $this->date($data->created, "chat")?>
-				</td>	
-			</tr>
-			<tr>
-				<td colspan="3">
-					<br/>
+					<?php echo $this->date($data->created, true)?>
 				</td>	
 			</tr>
         <?php endforeach;?>

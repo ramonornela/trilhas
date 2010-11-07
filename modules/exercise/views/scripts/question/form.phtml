@@ -13,7 +13,6 @@
         return false;
 	});
     $('.date').datepicker();
-    $('#status').other();
 
     $('input[type=button], input[type=submit]').button();
 
@@ -38,8 +37,4 @@
     
     $('#option-element').append('<br />')
                         .append($a);
-
-    <?php if ($this->update) :?>
-        $('.exercise').parents('.content').load('exercise/index/form/id/<?php echo $this->exerciseId?>');
-    <?php endif;?>
 </script>

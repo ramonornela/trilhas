@@ -12,6 +12,7 @@
 			<th width="250"><?php echo $this->translate("Description")?></th>
             <th><?php echo $this->translate("Note")?></th>
             <th><?php echo $this->translate("Exercise")?></th>
+            <th><?php echo $this->translate("Status")?></th>
 			<?php if($this->isAllowed("form")): ?>
 				<th></th>
 			<?php endif;?>
@@ -21,6 +22,7 @@
                 <td><?php echo $data->description?></td>
                 <td><?php echo $data->note?></td>
                 <td><?php echo $data->name ? $data->name : '---'?></td>
+                <td><?php echo $this->translate($data->status)?></td>
                 <td>
                     <input class="add-question" type="button" value="<?php echo $this->translate('add')?>">&nbsp;
                     <input type="hidden" value="<?php echo $data->id?>">
@@ -48,7 +50,7 @@
             html = '<div class="question">'
                  + '<input type="button" value="<?php echo $this->translate('remove')?>" />&nbsp;\n'
                  + '<input type="hidden" value="' + $this.next().val() + '" />'
-                 + $this.parent().prev().prev().prev().text();
+                 + $this.parent().prev().prev().prev().prev().text();
                  + '</div>';
         $('#question-list h3').after(html);
         $('input[type=button], input[type=submit]').button();

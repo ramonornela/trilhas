@@ -30,7 +30,7 @@
 "timeline";"Linha do tempo"
 
 #buttons
-"previous";"Anterior"
+"previous content";"Anterior"
 "next content";"Próxima"
 "next";"Próxima"
 "dashboard";"Inicial"
@@ -51,13 +51,16 @@
 "all";"Todos"
 "add";"Adicionar"
 "remove";"Remover"
-"Question bank";"Banco de perguntas"
+"remove";"Remover"
+"send";"Enviar"
 
 #message
 "there are no records";"Não existem registros"
 "No register";"Não existem registros"
 "You are not registred in a classroom. See";"Você não está matriculado em uma turma. Veja"
 "want to delete?";"Deseja realmente excluir?"
+"Number of attempts exec";"Número de tentativas execido"
+"Expired period";"Período expirado"
 
 #timeline
 "saved a new file";"adicionou um novo arquivo"
@@ -93,12 +96,16 @@
 "Position";"Posição"
 "Options";"Opções"
 "Note";"Nota"
+"value";"Valor"
+"Attemps";"Tentativas"
 
 #status
 "active";"Ativo"
 "inactive";"Inativo"
 "open";"Aberto"
 "final";"Final"
+"right";"Certo"
+"wrong";"Errado"
 
 #titles
 "Message";"Mensagem"
@@ -122,3 +129,5 @@
 "last versions";"Últimas versões"
 "Free";"Livre"
 "Question's list";"Lista de perguntas"
+"Exercise reply";"Avaliação"
+"previous";"Anteriores"
