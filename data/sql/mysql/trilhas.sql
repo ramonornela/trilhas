@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 21, 2010 at 01:40 PM
+-- Generation Time: Nov 07, 2010 at 02:02 AM
 -- Server version: 5.1.50
 -- PHP Version: 5.3.2
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `activity`
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS `activity` (
 INSERT INTO `activity` (`id`, `user_id`, `classroom_id`, `title`, `description`, `begin`, `end`, `status`) VALUES
 (1, 2, 7, 'Atividade 1', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using ''Content here, content here'', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for ''lorem ipsum'' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', '2010-09-30', '2010-10-06', 'active'),
 (2, 4, 3, 'Texto sobre isso', 'Caracas  em lembrava disso', '2010-09-21', '2010-12-30', 'active'),
-(3, 2, 7, 'caracas', 'sadf a sdf adsf', '2010-10-18', '2010-10-27', 'active');
+(3, 2, 7, 'caracas', 'sadf a sdf adsf', '2010-10-18', '2010-10-27', 'active'),
+(4, 2, 7, 'asdfadsf', 'asdfasdf', '2010-11-03', '2010-11-04', 'active');
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `activity_text` (
   KEY `user_id` (`user_id`),
   KEY `activity_id` (`activity_id`),
   KEY `sender` (`sender`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `activity_text`
@@ -84,7 +85,9 @@ INSERT INTO `activity_text` (`id`, `user_id`, `sender`, `activity_id`, `descript
 (9, 2, 2, 3, 'a sdjfa ldfkjadfkakdljflakdf', 'open', '2010-10-18 19:50:21'),
 (10, 2, 2, 3, 'a sdjfa ldfkjadfkakdljflakdf.,asmdnf,.amndfjkal dfjakdf lkafjdkladf', 'open', '2010-10-18 19:50:26'),
 (11, 4, 4, 3, 'ajklsh lkfjdfjakjlsdf akljhdf lkahdf ka dkfjha lkdfjkad fkljha lksdf kajds flk laksdf', 'open', '2010-10-18 19:51:11'),
-(12, 4, 4, 3, 'ajklsh lkfjdfjakjlsdf akljhdf lkahdf ka dkfjha lkdfjkad \n\nfkljha lksdf kajds flk laksdf\n\nasd,f am;sd fasdf', 'open', '2010-10-18 19:51:18');
+(12, 4, 4, 3, 'ajklsh lkfjdfjakjlsdf akljhdf lkahdf ka dkfjha lkdfjkad \n\nfkljha lksdf kajds flk laksdf\n\nasd,f am;sd fasdf', 'open', '2010-10-18 19:51:18'),
+(13, 2, 2, 4, 'asd.jfh akjlsfkjadsfkjaskldahsdf', 'open', '2010-11-03 14:17:29'),
+(14, 2, 2, 4, 'asd.jfh akjlsfkjadsfkjaskldahsdfa.djf asdfasdljkf ajlsdhgf kajshdg fahjgsd jfhasdf', 'open', '2010-11-03 14:17:40');
 
 -- --------------------------------------------------------
 
@@ -102,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `calendar` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `calendar`
@@ -110,7 +113,8 @@ CREATE TABLE IF NOT EXISTS `calendar` (
 
 INSERT INTO `calendar` (`id`, `user_id`, `classroom_id`, `description`, `begin`, `end`) VALUES
 (8, 2, 3, 'jkas dfjkadsfkjasflakjsdfkasdf', '2010-09-27', NULL),
-(9, 4, NULL, 'aviso geral. todos os cursos estarão bonitos no dia 10. hehehhe', '2010-09-28', '2010-10-30');
+(9, 4, NULL, 'aviso geral. todos os cursos estarão bonitos no dia 10. hehehhe', '2010-09-28', '2010-10-30'),
+(10, 2, 4, 'basf ajskdfklajdfshjkl', '2010-11-03', '2010-11-04');
 
 -- --------------------------------------------------------
 
@@ -339,7 +343,7 @@ CREATE TABLE IF NOT EXISTS `content_access` (
   PRIMARY KEY (`id`),
   KEY `content_id` (`content_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=438 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=503 ;
 
 --
 -- Dumping data for table `content_access`
@@ -782,7 +786,72 @@ INSERT INTO `content_access` (`id`, `content_id`, `user_id`) VALUES
 (434, 3, 2),
 (435, 2, 2),
 (436, 1, 2),
-(437, 1, 2);
+(437, 1, 2),
+(438, 1, 2),
+(439, 1, 2),
+(440, 1, 2),
+(441, 1, 2),
+(442, 7, 2),
+(443, 6, 2),
+(444, 3, 2),
+(445, 1, 2),
+(446, 1, 2),
+(447, 1, 2),
+(448, 1, 2),
+(449, 1, 2),
+(450, 1, 2),
+(451, 1, 2),
+(452, 1, 2),
+(453, 1, 2),
+(454, 1, 2),
+(455, 1, 2),
+(456, 1, 2),
+(457, 1, 2),
+(458, 1, 2),
+(459, 1, 2),
+(460, 1, 2),
+(461, 1, 2),
+(462, 1, 2),
+(463, 1, 2),
+(464, 2, 2),
+(465, 3, 2),
+(466, 6, 2),
+(467, 7, 2),
+(468, 2, 2),
+(469, 7, 2),
+(470, 6, 2),
+(471, 3, 2),
+(472, 1, 2),
+(473, 1, 2),
+(474, 1, 2),
+(475, 1, 2),
+(476, 1, 2),
+(477, 1, 3),
+(478, 1, 2),
+(479, 1, 2),
+(480, 1, 2),
+(481, 1, 2),
+(482, 1, 2),
+(483, 1, 2),
+(484, 1, 2),
+(485, 1, 2),
+(486, 1, 2),
+(487, 1, 2),
+(488, 1, 2),
+(489, 1, 2),
+(490, 1, 2),
+(491, 1, 2),
+(492, 1, 2),
+(493, 1, 2),
+(494, 1, 2),
+(495, 1, 2),
+(496, 1, 2),
+(497, 1, 2),
+(498, 1, 2),
+(499, 1, 2),
+(500, 1, 2),
+(501, 1, 2),
+(502, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -833,15 +902,16 @@ CREATE TABLE IF NOT EXISTS `exercise` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `exercise`
 --
 
 INSERT INTO `exercise` (`id`, `user_id`, `classroom_id`, `name`, `time`, `begin`, `end`, `attempts`, `status`) VALUES
-(1, 2, 7, 'Primeiro w', 0, '2010-10-20', '2010-10-23', 1, 'final'),
-(2, 2, 6, 'Outro', NULL, '2010-10-21', NULL, 2, 'active');
+(1, 2, 7, 'Primeiro', 0, '2010-10-20', '2010-11-23', 1, 'final'),
+(2, 2, 6, 'Outro', NULL, '2010-10-21', NULL, 2, 'active'),
+(3, 2, 7, 'Segundo', 10, '2010-10-26', '2010-11-06', 0, 'active');
 
 -- --------------------------------------------------------
 
@@ -851,17 +921,25 @@ INSERT INTO `exercise` (`id`, `user_id`, `classroom_id`, `name`, `time`, `begin`
 
 CREATE TABLE IF NOT EXISTS `exercise_answer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `exercise_value_id` bigint(20) DEFAULT NULL,
+  `exercise_option_id` bigint(20) NOT NULL,
+  `exercise_note_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `exercise_value_id` (`exercise_value_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `exercise_value_id` (`exercise_option_id`),
+  KEY `exercise_note_id` (`exercise_note_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
 -- Dumping data for table `exercise_answer`
 --
 
+INSERT INTO `exercise_answer` (`id`, `exercise_option_id`, `exercise_note_id`) VALUES
+(14, 8, 14),
+(15, 13, 14),
+(16, 20, 14),
+(17, 9, 15),
+(18, 13, 15),
+(19, 18, 15),
+(22, 23, 23);
 
 -- --------------------------------------------------------
 
@@ -873,16 +951,23 @@ CREATE TABLE IF NOT EXISTS `exercise_note` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `exercise_id` bigint(20) NOT NULL,
-  `note` decimal(4,2) NOT NULL,
+  `note` tinyint(3) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Dumping data for table `exercise_note`
 --
 
+INSERT INTO `exercise_note` (`id`, `user_id`, `exercise_id`, `note`, `created`) VALUES
+(14, 2, 1, 100, '2010-11-04 22:53:41'),
+(15, 2, 1, 33, '2010-11-04 23:53:55'),
+(23, 2, 3, 33, '2010-11-07 00:53:57'),
+(26, 2, 3, 0, '2010-11-07 01:05:16'),
+(27, 2, 3, 0, '2010-11-07 01:21:33');
 
 -- --------------------------------------------------------
 
@@ -898,16 +983,37 @@ CREATE TABLE IF NOT EXISTS `exercise_option` (
   `status` enum('right','wrong') NOT NULL DEFAULT 'wrong',
   PRIMARY KEY (`id`),
   KEY `exercise_question_id` (`exercise_question_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
 
 --
 -- Dumping data for table `exercise_option`
 --
 
 INSERT INTO `exercise_option` (`id`, `exercise_question_id`, `description`, `justify`, `status`) VALUES
-(1, 1, 'Option 1', NULL, 'wrong'),
-(2, 1, 'Option 2', NULL, 'wrong'),
-(3, 1, 'Option 3', NULL, 'right');
+(1, 1, 'Opcao 1', NULL, 'right'),
+(3, 1, 'Opcao 2', NULL, 'wrong'),
+(4, 1, 'Opcao 3', NULL, 'wrong'),
+(5, 1, 'Opcao 4', NULL, 'wrong'),
+(8, 3, 'Opcao 1', NULL, 'right'),
+(9, 3, 'Opcao 2', NULL, 'wrong'),
+(10, 3, 'Opcao 3', NULL, 'wrong'),
+(11, 3, 'Opcao 4', NULL, 'wrong'),
+(12, 4, 'Opcao 2.1', NULL, 'wrong'),
+(13, 4, 'Opcao 2.2', NULL, 'right'),
+(14, 4, 'Opcao 2.3.1', NULL, 'wrong'),
+(18, 6, 'Opcao 3.1', NULL, 'wrong'),
+(19, 6, 'Opcao 3.2', NULL, 'wrong'),
+(20, 6, 'Opcao 3.3', NULL, 'right'),
+(21, 7, 'Opcao 4.1', NULL, 'wrong'),
+(22, 8, 'Opcao 4.1', NULL, 'right'),
+(23, 9, 'Opcao 1', NULL, 'right'),
+(24, 9, 'Opcao 2', NULL, 'wrong'),
+(25, 9, 'Opcao 3', NULL, 'wrong'),
+(26, 9, 'Opcao 4', NULL, 'wrong'),
+(27, 10, 'Opcao 4.1', NULL, 'right'),
+(28, 11, 'Opcao 3.1', NULL, 'wrong'),
+(29, 11, 'Opcao 3.2', NULL, 'wrong'),
+(30, 11, 'Opcao 3.3', NULL, 'right');
 
 -- --------------------------------------------------------
 
@@ -918,24 +1024,29 @@ INSERT INTO `exercise_option` (`id`, `exercise_question_id`, `description`, `jus
 CREATE TABLE IF NOT EXISTS `exercise_question` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `exercise_id` bigint(20) DEFAULT NULL,
+  `parent_id` bigint(20) DEFAULT NULL,
   `description` text NOT NULL,
-  `note` decimal(4,2) DEFAULT NULL,
+  `note` tinyint(3) DEFAULT NULL,
   `position` int(10) DEFAULT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `exercise_question`
 --
 
-INSERT INTO `exercise_question` (`id`, `exercise_id`, `description`, `note`, `position`, `status`) VALUES
-(1, 1, 'Questao 1', '4.00', 0, 'active'),
-(2, 1, 'Questao 2', '2.00', NULL, 'active'),
-(3, 1, 'Questao 3', '2.00', NULL, 'active'),
-(4, NULL, 'Questao 4', '2.00', NULL, 'active'),
-(5, 2, 'Questao 5', '2.00', NULL, 'active');
+INSERT INTO `exercise_question` (`id`, `exercise_id`, `parent_id`, `description`, `note`, `position`, `status`) VALUES
+(1, NULL, NULL, 'Questao 1', 33, NULL, 'active'),
+(3, 1, 1, 'Questao 1', 33, 0, 'active'),
+(4, 1, NULL, 'Questao 2', 33, 1, 'active'),
+(6, 1, NULL, 'Questao 3', 34, 2, 'active'),
+(7, NULL, NULL, 'Questao 4', 0, NULL, 'active'),
+(8, NULL, 7, 'Questao 4', 0, 0, 'inactive'),
+(9, 3, 3, 'Questao 1', 33, 0, 'active'),
+(10, NULL, 8, 'Questao 4', 0, 2, 'inactive'),
+(11, 3, NULL, 'Questao 3', 34, 1, 'active');
 
 -- --------------------------------------------------------
 
@@ -952,7 +1063,7 @@ CREATE TABLE IF NOT EXISTS `faq` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `faq`
@@ -961,7 +1072,8 @@ CREATE TABLE IF NOT EXISTS `faq` (
 INSERT INTO `faq` (`id`, `user_id`, `classroom_id`, `question`, `answer`) VALUES
 (1, 2, 3, 'pq? pqqqq??', 'uai, pq sim! funfa'),
 (2, 2, 3, 'outra pergunta veihhhhhh?', 'serio! outra resposta, hehehhe!'),
-(4, 2, 5, 'Ainda tenho alguns questionamentos...', 'é mesmo?!');
+(4, 2, 5, 'Ainda tenho alguns questionamentos...', 'é mesmo?!'),
+(5, 2, 7, 'Curso - ,.f amsdfm', 'k jadsfja,gsdfg,asgdmf');
 
 -- --------------------------------------------------------
 
@@ -979,7 +1091,7 @@ CREATE TABLE IF NOT EXISTS `file` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `file`
@@ -987,7 +1099,8 @@ CREATE TABLE IF NOT EXISTS `file` (
 
 INSERT INTO `file` (`id`, `user_id`, `classroom_id`, `name`, `location`, `created`) VALUES
 (2, 3, 3, 'poaus dpfoiu paosdfa', '4c9cf52468077', '2010-09-24 15:59:48'),
-(3, 2, 3, 'eqwryoq qoiwer oiquew', '4c9cf54409176', '2010-09-24 16:00:20');
+(3, 2, 3, 'eqwryoq qoiwer oiquew', '4c9cf54409176', '2010-09-24 16:00:20'),
+(4, 2, 7, 'sadf', '4cd61c588098b', '2010-11-07 01:26:16');
 
 -- --------------------------------------------------------
 
@@ -1042,7 +1155,6 @@ CREATE TABLE IF NOT EXISTS `forum_reply` (
 INSERT INTO `forum_reply` (`id`, `forum_id`, `user_id`, `description`, `created`) VALUES
 (6, 1, 2, 'akljdsf lkjfajdfklalkdfhalkjdshflka', '2010-09-24 23:46:37'),
 (9, 1, 2, 'kljas fkjlaslkfjasdf\n\n\nasdflk asdfjalkdflkahdsf\n\nasdfja sdfhakljdflkjasdf', '2010-09-25 00:10:17'),
-(11, 4, 3, 'Cara! TambÃ©m gostei muito...a', '2010-09-28 23:19:18'),
 (13, 4, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', '2010-09-28 23:29:32'),
 (15, 4, 4, 'asdnf kljashdfkja sdfhjkasdf eqrqwerqwerqer', '2010-09-30 23:48:34');
 
@@ -1118,7 +1230,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `sender` (`sender`),
   KEY `receiver` (`receiver`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `message`
@@ -1131,7 +1243,8 @@ INSERT INTO `message` (`id`, `sender`, `receiver`, `description`, `created`) VAL
 (5, 4, 4, 'opa valeu!', '2010-09-29 00:08:30'),
 (7, 3, 4, 'fhufhsdjfhjsdhgj kjnfdsnfjks', '2010-09-30 23:27:33'),
 (9, 4, 3, 's;akdfj afjaldfkja dkfajfakjlhfkladfjakldsf', '2010-09-30 23:43:05'),
-(10, 4, 3, 'asdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hk\n\nasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hk', '2010-09-30 23:43:11');
+(10, 4, 3, 'asdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hk\n\nasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hkasdfha fkjladfkljalkdsfklajdfkjakdjf klajdf kjadkjlfa kljf kljah dklfja kdfakdfajdf akljsd hk', '2010-09-30 23:43:11'),
+(11, 2, 2, 'asf asdf a sdf as df a sdfsa', '2010-11-07 01:29:21');
 
 -- --------------------------------------------------------
 
@@ -1148,7 +1261,7 @@ CREATE TABLE IF NOT EXISTS `notepad` (
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
 --
 -- Dumping data for table `notepad`
@@ -1160,10 +1273,11 @@ INSERT INTO `notepad` (`id`, `classroom_id`, `user_id`, `description`, `created`
 (11, 3, 2, 'qwer', '2010-09-23 09:13:02'),
 (12, 3, 2, 'ZXvzxcv', '2010-09-23 09:13:05'),
 (14, 7, 2, 'oiiiiieeeee', '2010-09-28 23:42:00'),
-(15, 7, 2, 'as fa sdf as df asdfa', '2010-09-28 23:43:05'),
+(15, 7, 2, 'oipadsfj apidfadjfapdiufaisdfiausdfpiaudsf', '2010-09-28 23:43:05'),
 (16, 7, 2, 'sdfghjkl,;.''', '2010-09-28 23:44:02'),
 (17, 7, 2, 'asdfasdfa', '2010-10-18 18:39:17'),
-(18, 7, 2, 'asdf a sdf asdf', '2010-10-18 18:39:57');
+(18, 7, 2, 'asdf a sdf asdf', '2010-10-18 18:39:57'),
+(19, 7, 2, 'asdf asd f asd fa', '2010-11-06 23:49:12');
 
 -- --------------------------------------------------------
 
@@ -1269,7 +1383,7 @@ CREATE TABLE IF NOT EXISTS `timeline` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `timeline`
@@ -1280,7 +1394,11 @@ INSERT INTO `timeline` (`id`, `user_id`, `classroom_id`, `description`, `created
 (2, 2, 7, 'saved new word in glossary - agora sim', '2010-10-07 22:05:01'),
 (3, 2, 5, 'created a new FAQ - Ainda tenho alguns questionamentos...', '2010-10-07 22:18:37'),
 (4, 4, 7, 'saved a new word in the glossary - mais um', '2010-10-07 22:24:39'),
-(5, 2, 7, 'criou uma nova atividade - caracas', '2010-10-18 19:49:37');
+(5, 2, 7, 'criou uma nova atividade - caracas', '2010-10-18 19:49:37'),
+(6, 2, 7, 'created a new exercise', '2010-10-26 19:55:25'),
+(7, 2, 7, 'criou uma nova FAQ - ,.f amsdfm', '2010-11-03 14:14:06'),
+(8, 2, 7, 'criou uma nova atividade - asdfadsf', '2010-11-03 14:17:17'),
+(9, 2, 7, 'adicionou um novo arquivo - sadf', '2010-11-07 01:26:16');
 
 -- --------------------------------------------------------
 
@@ -1421,6 +1539,13 @@ ALTER TABLE `course`
 ALTER TABLE `exercise`
   ADD CONSTRAINT `exercise_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `exercise_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
+
+--
+-- Constraints for table `exercise_answer`
+--
+ALTER TABLE `exercise_answer`
+  ADD CONSTRAINT `exercise_answer_ibfk_2` FOREIGN KEY (`exercise_option_id`) REFERENCES `exercise_option` (`id`),
+  ADD CONSTRAINT `exercise_answer_ibfk_3` FOREIGN KEY (`exercise_note_id`) REFERENCES `exercise_note` (`id`);
 
 --
 -- Constraints for table `exercise_option`
