@@ -1,8 +1,6 @@
 <?php $optionTable = new Tri_Db_Table('exercise_option'); ?>
 <div class="reply">
     <h3><?php echo $this->exercise->name?></h3>
-    <p>Tempo restate: <span class="time"><?php echo $this->exercise->time ? $this->exercise->time : 'Livre'?></span></p>
-
     <?php if (count($this->questions)): ?>
         <ol>
             <?php foreach($this->questions as $question):?>
