@@ -1,0 +1,119 @@
+<div class="panel">
+    <div class="right">
+        <?php
+            if($this->isAllowed( "form" ) ) {
+               echo $this->ajax('Itens', 'panel/index/form', 2);
+            }
+        ?>
+    </div>
+    <div class="list">
+        <?php if (count($this->data)): ?>
+            <table class="datatable">
+                <tr>
+                    <th></th>
+                    <th><?php echo $this->translate('Note')?></th>
+                    <th><?php echo $this->translate('Average')?></th>
+                </tr>
+            <?php foreach($this->data as $user):?>
+                <?php $total = 0?>
+                <tr>
+                    <td width="300">
+                        <img alt="<?php echo $user->name ?>" src="upload/<?php echo $this->thumbnail($user->image, 'small') ?>" />
+                        <?php echo $user->name;?>
+                    </td>
+                    <td>
+                        <?php if (count($this->panel)):?>
+                            <?php $i = 0;?>
+                            <?php $panelNote = new Tri_Db_Table('panel_note');?>
+                            <?php $activityText = new Tri_Db_Table('activity_text');?>
+                                <?php foreach($this->panel as $panel):?>
+                                    <?php
+                                        $background = null;
+                                        if ($panel->type == 'activity') {
+                                            $row = $activityText->fetchRow(array('activity_id = ?' => $panel->item_id,
+                                                                                 'user_id = ?' => $user->id), 'id DESC');
+                                            if ($row) {
+                                                if ($row->status == 'close') {
+                                                    $background = 'background: yellow';
+                                                } elseif ($row->status == 'final') {
+                                                    $background = 'background: gray';
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                    <form action="panel/index/save-note">
+                                        <?php $note = $panelNote->fetchRow(array('panel_id = ?' => $panel->id, 'user_id = ?' => $user->id))?>
+                                        <div class="item">
+                                            <a href="<?php echo $panel->type?>/index/view/layout/box/id/<?php echo $panel->item_id?>/userId/<?php echo $user->id?>">
+                                                <?php echo $this->translate($panel->type)?>
+                                            </a>
+                                            <div class="note">
+                                                <?php $total += $note ? $note->note : '0';?>
+                                                <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'student'):?>
+                                                    <?php echo $note ? $note->note : '0';?>
+                                                <?php else: ?>
+                                                    <input style="<?php echo $background?>" type="text" name="note" value="<?php echo $note ? $note->note : '0';?>" />
+                                                    <input type="hidden" name="user_id" value="<?php echo $user->id?>" />
+                                                    <input type="hidden" name="panel_id" value="<?php echo $panel->id?>" />
+                                                <?php endif?>
+                                            </div>
+                                        </div>
+                                        <?php $i++;?>
+                                    </form>
+                                <?php endforeach;?>
+                        <?php endif;?>
+                    </td>
+                    <td>
+                        <?php echo round($total/$i)?>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+            </table>
+        <?php endif;?>
+    </div>
+</div>
+<script type="text/javascript">
+    var opened = false;
+    $(".close").live("click", function(){
+        $(this).parents('.box').remove();
+        opened = false;
+        return false;
+    });
+
+    $('.panel form').submit(function(){
+        return false;
+    });
+    
+    $('.panel .item a').click(function(){
+        var $this = $(this);
+        $.get(this.href, function(data){
+            if (opened) {
+                $this.parents('.box').prev().html(data);
+            } else {
+                $this.parents('.box').before(data);
+                opened = true;
+            }
+        });
+        return false;
+    });
+
+    $('.panel .note input[type=text]').blur(function(){
+        var $this = $(this),
+            $form = $this.parents('form');
+
+        $.post($form[0].action, $form.serialize(), function(){
+            alert('<?php echo $this->translate('Success')?>.');
+
+            var sum = 0, i = 0, average = 0;
+            $this.parents('tr').find('input[type=text]').each(function(){
+                sum += parseInt(this.value, 10);
+                i++;
+            });
+            
+            average = Math.round(sum/i);
+            $this.parents('td').next().text(average);
+        });
+    });
+
+    $('input[type=button], input[type=submit]').button();
+</script>
