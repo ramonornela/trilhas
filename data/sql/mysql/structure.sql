@@ -3,17 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 07, 2010 at 02:02 AM
+-- Generation Time: Nov 11, 2010 at 01:39 AM
 -- Server version: 5.1.50
 -- PHP Version: 5.3.2
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `trilhas`
@@ -37,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -57,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `activity_text` (
   KEY `user_id` (`user_id`),
   KEY `activity_id` (`activity_id`),
   KEY `sender` (`sender`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
 
 -- --------------------------------------------------------
 
@@ -179,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `classroom` (
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
   KEY `responsible` (`responsible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
@@ -190,6 +184,7 @@ CREATE TABLE IF NOT EXISTS `classroom` (
 CREATE TABLE IF NOT EXISTS `classroom_user` (
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
+  `status` enum('registered','certificated','disapproved') NOT NULL DEFAULT 'registered',
   PRIMARY KEY (`user_id`,`classroom_id`),
   KEY `classroom_id` (`classroom_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -225,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
   KEY `content_id` (`content_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1853 ;
 
 -- --------------------------------------------------------
 
@@ -237,10 +232,40 @@ CREATE TABLE IF NOT EXISTS `content_access` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `content_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
+  `classroom_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `content_id` (`content_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=503 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `content_file`
+--
+
+CREATE TABLE IF NOT EXISTS `content_file` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `content_template`
+--
+
+CREATE TABLE IF NOT EXISTS `content_template` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -250,9 +275,9 @@ CREATE TABLE IF NOT EXISTS `content_access` (
 
 CREATE TABLE IF NOT EXISTS `course` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL DEFAULT '2',
   `responsible` bigint(20) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` text,
   `image` varchar(255) DEFAULT NULL,
   `category` varchar(255) NOT NULL DEFAULT 'Uncategorized',
@@ -261,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `responsible` (`responsible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=574 ;
 
 -- --------------------------------------------------------
 
@@ -282,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -297,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `exercise_answer` (
   PRIMARY KEY (`id`),
   KEY `exercise_value_id` (`exercise_option_id`),
   KEY `exercise_note_id` (`exercise_note_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=40 ;
 
 -- --------------------------------------------------------
 
@@ -314,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `exercise_note` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=60 ;
 
 -- --------------------------------------------------------
 
@@ -330,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `exercise_option` (
   `status` enum('right','wrong') NOT NULL DEFAULT 'wrong',
   PRIMARY KEY (`id`),
   KEY `exercise_question_id` (`exercise_question_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
 
 -- --------------------------------------------------------
 
@@ -348,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `exercise_question` (
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
@@ -365,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `faq` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -383,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `file` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -404,7 +429,7 @@ CREATE TABLE IF NOT EXISTS `forum` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -477,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `sender` (`sender`),
   KEY `receiver` (`receiver`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -510,7 +535,7 @@ CREATE TABLE IF NOT EXISTS `panel` (
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`),
   KEY `item_id` (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -522,11 +547,11 @@ CREATE TABLE IF NOT EXISTS `panel_note` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT NULL,
   `panel_id` bigint(20) DEFAULT NULL,
-  `note` decimal(4,2) DEFAULT NULL,
+  `note` tinyint(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `panel_id` (`panel_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -538,9 +563,9 @@ CREATE TABLE IF NOT EXISTS `restriction_panel` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `content_id` bigint(20) NOT NULL,
-  `note` decimal(10,2) DEFAULT NULL,
+  `note` tinyint(3) DEFAULT NULL,
   `panel_id` int(20) NOT NULL,
-  `note_restriction` decimal(10,2) DEFAULT NULL,
+  `note_restriction` tinyint(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
@@ -574,7 +599,7 @@ CREATE TABLE IF NOT EXISTS `timeline` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -596,7 +621,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `status` varchar(255) DEFAULT 'active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Constraints for dumped tables
@@ -683,7 +708,6 @@ ALTER TABLE `configuration`
 -- Constraints for table `content`
 --
 ALTER TABLE `content`
-  ADD CONSTRAINT `content_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
   ADD CONSTRAINT `content_ibfk_2` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`);
 
 --

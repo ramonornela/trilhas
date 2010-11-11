@@ -1,6 +1,7 @@
 <?php $locale = strtolower(str_replace('_', '-', $this->locale))?>
 <div class="composer">
 	<?php echo $this->form?>
+    <?php echo $this->ajax('delete', 'content/composer/delete/id/'.$this->id, 2, 'want to delete?')?>
 </div>
 <script type="text/javascript">
     var $composer = $('#composer-description-text'),
@@ -27,7 +28,7 @@
         var $this = $(this);
         $composer.val(editor.getData());
 		$.post(this.action, $(this).serialize(), function(data){
-            $('#content-main-composer').html(data);
+            $this.parents('.content').html(data);
         });
         return false;
 	});

@@ -27,8 +27,9 @@ class Content_IndexController extends Tri_Controller_Action
 {
     public function viewAction()
     {
-        $id     = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $string = $this->_getParam('string');
+        $id      = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $string  = $this->_getParam('string');
+        $session = new Zend_Session_Namespace('data');
 
         $restriction = Content_Model_Restriction::verify($id);
 		
@@ -39,6 +40,7 @@ class Content_IndexController extends Tri_Controller_Action
 
             $data['content_id'] = $id;
             $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
+            $data['classroom_id'] = $session->classroom_id;
 
             $contentAccess->createRow($data)->save();
         } else {

@@ -47,5 +47,5 @@
         return false;
     });
 
-    $('#content').navigation('<?=str_replace("\'", "'", $this->data)?>', {current: 0});
+    $('#content').navigation('<?=str_replace("\'", "'", $this->data)?>', {current: <?php echo $this->current?>});
 </script>

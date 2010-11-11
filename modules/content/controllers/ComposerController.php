@@ -20,7 +20,6 @@ class Content_ComposerController extends Tri_Controller_Action
         }
         $this->view->contents = $session->contents;
         $this->view->current = 0;
-        $this->view->go = $go;
 
         if ($id) {
             $this->view->current = Application_Model_Content::getPositionById($id,
@@ -44,12 +43,13 @@ class Content_ComposerController extends Tri_Controller_Action
             $table = new Tri_Db_Table('content');
             $row   = $table->find($id)->current();
 
-            if ($row) {
+            if ($row) { 
                 $form->populate($row->toArray());
             }
         }
 
         $this->view->form = $form;
+        $this->view->id   = $id;
         $this->_helper->layout->disableLayout();
     }
 
@@ -87,7 +87,7 @@ class Content_ComposerController extends Tri_Controller_Action
             unset($session->contents);
             
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('/content/composer/form/id/'.$id);
+            $this->_redirect('/content/composer/index/id/'.$id);
         }
 
         $this->view->messages = array('Error');
@@ -103,23 +103,23 @@ class Content_ComposerController extends Tri_Controller_Action
     public function deleteAction() {
         $id = Zend_Filter::filterStatic( $this->_getParam( "id" ) , "int" );
 
-        $user          = new Zend_Session_Namespace("user");
-        $content 	   = new Content_Model_Content();
-        $contentAccess = new Content_Model_ContentAccess();
+        $content 	   = new Tri_Db_Table('content');
+        $contentAccess = new Tri_Db_Table('content_access');
+        $restriction   = new Tri_Db_Table('restriction_panel');
 
         try {
             if( $id ) {
-                $contentAccess->delete( array( 'content_id' => $id ) );
-                $content->delete( $id );
-
-                $user->contents = false;
-
-                //$this->_helper->_flashMessenger->addMessage( $this->view->translate( "deleted successfully" ) );
+                $restriction->delete(array('content_id = ?' => $id));
+                $contentAccess->delete(array('content_id = ?' => $id));
+                $content->delete(array('id = ?' => $id));
             }
         }catch( Exception $e ) {
-            $this->_helper->_flashMessenger->addMessage( $this->view->translate( "deleted error" ) );
+            $this->_helper->_flashMessenger->addMessage('Error');
         }
 
-        $this->_redirect( '/content/composer/index/go/previous' );
+        $session = new Zend_Session_Namespace('data');
+        unset($session->contents);
+
+        $this->_redirect('/content/composer/index/');
     }
 }
