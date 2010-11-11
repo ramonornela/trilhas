@@ -15,6 +15,7 @@ appnamespace    = "Application"
 constants.UPLOAD_DIR = APPLICATION_PATH  "/../public/upload/"
 constants.PAYMENT = true
 constants.THEME = "excite-bike"
+constants.AVERAGE = 7
 ;Availables themes: blitzer,dot-luv,excite-bike,hot-sneaks,humanity,mint-choc,
 ;redmond,smoothness,south-street,start,swanky-purse,ui-darkness,ui-lightness,vader
 

@@ -1,3 +1,6 @@
+<div class="right">
+    <?php echo $this->ajax('back', 'exercise/index', 2) ?>
+</div>
 <?php $optionTable = new Tri_Db_Table('exercise_option'); ?>
 <div class="reply">
     <h3><?php echo $this->exercise->name?></h3>
@@ -75,4 +78,5 @@
             $replyTime.text(countDown($replyTime.text()));
         }, 1000);
     <?php endif?>
+    $('input[type=button], input[type=submit]').button();
 </script>

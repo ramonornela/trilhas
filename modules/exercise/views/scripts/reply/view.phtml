@@ -1,3 +1,11 @@
+<?php if ($this->message): ?>
+    <div class="ui-state-highlight ui-corner-all message">
+        <span class="ui-icon ui-icon-info"></span>
+        <ul>
+            <li><?php echo $this->translate($this->message)?></li>
+        </ul>
+    </div>
+<?php else:?>
 <?php $optionTable = new Tri_Db_Table('exercise_option'); ?>
 <div class="reply">
     <h3><?php echo $this->exercise->name?></h3>
@@ -36,8 +44,9 @@
         <h3><?php echo $this->translate('previous')?></h3>
         <ul>
             <?php foreach($this->notes as $note):?>
-                <li><?php echo $this->ajax($this->date($note->created, true), 'exercise/reply/view/id/'. $note->id)?></li>
+                <li><?php echo $this->ajax($this->date($note->created, true), 'exercise/reply/view/id/'. $note->id.'/userId/'.$this->userId)?></li>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
 </div>
+<?php endif;?>

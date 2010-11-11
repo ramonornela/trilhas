@@ -14,12 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
 /**
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
- */
+*/
 html, body{margin: 0; padding: 0;}
 object, embed {display: block; background: #eee; border: 2px solid black;}
 
@@ -110,3 +110,10 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .magnifier{float: left; margin: 4px 8px 0 0;}
 
 .nav .buttons{margin: 5px 0; text-align: right;}
+
+.panel .item{float: left; padding-right: 10px;}
+.panel .note input{border: 1px solid; padding: 5px; margin-top: 3px; width: 50px;}
+
+.organizer{list-style-type: none; margin: 0; padding: 0; width: 80%;}
+.organizer li {cursor: move; margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 18px;}
+.organizer li span {position: absolute; margin-left: -1.3em;}

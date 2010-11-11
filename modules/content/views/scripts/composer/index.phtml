@@ -1,6 +1,3 @@
-<div style="float: right">
-    <a id="content-new" href="content/composer/form"><?php echo $this->translate('new')?></a>
-</div>
 <div id="composer-content-main">
     <div class="nav">
         <div class="bread">
@@ -9,6 +6,7 @@
             <span></span>
         </div>
         <div class="buttons">
+            <a id="content-new" href="content/composer/form"><?php echo $this->translate('new')?></a> | 
             <a class="previous" href="content/previous"><?php echo $this->translate('previous content') ?></a>&nbsp;&nbsp;
             <a class="next" href="content/next"><?php echo $this->translate('next content') ?></a>
         </div>
@@ -16,7 +14,6 @@
     </div>
     <div id="content-main-composer" class="text"></div><br />
 </div>
-
 <script type="text/javascript">
     $('#content-new').click(function(){
         $('#content-main-composer').load(this.href);

@@ -10,7 +10,7 @@
 "message";"Mensagem"
 "forum";"Fórum"
 "creation";"Criação"
-"content";"Criação"
+"content";"Texto-base"
 "organize";"Organizador"
 "restriction";"Restrição"
 "support";"Suporte"
@@ -28,6 +28,8 @@
 "classroom";"Turma"
 "user";"Usuário"
 "timeline";"Linha do tempo"
+"database-file";"Banco de arquivos"
+"template";"Modelo"
 
 #buttons
 "previous content";"Anterior"
@@ -42,6 +44,7 @@
 "Save";"Salvar"
 "Search";"Procurar"
 "new";"Novo"
+"now";"Agora"
 "New";"Novo"
 "save";"Salvar"
 "View all";"Ver todos"
@@ -53,6 +56,10 @@
 "remove";"Remover"
 "remove";"Remover"
 "send";"Enviar"
+"openButton";"Corrigir"
+"finalize";"Finalizar"
+"saveDraft";"Salvar Rascunho"
+"sendCorrection";"Enviar para correção"
 
 #message
 "there are no records";"Não existem registros"
@@ -61,6 +68,12 @@
 "want to delete?";"Deseja realmente excluir?"
 "Number of attempts exec";"Número de tentativas execido"
 "Expired period";"Período expirado"
+"minutes ago";"minuto(s) atrás"
+"hours ago";"hora(s) atrás"
+"seconds ago";"segundo(s) atrás"
+"Sent. Wait corretion.";"Enviado. Aguarde correção."
+"Finalized. See your note in panel.";"Finalizada. Veja sua nota no painel."
+"Sended";"Enviado"
 
 #timeline
 "saved a new file";"adicionou um novo arquivo"
@@ -98,6 +111,7 @@
 "Note";"Nota"
 "value";"Valor"
 "Attemps";"Tentativas"
+"Type";"Tipo"
 
 #status
 "active";"Ativo"
@@ -131,3 +145,7 @@
 "Question's list";"Lista de perguntas"
 "Exercise reply";"Avaliação"
 "previous";"Anteriores"
+"Average";"Média"
+"List";"Lista"
+"Database file";"Banco de arquivos"
+"Template";"Modelo"

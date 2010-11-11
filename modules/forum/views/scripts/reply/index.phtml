@@ -1,7 +1,10 @@
+<div class="right">
+    <?php echo $this->ajax('back', 'forum/index', 2) ?>
+</div>
 <div class="forum">
-    <h3><?php echo $this->parent->title?></h3>
+    <h3><?php echo $this->parent->title;?></h3>
     <table class="datatable">
-        <?php if ($this->page == 1):?>
+        <?php if ($this->page == 1 || $this->page == 9999):?>
             <?php $table = new Tri_Db_Table('user');?>
             <?php $user = $table->fetchRow(array('id = ?' => $this->parent->user_id));?>
             <tr>
@@ -82,5 +85,5 @@
         return false;
 	});
 
-    $('input[type=button]').button();
+    $('input[type=button], input[type=submit]').button();
 </script>

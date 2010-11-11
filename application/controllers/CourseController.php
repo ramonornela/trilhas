@@ -72,7 +72,9 @@ class CourseController extends Tri_Controller_Action
             $classroom = new Tri_Db_Table('classroom');
 
             $this->view->data = $course->find($id)->current();
-            $where = array('course_id = ?' => $id, 'status = ?' => 'open');
+            $where = array('course_id = ?' => $id, 
+                           'status = ?' => 'open',
+                           'end >= ? OR end IS NULL' => date('Y-m-d'));
             $this->view->classroom = $classroom->fetchAll($where, 'begin');
         }
     }

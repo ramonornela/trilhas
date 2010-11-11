@@ -43,6 +43,7 @@ class Exercise_ReplyController extends Tri_Controller_Action
         if ($this->_request->isPost()) {
             $exerciseNote   = new Tri_Db_Table('exercise_note');
             $exerciseAnswer = new Tri_Db_Table('exercise_answer');
+            $panelNote      = new Tri_Db_Table('panel_note');
             $identity       = Zend_Auth::getInstance()->getIdentity();
             $params         = $this->_getAllParams();
             $data           = array();
@@ -62,6 +63,8 @@ class Exercise_ReplyController extends Tri_Controller_Action
             $note->note = Exercise_Model_Reply::sumNote($note->id);
             $note->save();
 
+            Panel_Model_Panel::addNote($identity->id, 'exercise', $note->exercise_id, $note->note);
+
             $this->_redirect('/exercise/reply/view/id/' . $note->id);
         } else {
             $this->_helper->_flashMessenger->addMessage('Error');
@@ -71,9 +74,10 @@ class Exercise_ReplyController extends Tri_Controller_Action
 
     public function viewAction()
     {
-        $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $exerciseId = Zend_Filter::filterStatic($this->_getParam('exerciseId'), 'int');
         $identity         = Zend_Auth::getInstance()->getIdentity();
+        $id               = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $exerciseId       = Zend_Filter::filterStatic($this->_getParam('exerciseId'), 'int');
+        $userId           = Zend_Filter::filterStatic($this->_getParam('userId', $identity->id), 'int');
         $exercise         = new Tri_Db_Table('exercise');
         $exerciseQuestion = new Tri_Db_Table('exercise_question');
         $exerciseNote     = new Tri_Db_Table('exercise_note');
@@ -82,7 +86,8 @@ class Exercise_ReplyController extends Tri_Controller_Action
         if ($id) {
             $note = $exerciseNote->fetchRow(array('id = ?' => $id));
         } elseif ($exerciseId) {
-            $note = $exerciseNote->fetchRow(array('exercise_id = ?' => $exerciseId), 'id DESC');
+            $note = $exerciseNote->fetchRow(array('exercise_id = ?' => $exerciseId,
+                                                  'user_id = ?' => $userId), 'id DESC');
         }
 
         if ($note) {
@@ -96,15 +101,15 @@ class Exercise_ReplyController extends Tri_Controller_Action
                 $this->view->note      = $note;
 
                 $whereNote = array('exercise_id = ?' => $note->exercise_id,
-                                   'id <> ?' => $note->id);
-                $this->view->notes = $exerciseNote->fetchAll($whereNote);
+                                   'id <> ?' => $note->id,
+                                   'user_id = ?' => $userId);
+                $this->view->notes = $exerciseNote->fetchAll($whereNote, 'id DESC');
+                $this->view->userId = $userId;
             } else {
-                $this->_helper->_flashMessenger->addMessage('Error');
-                $this->_redirect('/exercise');
+                $this->view->message = 'there are no records';
             }
         } else {
-            $this->_helper->_flashMessenger->addMessage('Error');
-            $this->_redirect('/exercise');
+            $this->view->message = 'there are no records';
         }
     }
 }

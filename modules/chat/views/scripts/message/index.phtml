@@ -20,7 +20,7 @@
 		<b><?php echo $this->userName?></b>
 	</span>
 	<br /><br />
-    <div class="message">
+    <div class="message-form">
         <?php echo $this->form?>
     </div>
 <?php endif;?>
@@ -28,7 +28,7 @@
 <table class="datatable" style="width: 75%">
         <?php foreach($this->data as $data): ?>
 			<tr>
-                <td width="110">
+                <td width="110" valign="top">
 					<?php
 						$image = "<img alt='{$data->name}' title='{$data->name}' width='100' src='upload/" .$this->thumbnail($data->image, 'medium'). "' />";
 					?>
@@ -42,7 +42,11 @@
 				</td>
                 <td nowrap="nowrap">
                     <?php $id = Zend_Auth::getInstance()->getIdentity()->id;?>
-					<?php if ($this->userId == $id):?>
+                </td>
+            </tr>
+			<tr>
+				<td colspan="3" class="message-reply">
+                    <?php if ($this->userId == $id):?>
                         <input type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all message-reply-button" value="<?php echo $this->translate('reply') ?>" />
 						<input type="hidden" name="person-receiver" value="<?php echo $data->sender?>">
                     <?php endif; ?>
@@ -52,10 +56,6 @@
                         <?php endif; ?>
                         <?php echo $this->ajax("delete", 'chat/message/delete/id/' . $data->id.'/userId/'.$this->userId, 2 , "want to delete?");?>
                     <?php endif;?>
-                </td>
-            </tr>
-			<tr>
-				<td colspan="3" class="message-reply">
 					<?php echo $this->date($data->created, true)?>
 				</td>	
 			</tr>
@@ -68,7 +68,7 @@
     <p><?=$this->translate( "there are no records" );?></p>
 <?php endif;?>
 <script type="text/javascript">
-    $(".message form").submit(function() {
+    $(".message-form form").submit(function() {
         var $this = $(this);
 		$.post(this.action, $(this).serialize(), function(data){
             $this.parents('.content').html(data);
@@ -79,7 +79,7 @@
     $('input[type=button], input[type=submit]').button();
 
 	$('.message-reply-button').click(function(){
-		var $el = $(this).parent().prev().find('.message-reply-textarea'),
+		var $el = $(this).parent().parent().prev().find('.message-reply-textarea'),
 			receiver = $(this).next().val();
 		    url = "chat/message/reply/receiverId/"+receiver;
 

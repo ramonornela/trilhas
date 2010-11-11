@@ -85,4 +85,11 @@ class Exercise_IndexController extends Tri_Controller_Action
         $this->view->form = $form;
         $this->render('form');
     }
+
+    public function viewAction()
+    {
+        $id     = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $userId = Zend_Filter::filterStatic($this->_getParam('userId'), 'int');
+        $this->_redirect('/exercise/reply/view/layout/box/exerciseId/'.$id.'/userId/'.$userId);
+    }
 }

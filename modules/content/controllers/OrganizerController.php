@@ -1,8 +1,12 @@
 <?php
 class Content_OrganizerController extends Tri_Controller_Action
 {
-	protected $_model = false;
-	
+    public function init()
+    {
+        parent::init();
+        $this->view->title = "Organize";
+    }
+
 	public function indexAction()
 	{
 		$id		 = Zend_Filter::filterStatic($this->_getParam('id'), 'int');

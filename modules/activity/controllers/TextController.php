@@ -13,6 +13,8 @@ class Activity_TextController extends Tri_Controller_Action
         $activity = new Tri_Db_Table('activity');
         $id       = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $textId   = Zend_Filter::filterStatic($this->_getParam('textId'), 'int');
+        $authId   = Zend_Auth::getInstance()->getIdentity()->id;
+        $userId   = Zend_Filter::filterStatic($this->_getParam('userId', $authId), 'int');
         $form     = new Activity_Form_Text();
 
         if (!$id) {
@@ -23,23 +25,33 @@ class Activity_TextController extends Tri_Controller_Action
                         ->setIntegrityCheck(false)
                         ->join('user', 'user.id = sender', array('user.id as uid','user.name','user.image','user.role'))
                         ->where('activity_id = ?', $id)
-                        ->where('user_id = ?', Zend_Auth::getInstance()->getIdentity()->id)
                         ->order('id DESC')
                         ->limit(6);
 
+        if (Zend_Auth::getInstance()->getIdentity()->role == 'student') {
+            $select->where('user_id = ?', $authId);
+        } else {
+            $select->where('(user_id = ?', $authId)
+                   ->orWhere('user_id = ?)', $userId);
+        }
+
         $data = $table->fetchAll($select);
 
-        $populate = array('activity_id' => $id);
+        $populate = array('activity_id' => $id, 'user_id' => $userId);
 
+        $current = null;
         if (count($data) && !$textId) {
             $current = current(current($data));
-            if ($current['status'] == 'final' || $current['status'] == 'close' ) {
-                $this->_redirect('activity/text/view/status/'.$current['status']);
-            }
             $populate['description'] = $current['description'];
         } elseif ($textId) {
             $current = $table->find($textId)->current();
             $populate['description'] = $current->description;
+        }
+
+        if (Zend_Auth::getInstance()->getIdentity()->role == 'student' && !$this->_hasParam('nav')) {
+            if ($current && ($current['status'] == 'final' || $current['status'] == 'close')) {
+                $this->_redirect('activity/text/view/status/'.$current['status']);
+            }
         }
 
         $form->populate($populate);
@@ -47,8 +59,8 @@ class Activity_TextController extends Tri_Controller_Action
         $this->view->data   = $data;
         $this->view->parent = $activity->find($id)->current();
         $this->view->form   = $form;
-        $this->view->page   = $page;
         $this->view->id     = $id;
+        $this->view->userId = $userId;
     }
 
     public function viewAction()
@@ -63,27 +75,33 @@ class Activity_TextController extends Tri_Controller_Action
         $session = new Zend_Session_Namespace('data');
         $data  = $this->_getAllParams();
 
+        $statusList = array('openButton' => 'open', 'finalize' => 'final');
+        if (Zend_Auth::getInstance()->getIdentity()->role == 'student') {
+            $statusList['sendCorrection'] = 'close';
+            $statusList['saveDraft'] = 'open';
+        }
+
         if ($form->isValid($data)) {
             $data = $form->getValues();
-            $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
-            $data['sender'] = Zend_Auth::getInstance()->getIdentity()->id;
+            
+            $data['sender']  = Zend_Auth::getInstance()->getIdentity()->id;
+            $data['status']  = $statusList[$data['status']];
 
-            if (isset($data['id']) && $data['id']) {
-                $row = $table->find($data['id'])->current();
-                $row->setFromArray($data);
-                $id = $row->save();
-            } else {
-                unset($data['id']);
-                $row = $table->createRow($data);
-                $id = $row->save();
+            $row = $table->createRow($data);
+            $id = $row->save();
+
+            if (isset($data['note']) && $data['note']) {
+                Panel_Model_Panel::addNote($row->user_id, 'activity', $data['activity_id'], $data['note']);
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('activity/text/index/id/'.$data['activity_id']);
+            $this->_redirect('activity/text/index/id/'.$data['activity_id'].'/textId/'.$id.'/userId/'.$data['user_id']);
         }
 
+        $activity = new Tri_Db_Table('activity');
+        $this->view->parent = $activity->find($data['activity_id'])->current();
         $this->view->messages = array('Error');
         $this->view->form = $form;
-        $this->render('form');
+        $this->render('index');
     }
 }

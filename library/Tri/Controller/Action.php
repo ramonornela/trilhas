@@ -45,9 +45,7 @@ class Tri_Controller_Action extends Zend_Controller_Action
         if (!$this->_request->isXmlHttpRequest()) {
             $this->_helper->layout->enableLayout();
             $this->_helper->layout->setLayout('solo');
-        }
-
-        if ($this->_hasParam('layout')) {
+        } elseif ($this->_hasParam('layout')) {
             $this->_helper->layout->setLayout($this->_getParam('layout'));
         }
 

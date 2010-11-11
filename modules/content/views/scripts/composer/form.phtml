@@ -2,7 +2,7 @@
 <div class="composer">
 	<?php echo $this->form?>
 </div>
-<script>
+<script type="text/javascript">
     var $composer = $('#composer-description-text'),
         config = {
             toolbar: [
@@ -31,4 +31,5 @@
         });
         return false;
 	});
+    $('input[type=button], input[type=submit]').button();
 </script>
