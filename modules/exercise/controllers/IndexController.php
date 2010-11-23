@@ -4,7 +4,7 @@ class Exercise_IndexController extends Tri_Controller_Action
     public function init()
     {
         parent::init();
-        $this->view->title = "Evaluation";
+        $this->view->title = "Exercise";
     }
 
     public function indexAction()

@@ -76,6 +76,23 @@ class Application_Model_Classroom
         
         return $data;
     }
+
+    /**
+     * Get all possible classroom
+     *
+     * @param int $userId
+     * @return array
+     */
+    public static function getFinalizedByUser($userId)
+    {
+        $certificate = new Tri_Db_Table('certificate');
+        $select = $certificate->select(true)->setIntegrityCheck(false)
+                              ->join('classroom', 'classroom.id = certificate.classroom_id', array())
+                              ->join('course', 'course.id = classroom.course_id')
+                              ->where('certificate.user_id = ?', $userId);
+
+        return $certificate->fetchAll($select);
+    }
 	
 	/**
 	 * Verify if class it's available

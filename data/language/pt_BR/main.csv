@@ -30,6 +30,7 @@
 "timeline";"Linha do tempo"
 "database-file";"Banco de arquivos"
 "template";"Modelo"
+"chat";"Chat"
 
 #buttons
 "previous content";"Anterior"
@@ -56,10 +57,17 @@
 "remove";"Remover"
 "remove";"Remover"
 "send";"Enviar"
-"openButton";"Corrigir"
+"openButton";"Refazer"
 "finalize";"Finalizar"
 "saveDraft";"Salvar Rascunho"
 "sendCorrection";"Enviar para correção"
+"Emit certificate";"Emitir certificado"
+"Change";"Mudar"
+"Approve";"Aprovar"
+"Disapprove";"Reprovar"
+"Quitter justified";"Desistente c/"
+"Quitter not justified";"Desistente s/"
+"Register";"Retornar"
 
 #message
 "there are no records";"Não existem registros"
@@ -74,6 +82,7 @@
 "Sent. Wait corretion.";"Enviado. Aguarde correção."
 "Finalized. See your note in panel.";"Finalizada. Veja sua nota no painel."
 "Sended";"Enviado"
+"Certificate emited";"Certificado emitido"
 
 #timeline
 "saved a new file";"adicionou um novo arquivo"
@@ -112,6 +121,7 @@
 "value";"Valor"
 "Attemps";"Tentativas"
 "Type";"Tipo"
+"Hours";"Horas"
 
 #status
 "active";"Ativo"
@@ -120,6 +130,11 @@
 "final";"Final"
 "right";"Certo"
 "wrong";"Errado"
+"registered";"Matriculado"
+"approved";"Aprovado"
+"disapproved";"Reprovado"
+"justified";"Desistente c/"
+"not-justified";"Desistente s/"
 
 #titles
 "Message";"Mensagem"
@@ -143,9 +158,12 @@
 "last versions";"Últimas versões"
 "Free";"Livre"
 "Question's list";"Lista de perguntas"
-"Exercise reply";"Avaliação"
+"Exercise reply";"Exercício"
 "previous";"Anteriores"
 "Average";"Média"
 "List";"Lista"
 "Database file";"Banco de arquivos"
 "Template";"Modelo"
+"Certificate";"Certificado"
+"Unique code";"Código de idetificação"
+"Finalized";"Finalizado"

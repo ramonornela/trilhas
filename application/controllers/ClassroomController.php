@@ -137,6 +137,10 @@ class ClassroomController extends Tri_Controller_Action
                 unset($data['amount']);
             }
             
+            if (!$data['responsible']) {
+                unset($data['responsible']);
+            }
+            
             if (isset($data['id']) && $data['id']) {
                 $row = $table->find($data['id'])->current();
                 $row->setFromArray($data);

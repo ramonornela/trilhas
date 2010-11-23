@@ -45,7 +45,11 @@ class Tri_View_Helper_Date extends Zend_View_Helper_Abstract
                 if (date('H') == $h) {
                     $min = (int) date('i') - (int) $m;
                     if ($min < 1) {
-                        return (int) date('s') - (int) $s . ' ' . $translate->_('seconds ago');
+                        $sec = (int) date('s') - (int) $s;
+                        if ($sec < 10) {
+                            return $translate->_('now');
+                        }
+                        return $sec . ' ' . $translate->_('seconds ago');
                     }
                     return $min . ' ' . $translate->_('minutes ago');
                 } elseif (date('H') > $h) {

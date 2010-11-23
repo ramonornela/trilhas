@@ -12,20 +12,29 @@ class Panel_IndexController extends Tri_Controller_Action
         $classroomUser = new Tri_Db_Table('classroom_user');
         $panel         = new Tri_Db_Table('panel');
         $session       = new Zend_Session_Namespace('data');
+        $status        = $this->_getParam('status', 'registered');
         
         $select = $classroomUser->select(true)
                                 ->setIntegrityCheck(false)
-                                ->join('user', 'classroom_user.user_id = user.id')
+                                ->join('user', 'classroom_user.user_id = user.id', array('user.name','user.id','user.image'))
                                 ->where('classroom_user.classroom_id = ?', $session->classroom_id)
                                 ->where('user.role = ?', 'student')
+                                ->where('classroom_user.status = ?', $status)
                                 ->order('name');
         
         if (Zend_Auth::getInstance()->getIdentity()->role == 'student') {
             $select->where('user.id = ?', Zend_Auth::getInstance()->getIdentity()->id);
         }
 
-        $this->view->data  = $classroomUser->fetchAll($select);
-        $this->view->panel = $panel->fetchAll(array('classroom_id = ?' => $session->classroom_id));
+        $this->view->status = $status;
+        $this->view->data   = $classroomUser->fetchAll($select);
+        $this->view->panel  = $panel->fetchAll(array('classroom_id = ?' => $session->classroom_id));
+        $this->view->statusOptions = array('registered' => $this->view->translate('registered'),
+                                           'approved' => $this->view->translate('approved'),
+                                           'disapproved' => $this->view->translate('disapproved'),
+                                           'justified' => $this->view->translate('justified'),
+                                           'not-justified' => $this->view->translate('not-justified'));
+        $this->view->classroomId   = $session->classroom_id;
     }
 
     public function formAction()
@@ -101,5 +110,24 @@ class Panel_IndexController extends Tri_Controller_Action
         $panelNote->createRow($data)->save();
 
         exit('ok');
+    }
+
+    public function changeAction()
+    {
+        $userId        = Zend_Filter::filterStatic($this->_getParam('userId'), 'int');
+        $status        = $this->_getParam('status');
+        $classroomUser = new Tri_Db_Table('classroom_user');
+        $session       = new Zend_Session_Namespace('data');
+
+        $where = array('classroom_id = ?' => $session->classroom_id, 'user_id = ?' => $userId);
+        $row   = $classroomUser->fetchRow($where);
+        
+        if ($row) {
+            $row->status = $status;
+            $row->save();
+        }
+
+        $this->_helper->_flashMessenger->addMessage('Success');
+        $this->_redirect('/panel');
     }
 }

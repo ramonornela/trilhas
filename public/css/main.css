@@ -61,8 +61,9 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .courses .search a{margin-left: 20px;}
 .courses .item{clear: both;}
 .courses .item img{float: left; margin: 0 5px 5px 0;}
-.courses .item p{margin-top: 0;}
+.courses .item p{margin-top: 2px;}
 .courses .item span{margin-left: 5px; font-size: 0.8em; color: #ccc;}
+.courses .item img.certificate{float: none; margin: 0;}
 
 .course-image{float: left; margin: 0 10px 10px 0;}
 
@@ -117,3 +118,10 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .organizer{list-style-type: none; margin: 0; padding: 0; width: 80%;}
 .organizer li {cursor: move; margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 18px;}
 .organizer li span {position: absolute; margin-left: -1.3em;}
+
+.chat-room ul.messages{margin: 0; padding: 0; height: 300px; overflow: auto; list-style: none; border-right: 1px dotted;}
+.chat-room ul.messages li{margin-bottom: 4px;}
+.chat-room ul.messages li span{color: #ddd; font-size: 0.9em;}
+.chat-room ul.user{height: 300px; overflow: auto; list-style: none; float: right; padding-left: 10px; margin-left: 20px; width: 200px;}
+.chat-room .form{margin-right: 240px;}
+.chat-room .form textarea{width: 100%; }
