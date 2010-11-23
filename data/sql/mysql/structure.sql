@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 11, 2010 at 01:39 AM
+-- Generation Time: Nov 23, 2010 at 04:12 PM
 -- Server version: 5.1.50
--- PHP Version: 5.3.2
+-- PHP Version: 5.3.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `activity_text` (
   KEY `user_id` (`user_id`),
   KEY `activity_id` (`activity_id`),
   KEY `sender` (`sender`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
 
 -- --------------------------------------------------------
 
@@ -80,27 +80,14 @@ CREATE TABLE IF NOT EXISTS `calendar` (
 CREATE TABLE IF NOT EXISTS `certificate` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `description` text,
-  `hours` int(5) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `unique_id` varchar(20) NOT NULL,
   `begin` date NOT NULL,
   `end` date NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `certificate_user`
---
-
-CREATE TABLE IF NOT EXISTS `certificate_user` (
-  `certificate_id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`certificate_id`,`user_id`),
+  KEY `classroom_id` (`classroom_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -128,14 +115,15 @@ CREATE TABLE IF NOT EXISTS `chat` (
 CREATE TABLE IF NOT EXISTS `chat_room` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `begin` date NOT NULL,
-  `end` date DEFAULT NULL,
+  `description` text,
   `max_student` int(10) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('open','close') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -149,10 +137,11 @@ CREATE TABLE IF NOT EXISTS `chat_room_message` (
   `user_id` bigint(20) NOT NULL,
   `description` text,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('logged','message') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `chat_room_id` (`chat_room_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1044 ;
 
 -- --------------------------------------------------------
 
@@ -173,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `classroom` (
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
   KEY `responsible` (`responsible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 -- --------------------------------------------------------
 
@@ -184,7 +173,8 @@ CREATE TABLE IF NOT EXISTS `classroom` (
 CREATE TABLE IF NOT EXISTS `classroom_user` (
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
-  `status` enum('registered','certificated','disapproved') NOT NULL DEFAULT 'registered',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` enum('registered','approved','disapproved','justified','not-justified') NOT NULL DEFAULT 'registered',
   PRIMARY KEY (`user_id`,`classroom_id`),
   KEY `classroom_id` (`classroom_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -236,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `content_access` (
   PRIMARY KEY (`id`),
   KEY `content_id` (`content_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=387 ;
 
 -- --------------------------------------------------------
 
@@ -252,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `content_file` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -265,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `content_template` (
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -275,10 +265,11 @@ CREATE TABLE IF NOT EXISTS `content_template` (
 
 CREATE TABLE IF NOT EXISTS `course` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL DEFAULT '2',
+  `user_id` bigint(20) NOT NULL,
   `responsible` bigint(20) DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` text,
+  `hours` tinyint(4) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `category` varchar(255) NOT NULL DEFAULT 'Uncategorized',
   `status` varchar(255) NOT NULL DEFAULT 'active',
@@ -286,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `responsible` (`responsible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=574 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=205 ;
 
 -- --------------------------------------------------------
 
@@ -322,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `exercise_answer` (
   PRIMARY KEY (`id`),
   KEY `exercise_value_id` (`exercise_option_id`),
   KEY `exercise_note_id` (`exercise_note_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=40 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
 
 -- --------------------------------------------------------
 
@@ -339,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `exercise_note` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=60 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=61 ;
 
 -- --------------------------------------------------------
 
@@ -524,6 +515,21 @@ CREATE TABLE IF NOT EXISTS `notepad` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `page`
+--
+
+CREATE TABLE IF NOT EXISTS `page` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `position` tinyint(4) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `panel`
 --
 
@@ -535,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `panel` (
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`),
   KEY `item_id` (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -551,7 +557,7 @@ CREATE TABLE IF NOT EXISTS `panel_note` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `panel_id` (`panel_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 -- --------------------------------------------------------
 
@@ -654,14 +660,8 @@ ALTER TABLE `calendar`
 -- Constraints for table `certificate`
 --
 ALTER TABLE `certificate`
-  ADD CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `certificate_user`
---
-ALTER TABLE `certificate_user`
-  ADD CONSTRAINT `certificate_user_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificate` (`id`),
-  ADD CONSTRAINT `certificate_user_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  ADD CONSTRAINT `certificate_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `chat`
