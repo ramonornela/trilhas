@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 23, 2010 at 04:12 PM
+-- Generation Time: Nov 23, 2010 at 06:26 PM
 -- Server version: 5.1.50
 -- PHP Version: 5.3.3
 
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `classroom` (
   `end` date DEFAULT NULL,
   `max_student` int(10) DEFAULT NULL,
   `amount` decimal(20,2) DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'Active',
+  `status` enum('active','open','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
   KEY `responsible` (`responsible`)
@@ -620,11 +620,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   `born` date DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(32) NOT NULL,
-  `role` varchar(255) NOT NULL DEFAULT 'student',
+  `role` enum('student','teacher','coordinator','institution') NOT NULL DEFAULT 'student',
   `description` text,
   `image` varchar(255) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` varchar(255) DEFAULT 'active',
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
