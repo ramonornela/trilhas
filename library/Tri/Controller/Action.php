@@ -55,6 +55,11 @@ class Tri_Controller_Action extends Zend_Controller_Action
             $this->view->messages = $messages;
             $this->getResponse()->prepend('messages', $this->view->render('message.phtml'));
         }
+
+        if (!Zend_Auth::getInstance()->getIdentity()) {
+            $page = new Tri_Db_Table('page');
+            $this->view->pages = $page->fetchAll("status = 'active'", 'position');
+        }
     }
 
     protected function _security()

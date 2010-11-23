@@ -47,6 +47,15 @@
                     <a href="user/logout"><?php echo $this->translate('logout');?></a>
                 </div>
             <?php endif; ?>
+            <?php if (count($this->pages)) :?>
+                <div class="pages">
+                    <ul>
+                        <?php foreach ($this->pages as $page) :?>
+                            <li><a href="page/index/view/id/<?php echo $page->id?>"><?php echo $page->title?></a></li>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+            <?php endif;?>
         </div>
         <div id="bd">
             <?php if ($this->messages):?>
