@@ -61,7 +61,7 @@ class ForgotController extends Tri_Controller_Action
     	$data = $this->_getAllParams();
 	 	if ($form->isValid($data)) {
 			$email = $this->_getParam('email');
-			$user = $tableUser->fetchRow(array('email =?' => $email));
+			$user = $tableUser->fetchRow(array('email = ?' => $email));
 			if (!$user->id) {
 				$this->_helper->_flashMessenger->addMessage('user not avaliable');
 				$this->_redirect('forgot/');
@@ -72,8 +72,10 @@ class ForgotController extends Tri_Controller_Action
 			$mail->setBodyHtml($this->view->render('forgot/mail.phtml'));
 	        $mail->setFrom(FROM_EMAIL, FROM_NAME);
 	        $mail->setSubject($this->view->translate('forgot'));
-	        $mail->addTo($user->name, $user->email);
+	        $mail->addTo($user->email, $user->name);
 			$mail->send();
+            $this->_helper->_flashMessenger->addMessage('Success');
+            $this->_redirect('forgot/');
 		}
 		$this->_helper->_flashMessenger->addMessage('Error');
         $this->_redirect('forgot/');
@@ -153,7 +155,7 @@ class ForgotController extends Tri_Controller_Action
 		$encrypt = new Zend_Filter_Encrypt();
 		$encrypt->setVector(MAIL_VECTOR);
 		$hash = $encrypt->filter("id/{$user->id}/date/" . date('Y-m-d'));
-		return $this->view->serverUrl() . "/forgot/recovery?key=" . urlencode(base64_encode($hash));
+		return $this->view->serverUrl(). $this->view->baseUrl() . "/forgot/recovery?key=" . urlencode(base64_encode($hash));
 	}
 	
 	/**
