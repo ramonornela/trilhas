@@ -77,6 +77,19 @@ class Application_Model_Content
         $table->createRow($data)->save();
     }
 
+    public static function getLastAccess($classroomId, $data)
+    {
+        $access = new Zend_Db_Table('content_access');
+        $select = $access->select()->where('classroom_id = ?', $classroomId)
+                         ->order('content_access.id DESC');
+        $row = $access->fetchRow($select);
+
+        if ($row) {
+            return self::getPositionById($row->content_id, $data);
+        }
+        return 0;
+    }
+
     /**
      * Get a position by id
      *
@@ -84,7 +97,7 @@ class Application_Model_Content
      * @param array $data
      * @return boolean
      */
-    public function getPositionById($id, $data)
+    public static function getPositionById($id, $data)
     {
 		foreach($data as $key => $val) {
 			if ($val['id'] == $id) {

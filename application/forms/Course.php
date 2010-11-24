@@ -70,6 +70,12 @@ class Application_Form_Course extends Zend_Form
                     ->addFilters($filters['description'])
                     ->setAllowEmpty(false);
 
+        $filters['hours'][] = 'StripTags';
+        $hours = new Zend_Form_Element_Text('hours');
+        $hours->setLabel('Hours')
+              ->addValidators($validators['hours'])
+              ->addFilters($filters['hours']);
+
         if (!$categories || isset($categories[''])) {
             $category = new Zend_Form_Element_Text('category');
         } else {
@@ -109,6 +115,7 @@ class Application_Form_Course extends Zend_Form
              ->addElement($name)
              ->addElement($description)
              ->addElement($responsible)
+             ->addElement($hours)
              ->addElement($category)
              ->addElement($file)
              ->addElement($status)

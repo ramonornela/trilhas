@@ -35,16 +35,27 @@ class Exercise_Model_Question
     public static function associate($exerciseId, $questionIds)
     {
         if (count($questionIds)) {
-            $question = new Tri_Db_Table('exercise_question');
+            $question    = new Tri_Db_Table('exercise_question');
+            $optionTable = new Tri_Db_Table('exercise_option');
             foreach ($questionIds as $position => $questionId) {
                 $row = $question->fetchRow(array('id = ?' => $questionId));
                 if ($row) {
                     $row->position = $position;
                     if ($row->exercise_id != $exerciseId) {
                         $data = $row->toArray();
-                        unset($data['id']);
+                        if (!$row->exercise_id) {
+                            $data['parent_id'] = $data['id'];
+                        }
                         $data['exercise_id'] = $exerciseId;
-                        $question->createRow($data)->save();
+                        unset($data['id']);
+                        $id = $question->createRow($data)->save();
+                        $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $questionId));
+                        foreach ($options as $option) {
+                            $data = $option->toArray();
+                            unset($data['id']);
+                            $data['exercise_question_id'] = $id;
+                            $optionTable->createRow($data)->save();
+                        }
                     } else {
                         $row->save();
                     }
@@ -68,6 +79,24 @@ class Exercise_Model_Question
                 $row->save();
             }
         }
+    }
+
+    /**
+     * Get all available and filtered question by class
+     *
+     * @param integer $classroomId
+     * @return Zend_Db_Table_Select
+     */
+    public function available($classroomId)
+    {
+        $table  = new Tri_Db_Table('exercise_question');
+        $select = $table->select(true)->setIntegrityCheck(false)
+                        ->joinLeft('exercise', 'exercise.id = exercise_question.exercise_id', array('name'))
+                        ->where('(exercise.id = exercise_question.exercise_id AND classroom_id = ?)
+                                  OR exercise_question.exercise_id IS NULL', $classroomId)
+                        ->where('exercise_question.id NOT IN(SELECT DISTINCT eq.parent_id FROM exercise_question eq WHERE parent_id IS NOT NULL)')
+                        ->order(array('exercise_question.status','exercise_question.id DESC'));
+        return $select;
     }
 }
 ?>

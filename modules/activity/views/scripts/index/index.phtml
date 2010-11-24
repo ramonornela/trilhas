@@ -12,9 +12,15 @@
 
 <?php if (count($this->data)):?>
     <table class="datatable">
+            <tr>
+                <th></th>
+                <th><?php echo $this->translate('End')?></th>
+                <th></th>
+            </tr>
         <?php foreach ($this->data as $data): ?>
             <tr>
                 <td><?php echo $this->ajax($data->title, 'activity/text/index/id/' . $data->id);?></td>
+                <td><?php echo $data->end ? $this->date($data->end) : $this->translate('Free');?></td>
                 <td nowrap="nowrap">
                     <?php if ($this->isAllowed('form')): ?>
                         <?php echo $this->ajax("edit", 'activity/index/form/id/'. $data->id, 2); ?>

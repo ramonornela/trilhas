@@ -34,13 +34,25 @@ class IndexController extends Tri_Controller_Action
     {
         $course   = new Tri_Db_Table('course');
         $calendar = new Tri_Db_Table('calendar');
+        $page     = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
         $form     = new Application_Form_Login();
-        $this->view->courses  = $course->fetchAll(array('status = ?' => 'Active'),
-                                                  array('name', 'category'));
+        $select   = $course->select()
+                           ->where('status = ?', 'active')
+                           ->order(array('name', 'category'));
+        
         $where = array('classroom_id IS NULL', 'end IS NULL OR end > ?' => date('Y-m-d'));
         $this->view->calendar = $calendar->fetchAll($where, 'begin', 10);
         $this->view->form = $form;
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
+
+        $paginator = new Tri_Paginator($select, $page);
+        $this->view->courses = $paginator->getResult();
+
         $this->_helper->layout->setLayout('layout');
+    }
+
+    public function keepSessionAction()
+    {
+        exit('ok');
     }
 }

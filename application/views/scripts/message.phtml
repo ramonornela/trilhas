@@ -6,3 +6,9 @@
         <?php endforeach; ?>
     </ul>
 </div>
+<script type="text/javascript">
+    clearTimeout(mTime);
+    var mTime = setTimeout(function(){
+        $('.message').animate({"height": "hide", "opacity": "hide"}, 'slow');
+    }, 5000);
+</script>

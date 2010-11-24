@@ -30,14 +30,35 @@ require_once 'Zend/View/Helper/Abstract.php';
  */
 class Tri_View_Helper_Date extends Zend_View_Helper_Abstract
 {
-    public function date($value, $type = "")
+    public function date($value, $displayTime = false)
     {
-		if ('chat' === $type) {
-			$date = new Zend_Date($value);
+		if ($displayTime) {
+            $translate = Zend_Registry::get('Zend_Translate');
+            $locale    = key(Zend_Registry::get('Zend_Locale')->getDefault());
+			$date      = new Zend_Date($value, null, $locale);
+
 			if ($date->isToday()) {
+                $h = $date->toString('H');
+                $m = $date->toString('m');
+                $s = $date->toString('s');
+
+                if (date('H') == $h) {
+                    $min = (int) date('i') - (int) $m;
+                    if ($min < 1) {
+                        $sec = (int) date('s') - (int) $s;
+                        if ($sec < 10) {
+                            return $translate->_('now');
+                        }
+                        return $sec . ' ' . $translate->_('seconds ago');
+                    }
+                    return $min . ' ' . $translate->_('minutes ago');
+                } elseif (date('H') > $h) {
+                    return (int) date('H') - (int) $h . ' ' . $translate->_('hours ago');
+                }
+
 				return $date->toString('H:m');
 			} else {
-				return $date->toString('d/MM/y H:m');
+				return $date->toString('dd/MM/y H:m');
 			}
 		}
         

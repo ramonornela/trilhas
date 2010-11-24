@@ -20,7 +20,7 @@
 
 <?php if (count($this->data)):?>
     <table class="datatable">
-        <?php foreach ($this->data as $data): ?>
+        <?php foreach ($this->data as $key => $data): ?>
             <?php
                 $display = "display: none;";
                 if ($this->q && (strlen($this->q) > 1) && $key == 0) {

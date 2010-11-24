@@ -72,7 +72,9 @@ class CourseController extends Tri_Controller_Action
             $classroom = new Tri_Db_Table('classroom');
 
             $this->view->data = $course->find($id)->current();
-            $where = array('course_id = ?' => $id, 'status = ?' => 'open');
+            $where = array('course_id = ?' => $id, 
+                           'status = ?' => 'open',
+                           'end >= ? OR end IS NULL' => date('Y-m-d'));
             $this->view->classroom = $classroom->fetchAll($where, 'begin');
         }
     }
@@ -120,6 +122,10 @@ class CourseController extends Tri_Controller_Action
                 unset($data['image']);
             }
 
+            if (!$data['responsible']) {
+                unset($data['responsible']);
+            }
+
             $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
 
             if (isset($data['id']) && $data['id']) {
@@ -132,10 +138,16 @@ class CourseController extends Tri_Controller_Action
                 $row = $table->createRow($data);
                 $id = $row->save();
 
+                $responsible = null;
+                if (isset($data['responsible'])) {
+                    $responsible = $data['responsible'];
+                }
+
                 $data = array('course_id'   => $id,
-                              'responsible' => $data['responsible'],
+                              'responsible' => $responsible,
                               'name'        => 'Open ' . $data['name'],
                               'begin'       => date('Y-m-d'));
+
                 $row = $classroom->createRow($data);
                 $row->save();
             }

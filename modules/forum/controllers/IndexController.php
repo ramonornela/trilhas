@@ -79,4 +79,10 @@ class Forum_IndexController extends Tri_Controller_Action
         $this->view->form = $form;
         $this->render('form');
     }
+
+    public function viewAction()
+    {
+        $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $this->_redirect('/forum/reply/index/layout/box/id/'.$id);
+    }
 }

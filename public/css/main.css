@@ -14,12 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
 /**
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
- */
+*/
 html, body{margin: 0; padding: 0;}
 object, embed {display: block; background: #eee; border: 2px solid black;}
 
@@ -61,10 +61,17 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .courses .search a{margin-left: 20px;}
 .courses .item{clear: both;}
 .courses .item img{float: left; margin: 0 5px 5px 0;}
-.courses .item p{margin-top: 0;}
+.courses .item p{margin-top: 2px;}
 .courses .item span{margin-left: 5px; font-size: 0.8em; color: #ccc;}
+.courses .item img.certificate{float: none; margin: 0;}
 
 .course-image{float: left; margin: 0 10px 10px 0;}
+
+.reply ol li{margin-bottom: 30px;}
+.reply ul{margin: 10px 0; padding: 0; list-style: none;}
+.reply ul li{margin-bottom: 10px;}
+.reply li.right{color: green; float: none; font-weight: bold;}
+.reply li.wrong{color: red; font-weight: bold;}
 
 .classroom-list{border: 1px solid #eee; float: right; padding: 0 10px 5px 10px; margin: 0 0 5px 5px; background: #fff;}
 .classroom-list table{border-collapse: collapse;}
@@ -90,11 +97,13 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 
 .message-reply{text-align:right; font-size:80%; color:#BBB; border-bottom:1px solid #BBB; margin-bottom:10px;}
 
+.forum .name{color: #ccc;}
+
 .forgot{ padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px dotted; font-size: 0.8em;}
 
 .paginationControl{text-align: center; margin-top: 10px;}
 
-.list-user{float: right; width: 180px; border-left:dashed 1px; padding-left: 5px;}
+.list-user{float: right; width: 180px; border-left:dashed 1px; padding-left: 10px;}
 .list-user .list{overflow: auto; height: 140px;}
 .list-user .item{clear: both; margin-bottom: 15px;}
 .list-user .item img{float: left; margin-right: 5px;}
@@ -102,3 +111,22 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .magnifier{float: left; margin: 4px 8px 0 0;}
 
 .nav .buttons{margin: 5px 0; text-align: right;}
+
+.panel .item{float: left; padding-right: 10px;}
+.panel .note input{border: 1px solid; padding: 5px; margin-top: 3px; width: 50px;}
+
+.organizer{list-style-type: none; margin: 0; padding: 0; width: 80%;}
+.organizer li {cursor: move; margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 18px;}
+.organizer li span {position: absolute; margin-left: -1.3em;}
+
+.chat-room ul.messages{margin: 0; padding: 0; height: 300px; overflow: auto; list-style: none; border-right: 1px dotted;}
+.chat-room ul.messages li{margin-bottom: 4px;}
+.chat-room ul.messages li span{color: #ddd; font-size: 0.9em;}
+.chat-room ul.user{height: 300px; overflow: auto; list-style: none; float: right; padding-left: 10px; margin-left: 20px; width: 200px;}
+.chat-room .form{margin-right: 240px;}
+.chat-room .form textarea{width: 100%; }
+
+.pages{ float: right;}
+.pages ul{margin: 0; padding: 0; list-style: none;}
+.pages ul li{display: inline; padding-left: 5px;}
+.pages ul li a{color: #2C4359;}

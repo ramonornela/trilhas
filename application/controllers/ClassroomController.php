@@ -87,6 +87,8 @@ class ClassroomController extends Tri_Controller_Action
             Application_Model_Content::createInitialContent($row->course_id);
             $data = Application_Model_Content::fetchAllOrganize($row->course_id);
         }
+
+        $this->view->current = Application_Model_Content::getLastAccess($id, $data);
         $this->view->data = Zend_Json::encode($data);
 
         $session->contents = $this->view->data;
@@ -133,6 +135,10 @@ class ClassroomController extends Tri_Controller_Action
 
             if (!$data['amount']) {
                 unset($data['amount']);
+            }
+            
+            if (!$data['responsible']) {
+                unset($data['responsible']);
             }
             
             if (isset($data['id']) && $data['id']) {

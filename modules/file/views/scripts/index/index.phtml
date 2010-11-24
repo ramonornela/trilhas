@@ -28,7 +28,7 @@
         <?php echo $this->paginationControl($this->data) ?>
     </div>
 <?php else:?>
-    <p><?=$this->translate( "there are no records" );?></p>
+    <p><?php echo $this->translate( "there are no records" );?></p>
 <?php endif;?>
 <script type="text/javascript">
     $('.file-show').click(function(){

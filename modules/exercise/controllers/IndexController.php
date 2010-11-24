@@ -4,7 +4,7 @@ class Exercise_IndexController extends Tri_Controller_Action
     public function init()
     {
         parent::init();
-        $this->view->title = "Evaluation";
+        $this->view->title = "Exercise";
     }
 
     public function indexAction()
@@ -16,7 +16,6 @@ class Exercise_IndexController extends Tri_Controller_Action
 
         if ($identity->role == 'student') {
             $where['begin  <= ?'] = date('Y-m-d');
-            $where['end >= ? OR end IS NULL'] = date('Y-m-d');
             $where['status IN(?)'] = array('active','final');
         }
         
@@ -85,5 +84,12 @@ class Exercise_IndexController extends Tri_Controller_Action
         
         $this->view->form = $form;
         $this->render('form');
+    }
+
+    public function viewAction()
+    {
+        $id     = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $userId = Zend_Filter::filterStatic($this->_getParam('userId'), 'int');
+        $this->_redirect('/exercise/reply/view/layout/box/exerciseId/'.$id.'/userId/'.$userId);
     }
 }

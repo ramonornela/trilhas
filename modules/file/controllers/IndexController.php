@@ -51,15 +51,11 @@ class File_IndexController extends Tri_Controller_Action
             $row = $table->createRow($data);
             $id = $row->save();
             Application_Model_Timeline::save('saved a new file', $data['name']);
-
-            $this->_helper->_flashMessenger->addMessage('Success');
-            echo $this->view->translate('Sended');
-            exit;
+        } else {
+            $this->_response->prepend('messages', $this->view->translate('Error'));
+            $this->view->form = $form;
+            $this->render('form');
         }
-
-        $this->_response->prepend('messages', $this->view->translate('Error'));
-        $this->view->form = $form;
-        $this->render('form');
     }
 
     public function deleteAction()

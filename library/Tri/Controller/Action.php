@@ -45,9 +45,7 @@ class Tri_Controller_Action extends Zend_Controller_Action
         if (!$this->_request->isXmlHttpRequest()) {
             $this->_helper->layout->enableLayout();
             $this->_helper->layout->setLayout('solo');
-        }
-
-        if ($this->_hasParam('layout')) {
+        } elseif ($this->_hasParam('layout')) {
             $this->_helper->layout->setLayout($this->_getParam('layout'));
         }
 
@@ -56,6 +54,11 @@ class Tri_Controller_Action extends Zend_Controller_Action
         if (count($messages)) {
             $this->view->messages = $messages;
             $this->getResponse()->prepend('messages', $this->view->render('message.phtml'));
+        }
+
+        if (!Zend_Auth::getInstance()->getIdentity()) {
+            $page = new Tri_Db_Table('page');
+            $this->view->pages = $page->fetchAll("status = 'active'", 'position');
         }
     }
 

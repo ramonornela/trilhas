@@ -55,6 +55,9 @@ class Application_Model_Classroom
                      ->join($course, 'c.id = cr.course_id', array())
                      ->join($classUser, 'cr.id = cu.classroom_id', array())
                      ->where('cu.user_id = ?', $userId)
+                     ->where('cu.status = ?', 'registered')
+                     ->where('cr.begin <= ?', date('Y-m-d'))
+                     ->where('cr.end >= ? OR end IS NULL', date('Y-m-d'))
                      ->where('cr.status = ?', 'active');
         $registries = $db->fetchAll($select);
 
@@ -72,6 +75,23 @@ class Application_Model_Classroom
         }
         
         return $data;
+    }
+
+    /**
+     * Get all possible classroom
+     *
+     * @param int $userId
+     * @return array
+     */
+    public static function getFinalizedByUser($userId)
+    {
+        $certificate = new Tri_Db_Table('certificate');
+        $select = $certificate->select(true)->setIntegrityCheck(false)
+                              ->join('classroom', 'classroom.id = certificate.classroom_id', array())
+                              ->join('course', 'course.id = classroom.course_id')
+                              ->where('certificate.user_id = ?', $userId);
+
+        return $certificate->fetchAll($select);
     }
 	
 	/**
