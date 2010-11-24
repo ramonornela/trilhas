@@ -2,7 +2,7 @@
     <div class="main index">
         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all">
             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <h3><?php echo $this->translate($this->title); ?></h3>
+                <h3><?php echo !empty($this->title)?$this->translate($this->title):'empty'; ?></h3>
                 <a title="<?php echo $this->translate('fix')?>" style="margin-right: 20px;" href="#" class="fix ui-dialog-titlebar-close ui-corner-all">
                     <span class="ui-icon ui-icon-pin-s">fix</span>
                 </a>

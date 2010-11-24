@@ -84,8 +84,7 @@ class Application_Form_User extends Zend_Form
         $born->setLabel('Born')
                 ->setAttrib('class', 'date')
                 ->addFilters($filters['born'])
-                ->addValidators($validators['born'])
-                ->setAllowEmpty(false);
+                ->addValidators($validators['born']);
 
         $filters['description'][] = 'StripTags';
         $description = new Zend_Form_Element_Textarea('description');

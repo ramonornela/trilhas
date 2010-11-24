@@ -73,8 +73,8 @@ class Tri_Controller_Action extends Zend_Controller_Action
         $privilege = $this->_getParam('controller')
                    . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
                    . $this->_getParam('action');
-
-        if (!$acl->isAllowed($role, $resource, $privilege)) {
+			
+        if (!$acl->isAllowed($role, $resource, $privilege) && 'forgot' != $this->_getParam('controller')) {
             $url = base64_encode($_SERVER['REQUEST_URI']);
             $this->_redirect('/user/login/url/'. $url);
         }

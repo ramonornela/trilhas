@@ -200,6 +200,7 @@ class UserController extends Tri_Controller_Action
 		$this->_redirect( "/index" );
     }
 	
+	
 	/**
 	 * Action reset.
 	 *
