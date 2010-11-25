@@ -69,6 +69,9 @@
 "Quitter justified";"Desistente c/"
 "Quitter not justified";"Desistente s/"
 "Register";"Retornar"
+"page";"Página"
+"Forgot password";"Esqueceu a senha?"
+"New user";"Novo usuário"
 
 #message
 "there are no records";"Não existem registros"
@@ -92,8 +95,10 @@
 "created a new FAQ";"criou uma nova FAQ"
 "created a new forum";"criou um novo fórum"
 "created a new activity";"criou uma nova atividade"
+"created a new chat";"criou uma novo chat"
 
 #fields
+"[select]";"[selecione]"
 "Name";"Nome"
 "Email";"E-mail"
 "Password";"Senha"
@@ -172,3 +177,4 @@
 "Certificate";"Certificado"
 "Unique code";"Código de idetificação"
 "Finalized";"Finalizado"
+"Page";"Página"

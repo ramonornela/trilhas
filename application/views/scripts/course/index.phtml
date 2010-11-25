@@ -1,5 +1,5 @@
 <div class="right">
-    <a href="course/form"><?php echo $this->translate('New')?></a>
+    <?php echo $this->ajax("new", 'course/form', 2); ?>
 </div>
 <div class="search">
     <form action="course/index" method="get">
@@ -27,4 +27,5 @@
     $('form').submit(function(){
         this.action = this.action + '/query/' + $('input[type=text]').val();
     });
+    $('input[type=button], input[type=submit]').button();
 </script>

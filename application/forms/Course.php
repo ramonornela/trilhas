@@ -38,7 +38,7 @@ class Application_Form_Course extends Zend_Form
         $filters       = $course->getFilters();
         $where         = array("role = 'institution' OR role = 'Teacher' OR role = 'Creator'");
         $users         = $user->fetchPairs('id', 'name', $where, 'name');
-        $statusOptions = $course->fetchPairs('status', 'status');
+        $statusOptions = array('active' => 'active', 'inactive' => 'inactive');
         $categories    = $course->fetchPairs('category', 'category');
 
         $this->setAction('course/save')
@@ -68,6 +68,7 @@ class Application_Form_Course extends Zend_Form
         $description->setLabel('Description')
                     ->addValidators($validators['description'])
                     ->addFilters($filters['description'])
+                    ->setAttrib('id', 'course-description-text')
                     ->setAllowEmpty(false);
 
         $filters['hours'][] = 'StripTags';
@@ -99,15 +100,10 @@ class Application_Form_Course extends Zend_Form
              ->addValidator('Size', false, 2097152)//2mb
              ->addValidator('Extension', false, 'jpg,png,gif');
 
-        if (!$statusOptions || isset($statusOptions[''])) {
-            $status = new Zend_Form_Element_Text('status');
-        } else {
-            $statusOptions = array_unique($statusOptions);
-            $status        = new Zend_Form_Element_Select('status');
-            $status->addMultiOptions(array('' => '[select]') + $statusOptions)
-                   ->setRegisterInArrayValidator(false);
-        }
-        $status->setLabel('Status')
+        $status = new Zend_Form_Element_Select('status');
+        $status->addMultiOptions($statusOptions)
+               ->setRegisterInArrayValidator(false)
+               ->setLabel('Status')
                ->addValidators($validators['status'])
                ->addFilters($filters['status']);
 

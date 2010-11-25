@@ -32,6 +32,11 @@
                 <span class="ui-icon ui-icon-person"></span><?php echo $this->translate('user')?>
             </a>
         <?php endif;?>
+        <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'institution'):?>
+            <a href="page" class="ui-state-default ui-corner-all">
+                <span class="ui-icon ui-icon-document-b"></span><?php echo $this->translate('page')?>
+            </a>
+        <?php endif;?>
     </div>
 </div>
 

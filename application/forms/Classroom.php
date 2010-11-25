@@ -41,7 +41,7 @@ class Application_Form_Classroom extends Zend_Form
         $filters       = $table->getFilters();
         $where         = array("role = 'institution' OR role = 'Teacher' OR role = 'Creator'");
         $users         = $user->fetchPairs('id', 'name', $where, 'name');
-        $statusOptions = $table->fetchPairs('status', 'status');
+        $statusOptions = array('active' => 'active', 'inactive' => 'inactive','open' => 'open');
         $courses       = $course->fetchPairs('id', 'name', "status = 'active'");
 
         $this->setAction('classroom/save')
@@ -94,15 +94,10 @@ class Application_Form_Classroom extends Zend_Form
                ->addValidators($validators['amount'])
                ->addFilters($filters['amount']);
         
-        if (!$statusOptions || isset($statusOptions[''])) {
-            $status = new Zend_Form_Element_Text('status');
-        } else {
-            $statusOptions = array_unique($statusOptions);
-            $status        = new Zend_Form_Element_Select('status');
-            $status->addMultiOptions(array('' => '[select]') + $statusOptions)
-                   ->setRegisterInArrayValidator(false);
-        }
-        $status->setLabel('Status')
+        $status = new Zend_Form_Element_Select('status');
+        $status->addMultiOptions($statusOptions)
+               ->setRegisterInArrayValidator(false)
+               ->setLabel('Status')
                ->addValidators($validators['status'])
                ->addFilters($filters['status']);
 

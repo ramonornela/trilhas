@@ -35,7 +35,7 @@
     <body>
         <div id="hd">
             <h1>Trilhas</h1>
-            <img src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" />
+            <a href="index"><img src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" /></a>
             <?php if(Zend_Auth::getInstance()->hasIdentity()):?>
                 <div style="float: right;">
                     <?php echo Zend_Auth::getInstance()->getIdentity()->name?>
@@ -47,6 +47,15 @@
                     <a href="user/logout"><?php echo $this->translate('logout');?></a>
                 </div>
             <?php endif; ?>
+            <?php if (count($this->pages)) :?>
+                <div class="pages">
+                    <ul>
+                        <?php foreach ($this->pages as $page) :?>
+                            <li><a href="page/index/view/id/<?php echo $page->id?>"><?php echo $page->title?></a></li>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+            <?php endif;?>
         </div>
         <div id="bd">
             <?php if ($this->messages):?>

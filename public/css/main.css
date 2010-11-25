@@ -126,7 +126,7 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .chat-room .form{margin-right: 240px;}
 .chat-room .form textarea{width: 100%; }
 
-.pages{ float: right;}
+.pages{ float: right; font-size: 0.9em;}
 .pages ul{margin: 0; padding: 0; list-style: none;}
-.pages ul li{display: inline; padding-left: 5px;}
+.pages ul li{display: inline; padding-left: 8px;}
 .pages ul li a{color: #2C4359;}
