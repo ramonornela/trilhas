@@ -28,7 +28,7 @@ require_once 'Zend/View/Helper/Abstract.php';
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Tri_View_Helper_isAllowed extends Zend_View_Helper_Abstract
+class Tri_View_Helper_IsAllowed extends Zend_View_Helper_Abstract
 {
     /**
      * Check user has permission to passed resource
