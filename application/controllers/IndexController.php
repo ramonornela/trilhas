@@ -44,7 +44,6 @@ class IndexController extends Tri_Controller_Action
         $this->view->calendar = $calendar->fetchAll($where, 'begin', 10);
         $this->view->form = $form;
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
-
         $paginator = new Tri_Paginator($select, $page);
         $this->view->courses = $paginator->getResult();
 

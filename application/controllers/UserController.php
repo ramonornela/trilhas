@@ -92,6 +92,8 @@ class UserController extends Tri_Controller_Action
                 $result = $auth->authenticate($adapter);
 
                 if ($result->isValid()) {
+					$session->attempt = 0;
+					
                     if ($session->url) {
                         $url = $session->url;
                         $session->url = null;
@@ -101,6 +103,7 @@ class UserController extends Tri_Controller_Action
                     $this->_redirect('/dashboard');
                 }
                 $this->_helper->flashMessenger->addMessage('Login failed');
+				$session->attempt++;
             }
         }
 
@@ -110,6 +113,7 @@ class UserController extends Tri_Controller_Action
             $url = str_replace($path, '', $url);
             $session->url = $url;
         }
+		$session->attempt++;
         $this->view->form = $form;
     }
 	
@@ -211,4 +215,16 @@ class UserController extends Tri_Controller_Action
     {
 
     }
+	
+	private function generateCaptcha()
+	{
+		$captcha = new Zend_Captcha_Figlet(array(
+		    'name' => 'captch_verify',
+		    'wordLen' => 3,
+		    'timeout' => 200,
+		));
+		
+		$captcha->generate();
+		return $captcha->render();
+	}
 }

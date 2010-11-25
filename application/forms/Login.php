@@ -31,6 +31,8 @@ class Application_Form_Login extends Zend_Form
      */
     public function init()
     {
+		$session = new Zend_Session_Namespace('data');
+		
         $this->setAction('user/login')
              ->setMethod('post');
 
@@ -43,9 +45,29 @@ class Application_Form_Login extends Zend_Form
         $password->setRequired()
                  ->setLabel('Password')
                  ->addFilters(array('StringTrim', 'StripTags'));
-
+		
+		if (isset($session->attempt) && $session->attempt >= 3) {
+			$captcha = new Zend_Form_Element_Captcha('foo', array(
+			    'captcha' => array(
+			        'captcha' => 'Figlet',
+			        'wordLen' => 4,
+			        'timeout' => 300,
+			    ),
+			));
+			/**
+			 * @TODO Implementar translate
+			 */
+			//$captcha->setLabel('enter the code');
+			$captcha->setLabel('Informe o código');
+		}
+		
         $this->addElement($email)
-             ->addElement($password)
-             ->addElement('submit', 'Login');
+             ->addElement($password);
+			 
+		if  (isset($session->attempt) && $session->attempt >= 3) {
+			$this->addElement($captcha);
+		}
+			 
+        $this->addElement('submit', 'Login');
    }
 }

@@ -53,8 +53,8 @@ class Application_Form_Recovery extends Zend_Form
         $validators['password'][] = 'PasswordConfirmation';
         $password = new Zend_Form_Element_Password('password');
         $password->setLabel('new password')
-                ->addValidators($validators['password'])
-                ->addFilters($filters['password']);
+                 ->addValidators($validators['password'])
+                 ->addFilters($filters['password']);
 
         $passwordConfirmation = new Zend_Form_Element_Password('password_confirm');
         $passwordConfirmation->setLabel('new password confirmation')
