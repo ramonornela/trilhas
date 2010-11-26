@@ -54,11 +54,7 @@ class Application_Form_Login extends Zend_Form
 			        'timeout' => 300,
 			    ),
 			));
-			/**
-			 * @TODO Implementar translate
-			 */
-			//$captcha->setLabel('enter the code');
-			$captcha->setLabel('Informe o código');
+			$captcha->setLabel('enter the code');
 		}
 		
         $this->addElement($email)
