@@ -46,7 +46,7 @@ class Application_Form_Login extends Zend_Form
                  ->setLabel('Password')
                  ->addFilters(array('StringTrim', 'StripTags'));
 		
-		if (isset($session->attempt) && $session->attempt >= 3) {
+		if (isset($session->attempt) && $session->attempt >= ATTEMPTS) {
 			$captcha = new Zend_Form_Element_Captcha('foo', array(
 			    'captcha' => array(
 			        'captcha' => 'Figlet',
@@ -63,11 +63,9 @@ class Application_Form_Login extends Zend_Form
 		
         $this->addElement($email)
              ->addElement($password);
-			 
-		if  (isset($session->attempt) && $session->attempt >= 3) {
+		if  (isset($session->attempt) && $session->attempt >= ATTEMPTS) {
 			$this->addElement($captcha);
 		}
-			 
         $this->addElement('submit', 'Login');
    }
 }

@@ -10,8 +10,10 @@
                 <div class="forgot">
                     <a href="forgot/index"><?php echo $this->translate('Forgot password') ?></a>
                 </div>
-                <a href="user/form"><?php echo $this->translate('New user') ?></a>
-                <br />
+				<?php if (NEW_USER_TO_GUEST) :?>
+					<a href="user/form"><?php echo $this->translate('New user') ?></a>
+	                <br />
+				<?php endif ;?>	
             <?php endif;?>
         </div>
     </div>
