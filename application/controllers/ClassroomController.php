@@ -50,7 +50,7 @@ class ClassroomController extends Tri_Controller_Action
         $table = new Zend_Db_Table('classroom');
         $select = $table->select(true)
                         ->setIntegrityCheck(false)
-                        ->join('course', 'course.id = classroom.course_id', 'course.name as cname')
+                        ->joinLeft('course', 'classroom.course_id = course.id', 'course.name as cname')
                         ->order('status');
 
         if ($query) {
