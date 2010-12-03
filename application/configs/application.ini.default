@@ -16,6 +16,8 @@ constants.UPLOAD_DIR = APPLICATION_PATH  "/../public/upload/"
 constants.PAYMENT = true
 constants.THEME = "excite-bike"
 constants.AVERAGE = 7
+constants.ATTEMPTS = 3
+constants.NEW_USER_TO_GUEST = 0
 
 ;Settings Mail
 constants.FROM_EMAIL = "trilhas@server.com"
