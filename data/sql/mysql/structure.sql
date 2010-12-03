@@ -1,25 +1,28 @@
--- phpMyAdmin SQL Dump
--- version 3.3.4
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Nov 23, 2010 at 06:26 PM
--- Server version: 5.1.50
--- PHP Version: 5.3.3
+# Sequel Pro dump
+# Version 2492
+# http://code.google.com/p/sequel-pro
+#
+# Host: 127.0.0.1 (MySQL 5.1.51)
+# Database: trails
+# Generation Time: 2010-12-03 17:43:51 -0200
+# ************************************************************
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Database: `trilhas`
---
 
--- --------------------------------------------------------
+# Dump of table activity
+# ------------------------------------------------------------
 
---
--- Table structure for table `activity`
---
+DROP TABLE IF EXISTS `activity`;
 
-CREATE TABLE IF NOT EXISTS `activity` (
+CREATE TABLE `activity` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -30,16 +33,19 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `status` enum('active','inactive','final') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `activity_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `activity_text`
---
 
-CREATE TABLE IF NOT EXISTS `activity_text` (
+# Dump of table activity_text
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `activity_text`;
+
+CREATE TABLE `activity_text` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `sender` bigint(20) NOT NULL,
@@ -50,16 +56,20 @@ CREATE TABLE IF NOT EXISTS `activity_text` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `activity_id` (`activity_id`),
-  KEY `sender` (`sender`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
+  KEY `sender` (`sender`),
+  CONSTRAINT `activity_text_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `activity_text_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`),
+  CONSTRAINT `activity_text_ibfk_3` FOREIGN KEY (`sender`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `calendar`
---
 
-CREATE TABLE IF NOT EXISTS `calendar` (
+# Dump of table calendar
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `calendar`;
+
+CREATE TABLE `calendar` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) DEFAULT NULL,
@@ -68,16 +78,20 @@ CREATE TABLE IF NOT EXISTS `calendar` (
   `end` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `calendar_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  CONSTRAINT `calendar_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `calendar_ibfk_3` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `certificate`
---
 
-CREATE TABLE IF NOT EXISTS `certificate` (
+# Dump of table certificate
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `certificate`;
+
+CREATE TABLE `certificate` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -86,16 +100,19 @@ CREATE TABLE IF NOT EXISTS `certificate` (
   `end` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  CONSTRAINT `certificate_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `chat`
---
 
-CREATE TABLE IF NOT EXISTS `chat` (
+# Dump of table chat
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `chat`;
+
+CREATE TABLE `chat` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sender` bigint(20) NOT NULL,
   `receiver` bigint(20) NOT NULL,
@@ -103,16 +120,19 @@ CREATE TABLE IF NOT EXISTS `chat` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `sender` (`sender`),
-  KEY `receiver` (`receiver`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `receiver` (`receiver`),
+  CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`sender`) REFERENCES `user` (`id`),
+  CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`receiver`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `chat_room`
---
 
-CREATE TABLE IF NOT EXISTS `chat_room` (
+# Dump of table chat_room
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `chat_room`;
+
+CREATE TABLE `chat_room` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -122,16 +142,18 @@ CREATE TABLE IF NOT EXISTS `chat_room` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('open','close') NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `chat_room_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `chat_room_message`
---
 
-CREATE TABLE IF NOT EXISTS `chat_room_message` (
+# Dump of table chat_room_message
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `chat_room_message`;
+
+CREATE TABLE `chat_room_message` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `chat_room_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -140,16 +162,19 @@ CREATE TABLE IF NOT EXISTS `chat_room_message` (
   `status` enum('logged','message') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `chat_room_id` (`chat_room_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1044 ;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `chat_room_message_ibfk_1` FOREIGN KEY (`chat_room_id`) REFERENCES `chat_room` (`id`),
+  CONSTRAINT `chat_room_message_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1053 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `classroom`
---
 
-CREATE TABLE IF NOT EXISTS `classroom` (
+# Dump of table classroom
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `classroom`;
+
+CREATE TABLE `classroom` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `course_id` bigint(20) NOT NULL,
   `responsible` bigint(20) DEFAULT NULL,
@@ -161,46 +186,55 @@ CREATE TABLE IF NOT EXISTS `classroom` (
   `status` enum('active','open','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
-  KEY `responsible` (`responsible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+  KEY `responsible` (`responsible`),
+  CONSTRAINT `classroom_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+  CONSTRAINT `classroom_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+  CONSTRAINT `classroom_ibfk_3` FOREIGN KEY (`responsible`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `classroom_user`
---
 
-CREATE TABLE IF NOT EXISTS `classroom_user` (
+# Dump of table classroom_user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `classroom_user`;
+
+CREATE TABLE `classroom_user` (
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` enum('registered','approved','disapproved','justified','not-justified') NOT NULL DEFAULT 'registered',
   PRIMARY KEY (`user_id`,`classroom_id`),
-  KEY `classroom_id` (`classroom_id`)
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `classroom_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `classroom_user_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `configuration`
---
 
-CREATE TABLE IF NOT EXISTS `configuration` (
+# Dump of table configuration
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `configuration`;
+
+CREATE TABLE `configuration` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `value` text,
   PRIMARY KEY (`id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `configuration_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `content`
---
 
-CREATE TABLE IF NOT EXISTS `content` (
+# Dump of table content
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `content`;
+
+CREATE TABLE `content` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `course_id` bigint(20) NOT NULL,
   `content_id` bigint(20) DEFAULT NULL,
@@ -209,61 +243,69 @@ CREATE TABLE IF NOT EXISTS `content` (
   `position` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
-  KEY `content_id` (`content_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1853 ;
+  KEY `content_id` (`content_id`),
+  CONSTRAINT `content_ibfk_2` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `content_access`
---
 
-CREATE TABLE IF NOT EXISTS `content_access` (
+# Dump of table content_access
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `content_access`;
+
+CREATE TABLE `content_access` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `content_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `content_id` (`content_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=387 ;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `content_access_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`),
+  CONSTRAINT `content_access_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=530 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `content_file`
---
 
-CREATE TABLE IF NOT EXISTS `content_file` (
+# Dump of table content_file
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `content_file`;
+
+CREATE TABLE `content_file` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `content_file_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `content_template`
---
 
-CREATE TABLE IF NOT EXISTS `content_template` (
+# Dump of table content_template
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `content_template`;
+
+CREATE TABLE `content_template` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `course`
---
 
-CREATE TABLE IF NOT EXISTS `course` (
+# Dump of table course
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `course`;
+
+CREATE TABLE `course` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `responsible` bigint(20) DEFAULT NULL,
@@ -276,16 +318,19 @@ CREATE TABLE IF NOT EXISTS `course` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `responsible` (`responsible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=205 ;
+  KEY `responsible` (`responsible`),
+  CONSTRAINT `course_ibfk_1` FOREIGN KEY (`responsible`) REFERENCES `user` (`id`),
+  CONSTRAINT `course_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `exercise`
---
 
-CREATE TABLE IF NOT EXISTS `exercise` (
+# Dump of table exercise
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `exercise`;
+
+CREATE TABLE `exercise` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -297,31 +342,37 @@ CREATE TABLE IF NOT EXISTS `exercise` (
   `status` enum('active','inactive','final') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `exercise_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `exercise_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `exercise_answer`
---
 
-CREATE TABLE IF NOT EXISTS `exercise_answer` (
+# Dump of table exercise_answer
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `exercise_answer`;
+
+CREATE TABLE `exercise_answer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `exercise_option_id` bigint(20) NOT NULL,
   `exercise_note_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `exercise_value_id` (`exercise_option_id`),
-  KEY `exercise_note_id` (`exercise_note_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
+  KEY `exercise_note_id` (`exercise_note_id`),
+  CONSTRAINT `exercise_answer_ibfk_2` FOREIGN KEY (`exercise_option_id`) REFERENCES `exercise_option` (`id`),
+  CONSTRAINT `exercise_answer_ibfk_3` FOREIGN KEY (`exercise_note_id`) REFERENCES `exercise_note` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `exercise_note`
---
 
-CREATE TABLE IF NOT EXISTS `exercise_note` (
+# Dump of table exercise_note
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `exercise_note`;
+
+CREATE TABLE `exercise_note` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `exercise_id` bigint(20) NOT NULL,
@@ -329,32 +380,37 @@ CREATE TABLE IF NOT EXISTS `exercise_note` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=61 ;
+  KEY `exercise_id` (`exercise_id`),
+  CONSTRAINT `exercise_note_ibfk_2` FOREIGN KEY (`exercise_id`) REFERENCES `exercise` (`id`),
+  CONSTRAINT `exercise_note_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `exercise_option`
---
 
-CREATE TABLE IF NOT EXISTS `exercise_option` (
+# Dump of table exercise_option
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `exercise_option`;
+
+CREATE TABLE `exercise_option` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `exercise_question_id` bigint(20) NOT NULL,
   `description` text NOT NULL,
   `justify` text,
   `status` enum('right','wrong') NOT NULL DEFAULT 'wrong',
   PRIMARY KEY (`id`),
-  KEY `exercise_question_id` (`exercise_question_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
+  KEY `exercise_question_id` (`exercise_question_id`),
+  CONSTRAINT `exercise_option_ibfk_1` FOREIGN KEY (`exercise_question_id`) REFERENCES `exercise_question` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `exercise_question`
---
 
-CREATE TABLE IF NOT EXISTS `exercise_question` (
+# Dump of table exercise_question
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `exercise_question`;
+
+CREATE TABLE `exercise_question` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `exercise_id` bigint(20) DEFAULT NULL,
   `parent_id` bigint(20) DEFAULT NULL,
@@ -363,16 +419,18 @@ CREATE TABLE IF NOT EXISTS `exercise_question` (
   `position` int(10) DEFAULT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
-  KEY `exercise_id` (`exercise_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+  KEY `exercise_id` (`exercise_id`),
+  CONSTRAINT `exercise_question_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercise` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `faq`
---
 
-CREATE TABLE IF NOT EXISTS `faq` (
+# Dump of table faq
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `faq`;
+
+CREATE TABLE `faq` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -380,16 +438,19 @@ CREATE TABLE IF NOT EXISTS `faq` (
   `answer` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `faq_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `faq_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `file`
---
 
-CREATE TABLE IF NOT EXISTS `file` (
+# Dump of table file
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `file`;
+
+CREATE TABLE `file` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -398,16 +459,19 @@ CREATE TABLE IF NOT EXISTS `file` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `file_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `file_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `forum`
---
 
-CREATE TABLE IF NOT EXISTS `forum` (
+# Dump of table forum
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `forum`;
+
+CREATE TABLE `forum` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -419,16 +483,19 @@ CREATE TABLE IF NOT EXISTS `forum` (
   `status` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `forum_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `forum_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `forum_reply`
---
 
-CREATE TABLE IF NOT EXISTS `forum_reply` (
+# Dump of table forum_reply
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `forum_reply`;
+
+CREATE TABLE `forum_reply` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `forum_id` bigint(20) DEFAULT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -436,16 +503,19 @@ CREATE TABLE IF NOT EXISTS `forum_reply` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `forum_id` (`forum_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `forum_reply_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `forum` (`id`),
+  CONSTRAINT `forum_reply_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `glossary`
---
 
-CREATE TABLE IF NOT EXISTS `glossary` (
+# Dump of table glossary
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `glossary`;
+
+CREATE TABLE `glossary` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -456,16 +526,20 @@ CREATE TABLE IF NOT EXISTS `glossary` (
   KEY `user_id` (`user_id`),
   KEY `classroom_id` (`classroom_id`),
   KEY `user_id_2` (`user_id`),
-  KEY `classroom_id_2` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+  KEY `classroom_id_2` (`classroom_id`),
+  CONSTRAINT `glossary_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `glossary_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `glossary_ibfk_3` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `log`
---
 
-CREATE TABLE IF NOT EXISTS `log` (
+# Dump of table log
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `log`;
+
+CREATE TABLE `log` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) DEFAULT NULL,
@@ -475,16 +549,19 @@ CREATE TABLE IF NOT EXISTS `log` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `log_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `message`
---
 
-CREATE TABLE IF NOT EXISTS `message` (
+# Dump of table message
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `message`;
+
+CREATE TABLE `message` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sender` bigint(20) NOT NULL,
   `receiver` bigint(20) NOT NULL,
@@ -492,16 +569,19 @@ CREATE TABLE IF NOT EXISTS `message` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `sender` (`sender`),
-  KEY `receiver` (`receiver`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+  KEY `receiver` (`receiver`),
+  CONSTRAINT `message_ibfk_1` FOREIGN KEY (`sender`) REFERENCES `user` (`id`),
+  CONSTRAINT `message_ibfk_2` FOREIGN KEY (`receiver`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `notepad`
---
 
-CREATE TABLE IF NOT EXISTS `notepad` (
+# Dump of table notepad
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `notepad`;
+
+CREATE TABLE `notepad` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -509,94 +589,171 @@ CREATE TABLE IF NOT EXISTS `notepad` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `notepad_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  CONSTRAINT `notepad_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `page`
---
 
-CREATE TABLE IF NOT EXISTS `page` (
+# Dump of table page
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `page`;
+
+CREATE TABLE `page` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `position` tinyint(4) NOT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `panel`
---
 
-CREATE TABLE IF NOT EXISTS `panel` (
+# Dump of table panel
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `panel`;
+
+CREATE TABLE `panel` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `type` enum('exercise','forum','activity') NOT NULL,
   `item_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `classroom_id` (`classroom_id`),
-  KEY `item_id` (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+  KEY `item_id` (`item_id`),
+  CONSTRAINT `panel_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `panel_note`
---
 
-CREATE TABLE IF NOT EXISTS `panel_note` (
+# Dump of table panel_note
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `panel_note`;
+
+CREATE TABLE `panel_note` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT NULL,
   `panel_id` bigint(20) DEFAULT NULL,
   `note` tinyint(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `panel_id` (`panel_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
+  KEY `panel_id` (`panel_id`),
+  CONSTRAINT `panel_note_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `panel_note_ibfk_2` FOREIGN KEY (`panel_id`) REFERENCES `panel` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `restriction_panel`
---
 
-CREATE TABLE IF NOT EXISTS `restriction_panel` (
+# Dump of table restriction_panel
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `restriction_panel`;
+
+CREATE TABLE `restriction_panel` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `content_id` bigint(20) NOT NULL,
   `note` tinyint(3) DEFAULT NULL,
-  `panel_id` int(20) NOT NULL,
+  `panel_id` bigint(20) NOT NULL,
   `note_restriction` tinyint(3) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  PRIMARY KEY (`id`),
+  KEY `classroom_id` (`classroom_id`),
+  KEY `content_id` (`content_id`),
+  KEY `panel_id` (`panel_id`),
+  CONSTRAINT `restriction_panel_ibfk_3` FOREIGN KEY (`panel_id`) REFERENCES `panel` (`id`),
+  CONSTRAINT `restriction_panel_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  CONSTRAINT `restriction_panel_ibfk_2` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `restriction_time`
---
 
-CREATE TABLE IF NOT EXISTS `restriction_time` (
+# Dump of table restriction_time
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `restriction_time`;
+
+CREATE TABLE `restriction_time` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `classroom_id` bigint(20) NOT NULL,
   `content_id` bigint(20) NOT NULL,
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  PRIMARY KEY (`id`),
+  KEY `classroom_id` (`classroom_id`),
+  KEY `content_id` (`content_id`),
+  CONSTRAINT `restriction_time_ibfk_2` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`),
+  CONSTRAINT `restriction_time_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `timeline`
---
 
-CREATE TABLE IF NOT EXISTS `timeline` (
+# Dump of table selection_process
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `selection_process`;
+
+CREATE TABLE `selection_process` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `selection_process_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table selection_process_classroom
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `selection_process_classroom`;
+
+CREATE TABLE `selection_process_classroom` (
+  `selection_process_id` bigint(20) NOT NULL,
+  `classroom_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`selection_process_id`,`classroom_id`),
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `selection_process_classroom_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  CONSTRAINT `selection_process_classroom_ibfk_1` FOREIGN KEY (`selection_process_id`) REFERENCES `selection_process` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table selection_process_user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `selection_process_user`;
+
+CREATE TABLE `selection_process_user` (
+  `selection_process_id` bigint(20) NOT NULL,
+  `classroom_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `justify` varchar(255) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(45) NOT NULL DEFAULT 'waiting',
+  PRIMARY KEY (`selection_process_id`,`classroom_id`,`user_id`),
+  KEY `classroom_id` (`classroom_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `selection_process_user_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `selection_process_user_ibfk_1` FOREIGN KEY (`selection_process_id`) REFERENCES `selection_process` (`id`),
+  CONSTRAINT `selection_process_user_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table timeline
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `timeline`;
+
+CREATE TABLE `timeline` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `classroom_id` bigint(20) NOT NULL,
@@ -604,16 +761,19 @@ CREATE TABLE IF NOT EXISTS `timeline` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `classroom_id` (`classroom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+  KEY `classroom_id` (`classroom_id`),
+  CONSTRAINT `timeline_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `timeline_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `user`
---
 
-CREATE TABLE IF NOT EXISTS `user` (
+# Dump of table user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `sex` enum('M','F') DEFAULT 'M',
@@ -627,202 +787,17 @@ CREATE TABLE IF NOT EXISTS `user` (
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `activity`
---
-ALTER TABLE `activity`
-  ADD CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `activity_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
 
---
--- Constraints for table `activity_text`
---
-ALTER TABLE `activity_text`
-  ADD CONSTRAINT `activity_text_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `activity_text_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`),
-  ADD CONSTRAINT `activity_text_ibfk_3` FOREIGN KEY (`sender`) REFERENCES `user` (`id`);
 
---
--- Constraints for table `calendar`
---
-ALTER TABLE `calendar`
-  ADD CONSTRAINT `calendar_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
-  ADD CONSTRAINT `calendar_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `calendar_ibfk_3` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
 
---
--- Constraints for table `certificate`
---
-ALTER TABLE `certificate`
-  ADD CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
-  ADD CONSTRAINT `certificate_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
---
--- Constraints for table `chat`
---
-ALTER TABLE `chat`
-  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`sender`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`receiver`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `chat_room`
---
-ALTER TABLE `chat_room`
-  ADD CONSTRAINT `chat_room_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `chat_room_message`
---
-ALTER TABLE `chat_room_message`
-  ADD CONSTRAINT `chat_room_message_ibfk_1` FOREIGN KEY (`chat_room_id`) REFERENCES `chat_room` (`id`),
-  ADD CONSTRAINT `chat_room_message_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `classroom`
---
-ALTER TABLE `classroom`
-  ADD CONSTRAINT `classroom_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  ADD CONSTRAINT `classroom_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  ADD CONSTRAINT `classroom_ibfk_3` FOREIGN KEY (`responsible`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `classroom_user`
---
-ALTER TABLE `classroom_user`
-  ADD CONSTRAINT `classroom_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `classroom_user_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `configuration`
---
-ALTER TABLE `configuration`
-  ADD CONSTRAINT `configuration_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `content`
---
-ALTER TABLE `content`
-  ADD CONSTRAINT `content_ibfk_2` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`);
-
---
--- Constraints for table `content_access`
---
-ALTER TABLE `content_access`
-  ADD CONSTRAINT `content_access_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`),
-  ADD CONSTRAINT `content_access_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `course`
---
-ALTER TABLE `course`
-  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`responsible`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `course_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `exercise`
---
-ALTER TABLE `exercise`
-  ADD CONSTRAINT `exercise_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `exercise_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `exercise_answer`
---
-ALTER TABLE `exercise_answer`
-  ADD CONSTRAINT `exercise_answer_ibfk_2` FOREIGN KEY (`exercise_option_id`) REFERENCES `exercise_option` (`id`),
-  ADD CONSTRAINT `exercise_answer_ibfk_3` FOREIGN KEY (`exercise_note_id`) REFERENCES `exercise_note` (`id`);
-
---
--- Constraints for table `exercise_option`
---
-ALTER TABLE `exercise_option`
-  ADD CONSTRAINT `exercise_option_ibfk_1` FOREIGN KEY (`exercise_question_id`) REFERENCES `exercise_question` (`id`);
-
---
--- Constraints for table `exercise_question`
---
-ALTER TABLE `exercise_question`
-  ADD CONSTRAINT `exercise_question_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercise` (`id`);
-
---
--- Constraints for table `faq`
---
-ALTER TABLE `faq`
-  ADD CONSTRAINT `faq_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `faq_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `file`
---
-ALTER TABLE `file`
-  ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `file_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `forum`
---
-ALTER TABLE `forum`
-  ADD CONSTRAINT `forum_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `forum_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `forum_reply`
---
-ALTER TABLE `forum_reply`
-  ADD CONSTRAINT `forum_reply_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `forum` (`id`),
-  ADD CONSTRAINT `forum_reply_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `glossary`
---
-ALTER TABLE `glossary`
-  ADD CONSTRAINT `glossary_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `glossary_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `glossary_ibfk_3` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `log`
---
-ALTER TABLE `log`
-  ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `log_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `message`
---
-ALTER TABLE `message`
-  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`sender`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `message_ibfk_2` FOREIGN KEY (`receiver`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `notepad`
---
-ALTER TABLE `notepad`
-  ADD CONSTRAINT `notepad_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
-  ADD CONSTRAINT `notepad_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `panel`
---
-ALTER TABLE `panel`
-  ADD CONSTRAINT `panel_ibfk_1` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
-
---
--- Constraints for table `panel_note`
---
-ALTER TABLE `panel_note`
-  ADD CONSTRAINT `panel_note_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `panel_note_ibfk_2` FOREIGN KEY (`panel_id`) REFERENCES `panel` (`id`);
-
---
--- Constraints for table `timeline`
---
-ALTER TABLE `timeline`
-  ADD CONSTRAINT `timeline_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `timeline_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

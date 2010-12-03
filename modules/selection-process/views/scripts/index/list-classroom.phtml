@@ -1,0 +1,78 @@
+<div class="search">
+    <form action="selection-process/index/list-classroom" method="get">
+		<span class="ui-icon ui-icon-search magnifier"></span>
+        <input type="text" name="query" value="<?php echo $this->params['query']?>" />
+        <input type="submit" value="<?php echo $this->translate('Search')?>" />
+    </form>
+</div>
+<br />
+<div class="courses">
+    <?php if (count($this->data)): ?>
+		<table class="datatable">
+	        <tr>
+	            <th><?php echo $this->translate('Name')?></th>
+	            <th><?php echo $this->translate('Begin')?></th>
+	            <th><?php echo $this->translate('End')?></th>
+	            <th></th>
+	        </tr>
+	        <?php foreach ($this->data as $data): ?>
+	            <tr>
+	                <td>
+						<a href="classroom/form/id/<?php echo $data->id?>" title="<?php echo $this->translate('edit') ?>">
+							<?php echo $data->name?>
+						</a>
+					</td>
+	                <td><?php echo $this->date($data->begin)?></td>
+	                <td><?php echo !empty($data->end)?$this->date($data->end):'---' ?></td>
+	                <td>
+						<a href="selection-process/index/add-course/id/<?php echo $this->selection_process_id?>/classroom/<?php echo $data->id ?>" title="<?php echo $this->translate('selection process classes') ?>">
+							<?php echo $this->translate('add')?>
+						</a>
+					</td>
+	            </tr>
+	        <?php endforeach; ?>
+	    </table>
+        <?php echo $this->paginationControl($this->data, null, null, $this->params); ?>
+    <?php else:?>
+        <p><?php echo $this->translate('there are no records')?></p>
+    <?php endif;?>
+</div>
+<br /><br /><hr />
+<div class="courses-add">
+	<h3><?php echo $this->translate('courses add')?></h3>
+    <?php if (count($this->coursesAdd)): ?>
+		<table class="datatable" >
+	        <tr>
+	            <th><?php echo $this->translate('Name')?></th>
+	            <th><?php echo $this->translate('Begin')?></th>
+	            <th><?php echo $this->translate('End')?></th>
+	            <th></th>
+	        </tr>
+	        <?php foreach ($this->coursesAdd as $course): ?>
+	            <tr>
+	                <td>
+						<a href="classroom/form/id/<?php echo $course->id?>" title="<?php echo $this->translate('edit') ?>">
+							<?php echo $course->name?>
+						</a>
+					</td>
+	                <td><?php echo $this->date($course->begin)?></td>
+	                <td><?php echo !empty($course->end)?$this->date($course->end):'---'?></td>
+	                <td>
+						<a href="selection-process/index/remove-course/id/<?php echo $this->selection_process_id?>/classroom/<?php echo $course->id ?>" title="<?php echo $this->translate('selection process classes') ?>">
+							<?php echo $this->translate('remove')?>
+						</a>
+					</td>
+	            </tr>
+	        <?php endforeach; ?>
+	    </table>
+    <?php else:?>
+        <p><?php echo $this->translate('there are no records')?></p>
+    <?php endif;?>
+</div>
+
+<script type="text/javascript">
+    $('form').submit(function(){
+        this.action = this.action + '/id/<?php echo $this->selection_process_id ?>/query/' + $('input[type=text]').val();
+    });
+    $('input[type=button], input[type=submit]').button();
+</script>

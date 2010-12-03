@@ -25,6 +25,11 @@
  */
 class Application_Model_Classroom
 {
+	/**
+     * Status type: waiting
+     */
+	const REGISTERED = 'registered';
+		
     /**
      * Get all possible classroom
      *
@@ -122,5 +127,24 @@ class Application_Model_Classroom
         }
 
         return true;
+    }
+
+	/**
+	 * Get all class it's available
+	 *
+	 * @param int $id
+	 * @return object select
+	 */
+    public static function getAvailable($id)
+    {
+        $classroom  = new Tri_Db_Table('classroom');
+		$selectionProcessClassroom = new Tri_Db_Table('selection_process_classroom');
+		$selectIn = $selectionProcessClassroom->select()->setIntegrityCheck(false)
+									 		  ->from(array('p' => 'selection_process_classroom'), array('p.classroom_id'))
+		 							 		  ->where('selection_process_id = ?', $id);
+        $select = $classroom->select(true)
+                            ->where('status = ?', 'active')
+							->where('id not in (?)', $selectIn);
+        return $select;
     }
 }

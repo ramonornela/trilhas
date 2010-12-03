@@ -42,7 +42,6 @@ class ClassroomController extends Tri_Controller_Action
 	 * Action index.
 	 *
 	 * @return void
-	 * @author Italo Queiroz
 	 */
     public function indexAction()
     {

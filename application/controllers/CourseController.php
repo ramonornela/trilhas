@@ -76,6 +76,7 @@ class CourseController extends Tri_Controller_Action
                            'status = ?' => 'open',
                            'end >= ? OR end IS NULL' => date('Y-m-d'));
             $this->view->classroom = $classroom->fetchAll($where, 'begin');
+			$this->view->selectionProcess = SelectionProcess_Model_SelectionProcess::getAvailableProcessByCourse($id);
         }
     }
 	

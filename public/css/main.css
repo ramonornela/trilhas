@@ -130,3 +130,6 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .pages ul{margin: 0; padding: 0; list-style: none;}
 .pages ul li{display: inline; padding-left: 8px;}
 .pages ul li a{color: #2C4359;}
+
+.accepts{background:#e4fee4;}
+.rejected{background:#fee4e4;}

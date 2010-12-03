@@ -32,6 +32,7 @@ class IndexController extends Tri_Controller_Action
 	 */
     public function indexAction()
     {
+		var_dump(md5('123'));
         $course   = new Tri_Db_Table('course');
         $calendar = new Tri_Db_Table('calendar');
         $page     = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
