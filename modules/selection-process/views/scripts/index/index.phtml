@@ -1,0 +1,47 @@
+<div class="right">
+    <?php echo $this->ajax("new", 'selection-process/index/form', 2); ?>
+</div>
+<div class="search">
+    <form action="selection-process/index/index" method="get">
+		<span class="ui-icon ui-icon-search magnifier"></span>
+        <input type="text" name="query" value="<?php echo $this->params['query']?>" />
+        <input type="submit" value="<?php echo $this->translate('Search')?>" />
+    </form>
+</div>
+<br />
+<div class="selection-process">
+    <?php if (count($this->data)): ?>
+		<table class="datatable">
+	        <tr>
+	            <th><?php echo $this->translate('Name')?></th>
+	            <th><?php echo $this->translate('Begin')?></th>
+	            <th><?php echo $this->translate('End')?></th>
+	            <th></th>
+	        </tr>
+	        <?php foreach ($this->data as $data): ?>
+	            <tr>
+	                <td><a href="selection-process/index/form/id/<?php echo $data->id?>"><?php echo $data->name?></a></td>
+	                <td><?php echo $this->date($data->begin)?></td>
+	                <td><?php echo $this->date($data->end)?></td>
+	                <td>
+						<a href="selection-process/index/list-classroom/id/<?php echo $data->id?>" title="<?php echo $this->translate('selection process classes') ?>">
+							<?php echo $this->translate('participating classes')?> 
+						</a> &nbsp;	
+						<a href="selection-process/index/list-pre-registration/id/<?php echo $data->id?>" title="<?php echo $this->translate('students enrolled') ?>">
+								<?php echo $this->translate('students enrolled')?>
+						</a>
+					</td>
+	            </tr>
+	        <?php endforeach; ?>
+	    </table>
+        <?php echo $this->paginationControl($this->data, null, null, $this->params); ?>
+    <?php else:?>
+        <p><?php echo $this->translate('there are no records')?></p>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    $('form').submit(function(){
+        this.action = this.action + '/query/' + $('input[type=text]').val();
+    });
+    $('input[type=button], input[type=submit]').button();
+</script>

@@ -1,0 +1,29 @@
+<?php if ($this->data):?>
+    <div>
+        <h3><?php echo $this->data->uname?></h3>
+        <table class="datatable">
+            <tr>
+                <td width="200"><?php echo $this->translate('Course')?></td>
+                <td><?php echo $this->data->name?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->translate('Hours')?></td>
+                <td><?php echo $this->data->hours?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->translate('Begin')?></td>
+                <td><?php echo $this->date($this->data->begin)?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->translate('End')?></td>
+                <td><?php echo $this->date($this->data->end)?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->translate('Unique code')?></td>
+                <td><?php echo $this->data->unique_id?></td>
+            </tr>
+        </table>
+    </div>
+<?php else:?>
+    <p><?=$this->translate( "there are no records" );?></p>
+<?php endif;?>

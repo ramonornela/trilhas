@@ -25,12 +25,24 @@
  */
 class UserController extends Tri_Controller_Action
 {
+	/**
+	 * Init
+ 	 *
+	 * Call parent init and set title box.
+	 *
+	 * @return void
+	 */
     public function init()
     {
         parent::init();
         $this->view->title = "User";
     }
-
+	
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
@@ -49,7 +61,12 @@ class UserController extends Tri_Controller_Action
         $paginator = new Tri_Paginator($select, $page);
         $this->view->data = $paginator->getResult();
     }
-
+	
+	/**
+	 * Action login.
+	 *
+	 * @return void
+	 */
     public function loginAction()
     {
         $this->view->title = "Login";
@@ -75,6 +92,8 @@ class UserController extends Tri_Controller_Action
                 $result = $auth->authenticate($adapter);
 
                 if ($result->isValid()) {
+					$session->attempt = 0;
+					
                     if ($session->url) {
                         $url = $session->url;
                         $session->url = null;
@@ -84,6 +103,7 @@ class UserController extends Tri_Controller_Action
                     $this->_redirect('/dashboard');
                 }
                 $this->_helper->flashMessenger->addMessage('Login failed');
+				$session->attempt++;
             }
         }
 
@@ -93,11 +113,22 @@ class UserController extends Tri_Controller_Action
             $url = str_replace($path, '', $url);
             $session->url = $url;
         }
+		$session->attempt++;
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action form.
+	 *
+	 * @return void
+	 */
     public function formAction()
     {
+		if (!NEW_USER_TO_GUEST) {
+			$this->_helper->flashMessenger->addMessage('access denied');
+			$this->_redirect('/');
+		}
+		
         $userId   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $form     = new Application_Form_User();
         $identity = Zend_Auth::getInstance()->getIdentity();
@@ -122,7 +153,12 @@ class UserController extends Tri_Controller_Action
         }
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action save.
+	 *
+	 * @return void
+	 */
     public function saveAction()
     {
         $form  = new Application_Form_User();
@@ -162,14 +198,38 @@ class UserController extends Tri_Controller_Action
         $this->render('form');
     }
     
+	/**
+	 * Action logout.
+	 *
+	 * @return void
+	 */
     public function logoutAction()
     {
 		Zend_Auth::getInstance()->clearIdentity();
 		$this->_redirect( "/index" );
     }
-
+	
+	
+	/**
+	 * Action reset.
+	 *
+	 * @todo implement functionality. 
+	 * @return void
+	 */
     public function resetAction()
     {
 
     }
+	
+	private function generateCaptcha()
+	{
+		$captcha = new Zend_Captcha_Figlet(array(
+		    'name' => 'captch_verify',
+		    'wordLen' => 3,
+		    'timeout' => 200,
+		));
+		
+		$captcha->generate();
+		return $captcha->render();
+	}
 }

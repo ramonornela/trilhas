@@ -25,15 +25,37 @@
  */
 class DashboardController extends Tri_Controller_Action
 {
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
-        $identity = Zend_Auth::getInstance()->getIdentity();
-        $calendar = new Tri_Db_Table('calendar');
-        $courses  = Application_Model_Classroom::getAllByUser($identity->id);
+        $identity  = Zend_Auth::getInstance()->getIdentity();
+        $calendar  = new Tri_Db_Table('calendar');
+        $courses   = Application_Model_Classroom::getAllByUser($identity->id);
+        $finalized = Application_Model_Classroom::getFinalizedByUser($identity->id);
 
         $this->view->courses = $courses;
+        $this->view->finalized = $finalized;
         $this->view->calendar = Calendar_Model_Calendar::getByClassroom($courses);
+        $this->view->timeline = Application_Model_Timeline::getByClassroom($courses, 1);
         $this->view->user     = $identity;
         $this->_helper->layout->setLayout('layout');
+    }
+	
+	/**
+	 * Action more.
+	 *
+	 * @return void
+	 */
+    public function moreAction()
+    {
+        $page = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        $courses  = Application_Model_Classroom::getAllByUser($identity->id);
+
+        $this->view->timeline = Application_Model_Timeline::getByClassroom($courses, $page);
     }
 }

@@ -45,9 +45,7 @@ class Tri_Controller_Action extends Zend_Controller_Action
         if (!$this->_request->isXmlHttpRequest()) {
             $this->_helper->layout->enableLayout();
             $this->_helper->layout->setLayout('solo');
-        }
-
-        if ($this->_hasParam('layout')) {
+        } elseif ($this->_hasParam('layout')) {
             $this->_helper->layout->setLayout($this->_getParam('layout'));
         }
 
@@ -56,6 +54,11 @@ class Tri_Controller_Action extends Zend_Controller_Action
         if (count($messages)) {
             $this->view->messages = $messages;
             $this->getResponse()->prepend('messages', $this->view->render('message.phtml'));
+        }
+
+        if (!Zend_Auth::getInstance()->getIdentity()) {
+            $page = new Tri_Db_Table('page');
+            $this->view->pages = $page->fetchAll("status = 'active'", 'position');
         }
     }
 
@@ -73,8 +76,8 @@ class Tri_Controller_Action extends Zend_Controller_Action
         $privilege = $this->_getParam('controller')
                    . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
                    . $this->_getParam('action');
-
-        if (!$acl->isAllowed($role, $resource, $privilege)) {
+			
+        if (!$acl->isAllowed($role, $resource, $privilege) && 'forgot' != $this->_getParam('controller')) {
             $url = base64_encode($_SERVER['REQUEST_URI']);
             $this->_redirect('/user/login/url/'. $url);
         }

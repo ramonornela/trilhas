@@ -1,5 +1,5 @@
 <div class="right">
-    <a href="classroom/form"><?php echo $this->translate('New')?></a>
+    <?php echo $this->ajax("new", 'classroom/form', 2); ?>
 </div>
 <div class="search">
     <form action="classroom/index" method="get">
@@ -19,7 +19,7 @@
         <?php foreach($this->data as $data): ?>
             <tr>
                 <td><a href="classroom/form/id/<?php echo $data->id?>"><?php echo $data->name?></a></td>
-                <td><?php echo $data->cname?></td>
+                <td><?php echo isset($data->cname) ? $data->cname : ''?></td>
                 <td><?php echo $this->translate($data->status)?></td>
                 <td><a href="classroom/list-user/id/<?php echo $data->id?>"><?php echo $this->translate('users')?></a></td>
             </tr>
@@ -33,4 +33,5 @@
     $('form').submit(function(){
         this.action = this.action + '/query/' + $('input[type=text]').val();
     });
+    $('input[type=button], input[type=submit]').button();
 </script>

@@ -103,6 +103,7 @@ class Tri_Db_Table extends Zend_Db_Table
                 case 'int4':
                 case 'int2':
                 case 'bigint':
+                case 'tinyint':
                 case 'smallint':
                 case 'bigint':
                 case 'integer':
@@ -119,6 +120,9 @@ class Tri_Db_Table extends Zend_Db_Table
                 case 'time':
                     break;
                 default:
+                    if (strpos($value['DATA_TYPE'], 'enum') !== false) {
+                        break;
+                    }
                     throw new Exception('Tipo de dado não existe! ' . $value['DATA_TYPE']);
                     break;
             }
@@ -154,6 +158,7 @@ class Tri_Db_Table extends Zend_Db_Table
                 case 'int2':
                 case 'bigint':
                 case 'smallint':
+                case 'tinyint':
                 case 'numeric':
                 case 'bigint':
                 case 'integer':
@@ -171,6 +176,9 @@ class Tri_Db_Table extends Zend_Db_Table
                case 'bytea':
                    break;
                 default:
+                    if (strpos($value['DATA_TYPE'], 'enum') !== false) {
+                        break;
+                    }
                     throw new Exception('Tipo de dado não existe!'.$value['DATA_TYPE']);
                     break;
             }
@@ -281,57 +289,5 @@ class Tri_Db_Table extends Zend_Db_Table
             }
         }
         return $data;
-    }
-
-    /**
-     * Support method for fetching rows.
-     *
-     * @param  Zend_Db_Table_Select $select  query options.
-     * @return array An array containing the row results in FETCH_ASSOC mode.
-     */
-    protected function _fetch(Zend_Db_Table_Select $select)
-    {
-        if (Zend_Registry::isRegistered('cache')) {
-            $cache = Zend_Registry::get('cache');
-            $id    = sha1($select->__toString());
-
-            if ($cache->test($id)) {
-                return $cache->load($id);
-            }
-        }
-
-        $stmt = $this->_db->query($select);
-        $data = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-
-        if (isset($cache)) {
-            $cache->save($data, $id, array($this->_name));
-        }
-        return $data;
-    }
-
-    public function clearCache()
-    {
-        if (Zend_Registry::isRegistered('cache')) {
-            $mode = Zend_Cache::CLEANING_MODE_MATCHING_TAG;
-            Zend_Registry::get('cache')->clean($mode, array($this->_name));
-        }
-    }
-
-    public function insert(array $data)
-    {
-        $this->clearCache();
-        return parent::insert($data);
-    }
-
-    public function update(array $data, $where)
-    {
-        $this->clearCache();
-        return parent::update($data, $where);
-    }
-
-    public function delete($where)
-    {
-        $this->clearCache();
-        return parent::delete($where);
     }
 }

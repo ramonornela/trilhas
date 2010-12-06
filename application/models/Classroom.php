@@ -25,6 +25,11 @@
  */
 class Application_Model_Classroom
 {
+	/**
+     * Status type: waiting
+     */
+	const REGISTERED = 'registered';
+		
     /**
      * Get all possible classroom
      *
@@ -55,6 +60,9 @@ class Application_Model_Classroom
                      ->join($course, 'c.id = cr.course_id', array())
                      ->join($classUser, 'cr.id = cu.classroom_id', array())
                      ->where('cu.user_id = ?', $userId)
+                     ->where('cu.status = ?', 'registered')
+                     ->where('cr.begin <= ?', date('Y-m-d'))
+                     ->where('cr.end >= ? OR end IS NULL', date('Y-m-d'))
                      ->where('cr.status = ?', 'active');
         $registries = $db->fetchAll($select);
 
@@ -74,6 +82,29 @@ class Application_Model_Classroom
         return $data;
     }
 
+    /**
+     * Get all possible classroom
+     *
+     * @param int $userId
+     * @return array
+     */
+    public static function getFinalizedByUser($userId)
+    {
+        $certificate = new Tri_Db_Table('certificate');
+        $select = $certificate->select(true)->setIntegrityCheck(false)
+                              ->join('classroom', 'classroom.id = certificate.classroom_id', array())
+                              ->join('course', 'course.id = classroom.course_id')
+                              ->where('certificate.user_id = ?', $userId);
+
+        return $certificate->fetchAll($select);
+    }
+	
+	/**
+	 * Verify if class it's available
+	 *
+	 * @param int $id 
+	 * @return boolean
+	 */
     public static function isAvailable($id)
     {
         $classroom     = new Tri_Db_Table('classroom');
@@ -96,5 +127,24 @@ class Application_Model_Classroom
         }
 
         return true;
+    }
+
+	/**
+	 * Get all class it's available
+	 *
+	 * @param int $id
+	 * @return object select
+	 */
+    public static function getAvailable($id)
+    {
+        $classroom  = new Tri_Db_Table('classroom');
+		$selectionProcessClassroom = new Tri_Db_Table('selection_process_classroom');
+		$selectIn = $selectionProcessClassroom->select()->setIntegrityCheck(false)
+									 		  ->from(array('p' => 'selection_process_classroom'), array('p.classroom_id'))
+		 							 		  ->where('selection_process_id = ?', $id);
+        $select = $classroom->select(true)
+                            ->where('status = ?', 'active')
+							->where('id not in (?)', $selectIn);
+        return $select;
     }
 }

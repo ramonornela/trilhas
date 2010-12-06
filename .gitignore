@@ -25,6 +25,11 @@
 *.log
 *.sqlite
 
+# Default files
+####################
+application.ini
+.htaccess
+
 # OS generated files #
 ######################
 .DS_Store?
@@ -37,6 +42,7 @@ Thumbs.db
 ###################
 nbproject/
 data/cache/*
+data/upload/*
 .project
 .buildpath
 .settings

@@ -5,20 +5,19 @@
     <div class="classroom-list">
         <h3><?php echo $this->translate('Classroom')?></h3>
     <?php if (count($this->classroom)): ?>
-        <form action="classroom/sign">
+        <form action="classroom/sign" id='sign-form'>
             <table>
                 <thead>
                     <tr>
-                        <th>&nbsp;</th>
                         <th><?php echo $this->translate('Name')?></th>
                         <th><?php echo $this->translate('Begin')?></th>
                         <th><?php echo $this->translate('End')?></th>
+						<th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach($this->classroom as $classroom): ?>
                     <tr>
-                        <td><input name="id" type="radio" value="<?php echo $classroom->id?>" /></td>
                         <td><?php echo $classroom->name?></td>
                         <?php if ($classroom->end): ?>
                             <td><?php echo $this->date($classroom->begin)?></td>
@@ -26,16 +25,46 @@
                         <?php else:?>
                             <td colspan="2"><?php echo $this->translate('Open')?></td>
                         <?php endif;?>
+						<td>
+							<a href="#this" class='sign' id='<?php echo $classroom->id?>'><?php echo $this->translate("register"); ?></a>
+							<input name="id" id="sign-id" type="hidden" value="" />
+						</td>
+						
                     </tr>
                 <?php endforeach;?>
                 </tbody>
             </table>
-            <br />
-            <input type="submit" value="<?php echo $this->translate('Signup')?>" />
         </form>
-    <?php else: ?>
-        <p><?php echo $this->translate('No register')?></p>
+    <?php else: ?>	
+		<p><?php echo $this->translate('No register')?></p>
     <?php endif; ?>
+
+	<?php if (count($this->selectionProcess)) :?>
+		<p></p>
+    	<table>
+            <thead>
+                <tr>
+					<th><?php echo $this->translate('selection process')?></th>
+                    <th><?php echo $this->translate('classroom')?></th>
+                    <th><?php echo $this->translate('Begin')?></th>
+                    <th><?php echo $this->translate('End')?></th>
+					<th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($this->selectionProcess as $selectionProcess): ?>
+                <tr>
+					<td><?php echo $selectionProcess->pname?></td>
+                    <td><?php echo $selectionProcess->name?></td>
+                    <td><?php echo $this->date($selectionProcess->begin)?></td>
+                    <td><?php echo !empty($selectionProcess->end)?$this->date($selectionProcess->end):$this->translate('free')?></td>
+					<td><a href="<?php echo 'selection-process/index/pre-register/course/' . $selectionProcess->course_id . '/classroom_id/' . $selectionProcess->id . '/selection_process_id/' . $selectionProcess->pid ?>"><?php echo $this->translate("pre-register"); ?></a></td>
+                </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+	<?php endif; ?>
+	
     </div>
     <h2><?php echo $this->data->name?></h2>
     <span><?php echo $this->translate($this->data->category)?></span>
@@ -43,3 +72,10 @@
 <?php else: ?>
     <p><?php echo $this->translate('No register')?></p>
 <?php endif; ?>
+<script type="text/javascript" charset="utf-8">
+	$('.sign').click( function(){
+		$('#sign-id').val($(this).attr('id'));
+		$('#sign-form').submit();
+		return false;
+	});
+</script>

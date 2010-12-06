@@ -1,0 +1,54 @@
+<div class="right">
+    <?php echo $this->ajax('back', 'panel/index', 2) ?>
+</div>
+<div class="panel">
+    <h3><?php echo $this->translate('add')?></h3>
+    <form action="panel/index/save">
+        <label><?php echo $this->translate('Type')?></label><br />
+        <select name="type">
+            <option value=""><?php echo $this->translate('[select]')?></option>
+            <option value="activity"><?php echo $this->translate('activity')?></option>
+            <option value="forum"><?php echo $this->translate('forum')?></option>
+            <option value="exercise"><?php echo $this->translate('exercise')?></option>
+        </select>
+        <div class="add"></div>
+    </form>
+
+    <?php if(count($this->data)):?>
+        <div>
+            <h3><?php echo $this->translate('List')?></h3>
+            <table class="datatable">
+                <?php foreach($this->data as $data):?>
+                    <?php
+                        $table = new Tri_Db_Table($data->type);
+                        $row = $table->fetchRow(array('id = ?' => $data->item_id));
+                    ?>
+                    <tr>
+                        <td><?php echo $this->translate($data->type)?></td>
+                        <td><?php echo isset($row->name) ? $row->name : $row->title ?></td>
+                        <td><?php echo $this->ajax('delete', 'panel/index/delete/id/'.$data->id, 2, 'want to delete?')?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    $('.panel select').change(function(){
+        if (this.value) {
+            $.get('panel/index/find', {type: this.value}, function(data){
+                $('.panel .add').html(data);
+            });
+        }
+    });
+
+    $('.panel form').submit(function(){
+        var $this = $(this);
+		$.post(this.action, $this.serialize(), function(data){
+            $this.parents('.content').html(data);
+        });
+        return false;
+    });
+
+    $('input[type=button], input[type=submit]').button();
+</script>

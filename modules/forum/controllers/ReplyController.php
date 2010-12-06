@@ -12,13 +12,13 @@ class Forum_ReplyController extends Tri_Controller_Action
         $session  = new Zend_Session_Namespace('data');
         $table    = new Tri_Db_Table('forum_reply');
         $forum    = new Tri_Db_Table('forum');
-        $page     = Zend_Filter::filterStatic($this->_getParam('page', 1), 'int');
+        $page     = Zend_Filter::filterStatic($this->_getParam('page', 9999), 'int');
         $id       = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $form     = new Forum_Form_Reply();
 
         $select = $table->select(true)
                         ->setIntegrityCheck(false)
-                        ->join('user', 'user.id = user_id', array('user.id as uid','user.name','user.image'))
+                        ->join('user', 'user.id = user_id', array('user.id as uid','user.name','user.image','user.role'))
                         ->where('forum_id = ?', $id)
                         ->order('id');
 

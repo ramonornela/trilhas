@@ -7,30 +7,35 @@
         <base href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/" />
         <link rel="shortcut icon" href="favicon.ico" />
 
-        <?php echo $this->headLink()->appendStylesheet('js/editor/stylesheets/xq_ui.css')
-							->appendStylesheet('js/editor/stylesheets/xq_contents.css')
-							->appendStylesheet('css/themes/' . $this->theme . '/jquery-ui.css')
-							->appendStylesheet('css/main.css')
-							->appendStylesheet('css/utils.css'); ?>
+        <?php echo $this->headLink()->appendStylesheet('css/themes/' . $this->theme . '/jquery-ui.css')
+							->appendStylesheet('css/utils.css')
+							->appendStylesheet('css/main.css'); ?>
 
-        <?php $this->headScript()->appendFile('js/jquery/jquery.min.js');
+        <?php if(strstr($_SERVER['HTTP_USER_AGENT'],'iPhone') || strstr($_SERVER['HTTP_USER_AGENT'],'iPod')):?>
+            <link rel="stylesheet" type="text/css" href="css/iphone.css" />
+            <meta name="viewport" content="user-scalable=no, width=device-width" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <link rel="apple-touch-icon" href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/img/iphoneIcon.png" />
+            <link rel="apple-touch-startup-image" href="<?php echo $this->serverUrl() . $this->baseUrl() ?>/img/iphoneStartup.png" />
+        <?php endif; ?>
+            
+        <?php $this->headScript()->appendFile('js/jquery/jquery.min.js')
+                                 ->appendFile('js/jquery/jquery-ui.min.js')
+                                 ->appendFile('js/ckeditor/ckeditor.js');
               if ($locale != 'en') { $this->headScript()->appendFile('js/jquery/ui/i18n/jquery.ui.datepicker-' . $locale . '.js'); }
-		      echo $this->headScript()->appendFile('js/jquery/jquery-ui.min.js')
-							          ->appendFile('js/jquery/jquery.other.js')
-                                      ->appendFile('js/editor/all.js')
-                                      ->appendFile('js/editor/plugin/FileGalleryPlugin.js')
-                                      ->appendFile('js/editor/plugin/CustomStylePlugin.js')
-                                      ->appendFile('js/editor/plugin/EditorResizePlugin.js')
-                                      ->appendFile('js/editor/plugin/FlashMovieMacroPlugin.js')
-                                      ->appendFile('js/editor/plugin/LinkToImagePlugin.js')
-                                      ->appendFile('js/editor/plugin/ContextoPlugin.js')
-                                      ->appendFile('js/chat.js')
-                                      ->appendFile('js/navigation.js'); ?>
+              if ($locale != 'en') { $this->headScript()->appendFile('js/ckeditor/lang/' . strtolower($locale) . '.js'); }
+		      $this->headScript()->appendFile('js/jquery/jquery-ui.min.js')
+                                  ->appendFile('js/jquery/jquery.other.js')
+                                  ->appendFile('js/yahoo/yahoo-dom-event.js')
+                                  ->appendFile('js/yahoo/json-min.js')
+                                  ->appendFile('js/chat.js')
+                                  ->appendFile('js/navigation.js');
+              echo $this->headScript();?>
 	</head>
     <body>
         <div id="hd">
             <h1>Trilhas</h1>
-            <img src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" />
+            <a href="index"><img src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" /></a>
             <?php if(Zend_Auth::getInstance()->hasIdentity()):?>
                 <div style="float: right;">
                     <?php echo Zend_Auth::getInstance()->getIdentity()->name?>
@@ -42,6 +47,15 @@
                     <a href="user/logout"><?php echo $this->translate('logout');?></a>
                 </div>
             <?php endif; ?>
+            <?php if (count($this->pages)) :?>
+                <div class="pages">
+                    <ul>
+                        <?php foreach ($this->pages as $page) :?>
+                            <li><a href="page/index/view/id/<?php echo $page->id?>"><?php echo $page->title?></a></li>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+            <?php endif;?>
         </div>
         <div id="bd">
             <?php if ($this->messages):?>
@@ -49,7 +63,7 @@
                     <span class="ui-icon ui-icon-info"></span>
                     <ul>
                         <?php foreach ($this->messages as $message): ?>
-                            <li><?php echo $message ?></li>
+                            <li><?php echo $this->translate($message)?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -68,7 +82,7 @@
         </div>
         <div id="ft">
             <a href="http://www.preceptoread.com.br">
-                <img src="img/logo.png" alt="Logo Preceptor" />
+                <img border="0" src="img/logo.png" alt="Logo Preceptor" />
             </a>
         </div>
     </body>

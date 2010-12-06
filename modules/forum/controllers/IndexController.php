@@ -68,6 +68,7 @@ class Forum_IndexController extends Tri_Controller_Action
                 unset($data['id']);
                 $row = $table->createRow($data);
                 $id = $row->save();
+                Application_Model_Timeline::save('created a new forum', $data['title']);
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');
@@ -77,5 +78,11 @@ class Forum_IndexController extends Tri_Controller_Action
         $this->_helper->_flashMessenger->addMessage('Error');
         $this->view->form = $form;
         $this->render('form');
+    }
+
+    public function viewAction()
+    {
+        $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $this->_redirect('/forum/reply/index/layout/box/id/'.$id);
     }
 }

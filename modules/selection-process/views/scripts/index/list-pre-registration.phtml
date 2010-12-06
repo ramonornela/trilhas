@@ -1,0 +1,103 @@
+<div class="search">
+    <div class='left'>
+		<form action="selection-process/index/list-pre-registration" method="get" id='query'>
+			<span class="ui-icon ui-icon-search magnifier"></span>	
+	        <input type="text" name="query" value="<?php echo $this->params['query']?>" />
+	        <input type="submit" value="<?php echo $this->translate('Search')?>" />
+	    </form>
+	</div>
+	<div style="margin-left:10px;" class='left'>
+		<form action='selection-process/index/list-pre-registration/id/<?php echo $this->selection_process->id ?>' id='course-form' method='post'>
+			<label>
+				<?php echo $this->translate('list for course')?>:
+				<?php echo $this->formSelect('course', !empty($this->course_id)?$this->course_id:'', null, $this->courses)?>
+			</label>
+		</form>
+	</div>
+	<p class='clear'></p>
+</div>
+<br />
+<div>
+	<h2><?php echo mb_strtoupper($this->selection_process->name, APP_CHARSET)?></h2>
+    <?php if (count($this->data)): ?>
+		<p style='margin-bottom:20px;'>
+			<?php echo $this->translate('select')?>: 
+			<a href='/#' class='select-all'><?php echo $this->translate('all')?></a>, 
+			<a href='/#' class='remove-all'><?php echo $this->translate('none')?></a>
+		</p>
+		
+		<form action="selection-process/index/" method="post" id='pre-registration'>
+			<input type='hidden' name='id' value='<?php echo $this->selection_process->id?>' />
+			<table class="datatable">
+		        <tr>
+		            <th></th>
+					<th></th>
+		            <th><?php echo $this->translate('Name')?></th>
+		            <th><?php echo $this->translate('Date')?></th>
+					<th><?php echo $this->translate('course') . ' / ' . $this->translate('classroom')?></th>
+		            <th><?php echo $this->translate('justify')?></th>
+					<th><?php echo $this->translate('Status')?></th>
+		        </tr>
+		        <?php foreach ($this->data as $data): ?>
+		            <tr class='<?php echo $data->status ?>'>
+						<td>
+							<?php if (SelectionProcess_Model_SelectionProcess::WAITING == $data->status) :?>
+								<input type="checkbox" name="interested[]" value="<?php echo $data->id . '-' . $data->cid . '-' . $data->uid ?>" id='user-<?php echo $data->uid ?>'/>
+							<?php endif ;?>
+						</td>
+						<td>
+							<label for='user-<?php echo $data->uid ?>'><img alt="<?php echo $data->uname ?>" title="<?php echo $data->uname ?>" width="" src="upload/<?php echo $this->thumbnail($data->image, 'small') ?>" /></label>
+						</td>
+		                <td>
+							<?php echo $data->uname?>
+						</td>
+		                <td><?php echo $this->date($data->date, true)?></td>
+		                <td><?php echo $data->coname . ' / ' . $data->cname?></td>
+						<td><?php echo $data->justify?></td>
+						<td><?php echo $this->translate($data->status)?></td>
+		            </tr>
+		        <?php endforeach; ?>
+		    </table>
+			<p style='margin:20px 0;'>
+				<?php echo $this->translate('select')?>: 
+				<a href='/#' class='select-all'><?php echo $this->translate('all')?></a>, 
+				<a href='/#' class='remove-all'><?php echo $this->translate('none')?></a>
+			</p>
+			<p>
+				<input type="button" value=" <?php echo $this->translate('enroll students selected') ?> " id='matriculate' />
+				<input type="button" value=" <?php echo $this->translate('reject students selected') ?> " id='reject' />
+			</p>
+			
+		</form>
+        <?php echo $this->paginationControl($this->data, null, null, $this->params); ?>
+    <?php else:?>
+        <p><?php echo $this->translate('there are no records')?></p>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    $('#query').submit( function(){
+        this.action = this.action + '/id/<?php echo $this->selection_process->id?>/query/' + $('input[type=text]').val();
+    });
+
+	$('input[type=button]').click( function(){
+		formAction = $('#pre-registration').attr('action');
+		formAction += this.id;
+		$('#pre-registration').attr('action', formAction).submit();
+    });
+	
+	$('#course').change( function(){
+		$('#course-form').submit();
+	});
+	
+	$('.select-all').click( function(){
+		$('#pre-registration input[type="checkbox"]').attr('checked', 'checked');
+		return false;
+	});
+	
+	$('.remove-all').click( function(){
+		$('#pre-registration input[type="checkbox"]').removeAttr('checked');
+		return false;
+	});
+	
+    $('input[type=button], input[type=submit]').button();
+</script>

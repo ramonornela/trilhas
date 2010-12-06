@@ -18,12 +18,13 @@ class Chat_MessageController extends Tri_Controller_Action
         $classroomUser = new Tri_Db_Table('classroom_user');
         $select  = $table->select(true)
                         ->setIntegrityCheck(false)
-                        ->join('user', 'message.sender = user.id', array('name','image'));
+                        ->join('user', 'message.sender = user.id', array('name','image'))
+                        ->order('id DESC');
 
         if (!$userId) {
             $userId = Zend_Auth::getInstance()->getIdentity()->id;
         }
-
+        
         $form->populate(array('receiver' => $userId));
         $select->where('receiver = ?', $userId);
 
@@ -35,7 +36,9 @@ class Chat_MessageController extends Tri_Controller_Action
                 $form->populate($row->toArray());
             }
         }
-
+		
+		$tableUser = new Tri_Db_Table('user');
+		$user = $tableUser->find($userId)->current();
 
         $selectUser = $classroomUser->select(true)
                                     ->setIntegrityCheck(false)
@@ -48,6 +51,8 @@ class Chat_MessageController extends Tri_Controller_Action
         $this->view->data = $paginator->getResult();
         $this->view->form = $form;
         $this->view->userId = $userId;
+		$this->view->userName = $user->name;
+		$this->view->userImage = $user->image;
     }
 
     public function saveAction()
@@ -92,4 +97,14 @@ class Chat_MessageController extends Tri_Controller_Action
 
         $this->_redirect('chat/message/index/');
     }
+
+	public function replyAction()
+	{
+		$receiverId = Zend_Filter::filterStatic($this->_getParam('receiverId'), 'int');
+		$form  = new Chat_Form_Message();
+		$form->populate(array('receiver' => $receiverId));
+		$form->populate(array('sender' => Zend_Auth::getInstance()->getIdentity()->id));
+		$this->view->form = $form;
+		$this->render('reply');
+	}
 }

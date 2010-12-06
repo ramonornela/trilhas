@@ -1,3 +1,6 @@
+<div class="right">
+    <?php echo $this->ajax('back', 'faq/index', 2) ?>
+</div>
 <div class="faq">
 <?php echo $this->form?>
 </div>
@@ -9,4 +12,5 @@
         });
         return false;
 	});
+    $('input[type=button], input[type=submit]').button();
 </script>

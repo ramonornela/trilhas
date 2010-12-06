@@ -25,12 +25,24 @@
  */
 class CourseController extends Tri_Controller_Action
 {
+	/**
+	 * Init
+ 	 *
+	 * Call parent init and set title box.
+	 *
+	 * @return void
+	 */
     public function init()
     {
         parent::init();
         $this->view->title = "Course";
     }
-
+	
+	/**
+	 * Action index.
+	 *
+	 * @return void
+	 */
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
@@ -45,7 +57,12 @@ class CourseController extends Tri_Controller_Action
         $paginator = new Tri_Paginator($select, $page);
         $this->view->data = $paginator->getResult();
     }
-
+	
+	/**
+	 * Action view
+	 *
+	 * @return void
+	 */
     public function viewAction()
     {
         $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -55,11 +72,19 @@ class CourseController extends Tri_Controller_Action
             $classroom = new Tri_Db_Table('classroom');
 
             $this->view->data = $course->find($id)->current();
-            $where = array('course_id = ?' => $id, 'status = ?' => 'open');
+            $where = array('course_id = ?' => $id, 
+                           'status = ?' => 'open',
+                           'end >= ? OR end IS NULL' => date('Y-m-d'));
             $this->view->classroom = $classroom->fetchAll($where, 'begin');
+			$this->view->selectionProcess = SelectionProcess_Model_SelectionProcess::getAvailableProcessByCourse($id);
         }
     }
-
+	
+	/**
+	 * Action form
+	 *
+	 * @return void
+	 */
     public function formAction()
     {
         $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -76,7 +101,12 @@ class CourseController extends Tri_Controller_Action
 
         $this->view->form = $form;
     }
-
+	
+	/**
+	 * Action save
+	 *
+	 * @return void
+	 */
     public function saveAction()
     {
         $form  = new Application_Form_Course();
@@ -93,6 +123,10 @@ class CourseController extends Tri_Controller_Action
                 unset($data['image']);
             }
 
+            if (!$data['responsible']) {
+                unset($data['responsible']);
+            }
+
             $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
 
             if (isset($data['id']) && $data['id']) {
@@ -105,10 +139,16 @@ class CourseController extends Tri_Controller_Action
                 $row = $table->createRow($data);
                 $id = $row->save();
 
+                $responsible = null;
+                if (isset($data['responsible'])) {
+                    $responsible = $data['responsible'];
+                }
+
                 $data = array('course_id'   => $id,
-                              'responsible' => $data['responsible'],
+                              'responsible' => $responsible,
                               'name'        => 'Open ' . $data['name'],
                               'begin'       => date('Y-m-d'));
+
                 $row = $classroom->createRow($data);
                 $row->save();
             }
