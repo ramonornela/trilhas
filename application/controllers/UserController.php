@@ -124,14 +124,14 @@ class UserController extends Tri_Controller_Action
 	 */
     public function formAction()
     {
-		if (!NEW_USER_TO_GUEST) {
-			$this->_helper->flashMessenger->addMessage('access denied');
-			$this->_redirect('/');
-		}
-		
         $userId   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $form     = new Application_Form_User();
         $identity = Zend_Auth::getInstance()->getIdentity();
+    	
+    	if (!NEW_USER_TO_GUEST && !Zend_Auth::getInstance()->hasIdentity()) {
+			$this->_helper->flashMessenger->addMessage('access denied');
+			$this->_redirect('/');
+		}		
 
         if ($identity) {
             $id = $identity->id;

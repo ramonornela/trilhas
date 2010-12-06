@@ -29,9 +29,9 @@
                         <?php echo $user->name;?>
                     </td>
                     <td>
-                        <?php if (count($this->panel)):?>
+                        <?php $i = 0; if (count($this->panel)):?>
                             <?php 
-                                $i = 0;
+                                
                                 $panelNote = new Tri_Db_Table('panel_note');
                                 $panelNote = new Tri_Db_Table('panel_note');
                                 $forumReply = new Tri_Db_Table('forum_reply');
@@ -90,7 +90,9 @@
                         <?php endif;?>
                     </td>
                     <td width="50">
+						<?php if ($i != 0): ?>
                         <?php echo round($total/$i)?>
+						<?php endif; ?>	
                     </td>
                     <?php if (Zend_Auth::getInstance()->getIdentity()->role != 'student'):?>
                         <td width="80">
