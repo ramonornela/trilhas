@@ -20,7 +20,7 @@
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
 */
-html, body{margin: 0; padding: 0;}
+html, body{margin: 0; padding: 0; background: url(../img/gradient_texture.jpg) #eee;}
 object, embed {display: block; background: #eee; border: 2px solid black;}
 
 #hd{padding: 8px 20px; margin-bottom: 10px;}
