@@ -48,8 +48,6 @@ class SelectionProcess_Model_SelectionProcess
 	 */
     public static function getAvailableProcessByCourse($course_id)
     {
-		$user_id = Zend_Auth::getInstance()->getIdentity()->id;
-		
 		$selectionProcess = new Tri_Db_Table('selection_process');
 		$select = $selectionProcess->select()->setIntegrityCheck(false)
 								   ->from(array('p' => 'selection_process'), array('pname' => 'name', 'pid' => 'id'))
