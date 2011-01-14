@@ -56,12 +56,14 @@ class Application_Form_User extends Zend_Form
         $name = new Zend_Form_Element_Text('name');
         $name->setLabel('Name')
                 ->addValidators($validators['name'])
-                ->addFilters($filters['name']);
+                ->addFilters($filters['name'])
+                ->setAllowEmpty(false);
 
         $email = new Zend_Form_Element_Text('email');
         $email->setLabel('Email')
                 ->addValidators($validators['email'])
-                ->addFilters($filters['email']);
+                ->addFilters($filters['email'])
+                ->setAllowEmpty(false);
 
         $filters['password'][] = 'Md5';
         $validators['password'][] = 'PasswordConfirmation';

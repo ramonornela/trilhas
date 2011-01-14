@@ -54,4 +54,10 @@ class IndexController extends Tri_Controller_Action
     {
         exit('ok');
     }
+
+    public function returnAction()
+    {
+        $this->_helper->_flashMessenger->addMessage('Obrigado! Sua matrícula será efetiva após a confirmação do pagamento.');
+        $this->_redirect('index');
+    }
 }

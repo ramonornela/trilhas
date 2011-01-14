@@ -40,7 +40,9 @@ class Application_Model_Classroom
     {
         $session   = new Zend_Session_Namespace('data');
         $db        = Zend_Db_Table::getDefaultAdapter();
-        $cols      = array('cr.*', 'c.*', 'c.id as id', 'cr.id as classroom_id');
+        $cols      = array('cr.*', 'c.*', 'c.id as id',
+                           'cr.id as classroom_id',
+                           'cr.name as classroom_name');
         $course    = array('c' => 'course');
         $classroom = array('cr' => 'classroom');
         $classUser = array('cu' => 'classroom_user');
@@ -51,7 +53,7 @@ class Application_Model_Classroom
                      ->from($classroom, $cols)
                      ->join($course, 'c.id = cr.course_id', array())
                      ->where('c.responsible = ? OR cr.responsible = ?', $userId)
-                     ->where('cr.status = ?', 'active');
+                     ->where("cr.status = 'active' OR cr.status = 'open'");
         $responsibles = $db->fetchAll($select);
 
         //by registration
@@ -63,7 +65,7 @@ class Application_Model_Classroom
                      ->where('cu.status = ?', 'registered')
                      ->where('cr.begin <= ?', date('Y-m-d'))
                      ->where('cr.end >= ? OR end IS NULL', date('Y-m-d'))
-                     ->where('cr.status = ?', 'active');
+                     ->where("cr.status = 'active' OR cr.status = 'open'");
         $registries = $db->fetchAll($select);
 
         foreach ($responsibles as $responsible) {

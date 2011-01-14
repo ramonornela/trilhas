@@ -1,6 +1,9 @@
 #message
 "Error";"Erro"
 "Success";"Realizado com sucesso"
+"Email existing";"E-mail já existente"
+
+"Password confirmation does not match";"Confirmação de senha incorreta."
 
 "Invalid type given, value should be float, string, or integer";"O tipo especificado é inválido, o valor deve ser float, string, ou inteiro"
 "'%value%' contains characters which are non alphabetic and no digits";"'%value%' contém caracteres que não são alfabéticos e nem dígitos"

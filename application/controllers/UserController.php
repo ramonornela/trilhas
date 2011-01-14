@@ -82,14 +82,8 @@ class UserController extends Tri_Controller_Action
             if ($form->isValid($this->getRequest()->getPost())) {
                 $username = $form->getValue('email');
                 $password = $form->getValue('password');
-                $db      = Zend_Db_Table::getDefaultAdapter();
-                $adapter = new Tri_Auth_Adapter_DbTable($db, 'user', 'email', 'password');
 
-                $adapter->setIdentity($username)
-                        ->setCredential($password)
-                        ->setCredentialTreatment('MD5(?)');
-
-                $result = $auth->authenticate($adapter);
+                $result = $this->login($username, $password);
 
                 if ($result->isValid()) {
 					$session->attempt = 0;
@@ -102,7 +96,7 @@ class UserController extends Tri_Controller_Action
 
                     $this->_redirect('/dashboard');
                 }
-                $this->_helper->flashMessenger->addMessage('Login failed');
+                $this->view->messages = array('Login failed');
 				$session->attempt++;
             }
         }
@@ -115,6 +109,28 @@ class UserController extends Tri_Controller_Action
         }
 		$session->attempt++;
         $this->view->form = $form;
+    }
+
+    /**
+     * Form internal use. Used in loginAction and saveAction
+     *
+     *
+     * @param <string> $username
+     * @param <string> $password
+     *
+     * @return Zend_Auth_Result
+     */
+    private function login($username, $password)
+    {
+        $auth    = Zend_Auth::getInstance();
+        $db      = Zend_Db_Table::getDefaultAdapter();
+        $adapter = new Tri_Auth_Adapter_DbTable($db, 'user', 'email', 'password');
+
+        $adapter->setIdentity($username)
+                ->setCredential($password)
+                ->setCredentialTreatment('MD5(?)');
+
+        return $auth->authenticate($adapter);
     }
 	
 	/**
@@ -133,25 +149,41 @@ class UserController extends Tri_Controller_Action
 			$this->_redirect('/');
 		}		
 
-        if ($identity) {
-            $id = $identity->id;
-
-            if ($identity->role == 'institution') {
-                $id = 0;
-            }
-
-            if ($userId && $identity->role == 'institution') {
-                $id = $userId;
-            }
-
+        if ($userId && $identity->role == 'institution') {
             $table = new Tri_Db_Table('user');
-            $row   = $table->find($id)->current();
+            $row   = $table->find($userId)->current();
 
             if ($row) {
                 $form->populate($row->toArray());
             }
+        } else {
+            $form->getElement('password')->setAllowEmpty(false);
         }
+        
         $this->view->form = $form;
+    }
+
+    public function editAction()
+    {
+        $form     = new Application_Form_User();
+        $identity = Zend_Auth::getInstance()->getIdentity();
+
+    	if (!Zend_Auth::getInstance()->hasIdentity()) {
+			$this->_helper->flashMessenger->addMessage('access denied');
+			$this->_redirect('/');
+		}
+
+        $id = $identity->id;
+
+        $table = new Tri_Db_Table('user');
+        $row   = $table->find($id)->current();
+
+        if ($row) {
+            $form->populate($row->toArray());
+        }
+        
+        $this->view->form = $form;
+        $this->render('form');
     }
 	
 	/**
@@ -161,13 +193,28 @@ class UserController extends Tri_Controller_Action
 	 */
     public function saveAction()
     {
-        $form  = new Application_Form_User();
-        $table = new Tri_Db_Table('user');
-        $data  = $this->_getAllParams();
+        $messages     = array();
+        $isValidEmail = true;
+        $session      = new Zend_Session_Namespace('data');
+        $form         = new Application_Form_User();
+        $table        = new Tri_Db_Table('user');
+        $data         = $this->_getAllParams();
 
-        if ($form->isValid($data)) {
+        if ($data['email']) {
+            $row = $table->fetchRow(array('email = ?' => $data['email']));
+            if ($row) {
+                $isValidEmail = false;
+                $messages[] = 'Email existing';
+            }
+        }
+
+        if (!isset($data['id']) || !$data['id']) {
+            $form->getElement('password')->setAllowEmpty(false);
+        }
+
+        if ($form->isValid($data) && $isValidEmail) {
             if (!$form->image->receive()) {
-                $this->_helper->_flashMessenger->addMessage('Image fail');
+                $messages[] = 'Image fail';
             }
 
             $data = $form->getValues();
@@ -179,7 +226,7 @@ class UserController extends Tri_Controller_Action
                 unset($data['password']);
             }
             
-            if (isset($data['id']) && $data['id']) {
+            if (isset($data['id']) && $data['id'] && Zend_Auth::getInstance()->hasIdentity()) {
                 $row = $table->find($data['id'])->current();
                 $row->setFromArray($data);
                 $id = $row->save();
@@ -187,13 +234,44 @@ class UserController extends Tri_Controller_Action
                 unset($data['id']);
                 $row = $table->createRow($data);
                 $id = $row->save();
+
+                $session->attempt = 0;
+                $data['password'] = $this->_getParam('password');
+                $this->view->data = $data;
+                
+                $mail = new Zend_Mail(APP_CHARSET);
+                $mail->setBodyHtml($this->view->render('user/welcome.phtml'));
+                $mail->setSubject($this->view->translate('Welcome'));
+                $mail->addTo($data['email'], $data['name']);
+                $mail->send();
+
+                $result = $this->login($data['email'], $data['password']);
+                if ($result->isValid()) {
+                    if ($session->url) {
+                        $this->_helper->_flashMessenger->addMessage('Success');
+                        $url = $session->url;
+                        $session->url = null;
+                        $this->_redirect($url);
+                    }
+                }
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('user/form/id/'.$id);
+
+            $identity = Zend_Auth::getInstance()->getIdentity();
+            if ($identity->id == $id) {
+                $this->_redirect('user/edit');
+            }
+
+            if ($identity->role == 'institution') {
+                $this->_redirect('user');
+            }
+            
+            $this->_redirect('dashboard');
         }
 
-        $this->view->messages = array('Error');
+        $messages[] = 'Error';
+        $this->view->messages = $messages;
         $this->view->form = $form;
         $this->render('form');
     }

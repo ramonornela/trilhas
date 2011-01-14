@@ -73,7 +73,7 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .reply li.right{color: green; float: none; font-weight: bold;}
 .reply li.wrong{color: red; font-weight: bold;}
 
-.classroom-list{border: 1px solid #eee; float: right; padding: 0 10px 5px 10px; margin: 0 0 5px 5px; background: #fff;}
+.classroom-list{margin: 0 0 5px 220px; background: #fff;}
 .classroom-list table{border-collapse: collapse;}
 .classroom-list table thead{background: #ddd;}
 .classroom-list table td, .classroom-list table th{padding: 5px; border: 1px solid #ddd;}

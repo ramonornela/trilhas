@@ -173,7 +173,8 @@ class ClassroomController extends Tri_Controller_Action
                 $session = new Zend_Session_Namespace('data');
                 $session->classroom_id = $id;
                 $classroom = new Zend_Db_Table('classroom');
-                $row= $classroom->fetchRow(array('id = ?' => $id));
+                $row = $classroom->fetchRow(array('id = ?' => $id));
+                
                 if (PAYMENT && $row->amount && $row->amount > 0) {
                     $this->_redirect('/classroom/pay');
                 } else {
@@ -215,9 +216,13 @@ class ClassroomController extends Tri_Controller_Action
         $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
         $data['classroom_id'] = $session->classroom_id;
 
-        $classroomUser->createRow($data)->save();
+        try {
+            $classroomUser->createRow($data)->save();
+            $this->_helper->_flashMessenger->addMessage('Success');
+        } catch (Exception $e) {
+            $this->_helper->_flashMessenger->addMessage('Student already registered in this class');
+        }
 
-        $this->_helper->_flashMessenger->addMessage('Success');
         $this->_redirect('/dashboard');
     }
 

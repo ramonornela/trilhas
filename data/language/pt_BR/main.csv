@@ -90,6 +90,10 @@
 "Finalized. See your note in panel.";"Finalizada. Veja sua nota no painel."
 "Sended";"Enviado"
 "Certificate emited";"Certificado emitido"
+"Login failed";"Login não realizado. Dados inválidos."
+"Unavailable";"Indisponível"
+"Classroom unavailable";"Turma indisponível no momento."
+"Student already registered in this class";"Estudante já registrado nesta turma."
 
 #timeline
 "saved a new file";"adicionou um novo arquivo"
@@ -156,6 +160,10 @@
 "Attemps";"Tentativas"
 "Type";"Tipo"
 "Hours";"Horas"
+"Male";"Masculino"
+"Female";"Feminino"
+"Period";"Período"
+"Value";"Valor"
 
 #status
 "active";"Ativo"
@@ -205,3 +213,4 @@
 "Finalized";"Finalizado"
 "Page";"Página"
 "User";"Usuário"
+"Welcome";"Benvindo"

@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="button">
-        <a href="user/form" class="ui-state-default ui-corner-all">
+        <a href="user/edit" class="ui-state-default ui-corner-all">
             <span class="ui-icon ui-icon-contact"></span><?php echo $this->translate('data')?>
         </a>
         <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'course', 'action' => 'form'))):?>
@@ -88,7 +88,7 @@
                         <div class="item">
                             <img alt="<?php echo $course['name'] ?>" src="upload/<?php echo $this->thumbnail($course['image'], 'small') ?>" width="40" height="40" />
                             <a href="classroom/view/id/<?php echo $course['classroom_id'] ?>"><?php echo $course['name'] ?></a>
-                            <span><?php echo $this->translate($course['category']) ?></span>
+                            <span>(<?php echo $course['classroom_name'] ?>)</span>
                             <p class="light"><?php echo substr($course['description'], 0, strpos($course['description'], '.')) ?></p>
                         </div>
                     <?php endforeach; ?>
