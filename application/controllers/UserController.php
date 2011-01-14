@@ -200,7 +200,7 @@ class UserController extends Tri_Controller_Action
         $table        = new Tri_Db_Table('user');
         $data         = $this->_getAllParams();
 
-        if ($data['email']) {
+        if ($data['email'] && (!isset($data['id']) || !$data['id'])) {
             $row = $table->fetchRow(array('email = ?' => $data['email']));
             if ($row) {
                 $isValidEmail = false;

@@ -82,7 +82,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		               ->getCacheManager()
 		               ->getCache('default');
 
-		Zend_Paginator::setCache($cache);
 		Zend_Db_Table::setDefaultMetadataCache($cache);
 		Zend_Date::setOptions(array('cache' => $cache));
 		Zend_Translate::setCache($cache);

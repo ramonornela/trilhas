@@ -10,7 +10,7 @@
 "message";"Mensagem"
 "forum";"Fórum"
 "creation";"Criação"
-"content";"Criação"
+"content";"Conteúdo"
 "base-text";"Texto-base"
 "organize";"Organizador"
 "restriction";"Restrição"
@@ -101,7 +101,7 @@
 "created a new FAQ";"criou uma nova FAQ"
 "created a new forum";"criou um novo fórum"
 "created a new activity";"criou uma nova atividade"
-"created a new chat";"criou uma novo chat"
+"created a new chat room";"criou um novo chat"
 
 #fields
 "[select]";"[selecione]"

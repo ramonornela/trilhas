@@ -119,10 +119,10 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .organizer li {cursor: move; margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 18px;}
 .organizer li span {position: absolute; margin-left: -1.3em;}
 
-.chat-room ul.messages{margin: 0; padding: 0; height: 300px; overflow: auto; list-style: none; border-right: 1px dotted;}
-.chat-room ul.messages li{margin-bottom: 4px;}
+.chat-room ul.messages{margin: 0; padding: 5px; height: 300px; overflow: auto; list-style: none; border: 1px solid;}
+.chat-room ul.messages li{margin-bottom: 4px; padding: 3px;}
 .chat-room ul.messages li span{color: #ddd; font-size: 0.9em;}
-.chat-room ul.user{height: 300px; overflow: auto; list-style: none; float: right; padding-left: 10px; margin-left: 20px; width: 200px;}
+.chat-room ul.user{height: 300px; overflow: auto; list-style: none; float: right; padding: 5px; margin: 0 0 0 20px; width: 200px; border: 1px solid;}
 .chat-room .form{margin-right: 240px;}
 .chat-room .form textarea{width: 100%; }
 

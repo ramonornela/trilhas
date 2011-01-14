@@ -13,8 +13,8 @@
 
 <?php if ($this->stream):?>
     <ul class="messages">
-        <?php foreach ($this->stream as $message):?>
-            <li>
+        <?php foreach ($this->stream as $key => $message):?>
+            <li style="<?php echo $key%2 ? 'background: #eee' : null?>">
                 <strong><?php echo $message->name?></strong>:
                 <?php echo $message->description?>
                 <span><?php echo $this->date($message->created, true)?></span>
