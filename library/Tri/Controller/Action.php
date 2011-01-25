@@ -39,12 +39,12 @@ class Tri_Controller_Action extends Zend_Controller_Action
         $this->_security();
         $this->_locale();
 
-        $this->view->theme = THEME;
+        $this->view->theme = Tri_Config::get('tri_theme');
+        $this->view->appCharset = Tri_Config::get('tri_app_charset');
 
-        $this->_helper->layout->disableLayout();
-        if (!$this->_request->isXmlHttpRequest()) {
-            $this->_helper->layout->enableLayout();
-            $this->_helper->layout->setLayout('solo');
+        $this->_helper->layout->setLayout('solo');
+        if ($this->_request->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
         } elseif ($this->_hasParam('layout')) {
             $this->_helper->layout->setLayout($this->_getParam('layout'));
         }
@@ -78,8 +78,7 @@ class Tri_Controller_Action extends Zend_Controller_Action
                    . $this->_getParam('action');
 			
         if (!$acl->isAllowed($role, $resource, $privilege) && 'forgot' != $this->_getParam('controller')) {
-            $url = base64_encode($_SERVER['REQUEST_URI']);
-            $this->_redirect('/user/login/url/'. $url);
+//            throw new Exception('Permission denied.');
         }
     }
 

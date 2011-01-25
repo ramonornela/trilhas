@@ -25,16 +25,6 @@
  */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-    protected function _initConstants()
-    {
-        if ($this->hasOption('constants')) {
-            $options = $this->getOption('constants');
-            foreach($options as $name => $value) {
-                define($name, $value);
-            }
-        }
-    }
-
     protected function _initZFDebug()
     {
         // Setup autoloader with namespace
@@ -75,18 +65,48 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
 
-    public function _initCache()
+    protected function _initCache()
     {
-		$this->bootstrap('cachemanager');
-		$cache  = $this->getPluginResource('cachemanager')
-		               ->getCacheManager()
-		               ->getCache('default');
+        $this->bootstrap('db');
+        $options = Zend_Json::decode(Tri_Config::get('cachemanager'));
+        $resource = new Zend_Application_Resource_Cachemanager($options);
+        $cache = $resource->init()->getCache('default');
 
-		Zend_Db_Table::setDefaultMetadataCache($cache);
-		Zend_Date::setOptions(array('cache' => $cache));
-		Zend_Translate::setCache($cache);
-		Zend_Locale::setCache($cache);
+        Zend_Db_Table::setDefaultMetadataCache($cache);
+        Zend_Date::setOptions(array('cache' => $cache));
+        Zend_Translate::setCache($cache);
+        Zend_Locale::setCache($cache);
 
-		Zend_Registry::set('cache', $cache);
+        Zend_Registry::set('cache', $cache);
+    }
+
+    protected function _initAcl()
+    {
+        $acl = new Zend_Acl();
+        $roles = Zend_Json::decode(Tri_Config::get('tri_roles'));
+        $resources = Zend_Json::decode(Tri_Config::get('tri_resources'));
+
+//        $resources['admin'] = array('index' => array('index' => 'institution'),
+//                                    'course' => array('index' => 'institution'));
+//        echo Zend_Json::encode($resources);exit;
+        // static roles
+        $resource = new Tri_Application_Resource_Acl();
+        $resource->setRoles($roles);
+        $resource->setResources($resources);
+        $resource->init();
+    }
+
+    protected function _initLocale()
+    {
+        $options = Zend_Json::decode(Tri_Config::get('locale'));
+        $resource = new Zend_Application_Resource_Locale($options);
+        $resource->init();
+    }
+
+    protected function _initTranslate()
+    {
+        $options = Zend_Json::decode(Tri_Config::get('translate'));
+        $resource = new Zend_Application_Resource_Translate($options);
+        $resource->init();
     }
 }

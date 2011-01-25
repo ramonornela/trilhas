@@ -25,44 +25,12 @@
  */
 class CourseController extends Tri_Controller_Action
 {
-	/**
-	 * Init
- 	 *
-	 * Call parent init and set title box.
-	 *
-	 * @return void
-	 */
     public function init()
     {
         parent::init();
         $this->view->title = "Course";
     }
 	
-	/**
-	 * Action index.
-	 *
-	 * @return void
-	 */
-    public function indexAction()
-    {
-        $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
-        $query = Zend_Filter::filterStatic($this->_getParam('query'), 'alnum');
-        $table = new Zend_Db_Table('course');
-        $select = $table->select()->order('status');
-
-        if ($query) {
-            $select->where('name LIKE (?)', "%$query%");
-        }
-
-        $paginator = new Tri_Paginator($select, $page);
-        $this->view->data = $paginator->getResult();
-    }
-	
-	/**
-	 * Action view
-	 *
-	 * @return void
-	 */
     public function viewAction()
     {
         $id = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
@@ -78,87 +46,5 @@ class CourseController extends Tri_Controller_Action
             $this->view->classroom = $classroom->fetchAll($where, 'begin');
 			$this->view->selectionProcess = SelectionProcess_Model_SelectionProcess::getAvailableProcessByCourse($id);
         }
-    }
-	
-	/**
-	 * Action form
-	 *
-	 * @return void
-	 */
-    public function formAction()
-    {
-        $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $form = new Application_Form_Course();
-
-        if ($id) {
-            $table = new Tri_Db_Table('course');
-            $row   = $table->find($id)->current();
-
-            if ($row) {
-                $form->populate($row->toArray());
-            }
-        }
-
-        $this->view->form = $form;
-    }
-	
-	/**
-	 * Action save
-	 *
-	 * @return void
-	 */
-    public function saveAction()
-    {
-        $form  = new Application_Form_Course();
-        $table = new Tri_Db_Table('course');
-        $data  = $this->_getAllParams();
-
-        if ($form->isValid($data)) {
-            if (!$form->image->receive()) {
-                $this->_helper->_flashMessenger->addMessage('Image fail');
-            }
-
-            $data = $form->getValues();
-            if (!$form->image->getValue()) {
-                unset($data['image']);
-            }
-
-            if (!$data['responsible']) {
-                unset($data['responsible']);
-            }
-
-            $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
-
-            if (isset($data['id']) && $data['id']) {
-                $row = $table->find($data['id'])->current();
-                $row->setFromArray($data);
-                $id = $row->save();
-            } else {
-                unset($data['id']);
-                $classroom = new Zend_Db_Table('classroom');
-                $row = $table->createRow($data);
-                $id = $row->save();
-
-                $responsible = null;
-                if (isset($data['responsible'])) {
-                    $responsible = $data['responsible'];
-                }
-
-                $data = array('course_id'   => $id,
-                              'responsible' => $responsible,
-                              'name'        => 'Open ' . $data['name'],
-                              'begin'       => date('Y-m-d'));
-
-                $row = $classroom->createRow($data);
-                $row->save();
-            }
-
-            $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('course/form/id/'.$id);
-        }
-
-        $this->_helper->_flashMessenger->addMessage('Error');
-        $this->view->form = $form;
-        $this->render('form');
     }
 }

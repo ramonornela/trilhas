@@ -37,9 +37,10 @@ class Tri_View_Helper_Thumbnail extends Zend_View_Helper_Abstract
 
     public function thumbnail($path, $type)
     {
-        $thumb = UPLOAD_DIR . $path . $type . '.png';
+        $uploadDir = str_replace('APPLICATION_PATH', APPLICATION_PATH, Tri_Config::get('tri_upload_dir'));
+        $thumb = $uploadDir . $path . $type . '.png';
         if (!file_exists($thumb)) {
-            $this->_open(UPLOAD_DIR . $path);
+            $this->_open($uploadDir . $path);
             $this->_resize($this->_type[$type]['width'], $this->_type[$type]['height']);
             imagepng($this->_image, $thumb, 0);
         }

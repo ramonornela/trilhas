@@ -10,7 +10,7 @@
                 <div class="forgot">
                     <a href="forgot/index"><?php echo $this->translate('Forgot password') ?></a>
                 </div>
-				<?php if (NEW_USER_TO_GUEST) :?>
+				<?php if ((bool) $this->newUserToGuest) :?>
 					<a href="user/form"><?php echo $this->translate('New user') ?></a>
 	                <br />
 				<?php endif ;?>	

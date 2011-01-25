@@ -46,6 +46,7 @@ class IndexController extends Tri_Controller_Action
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
         $paginator = new Tri_Paginator($select, $page);
         $this->view->courses = $paginator->getResult();
+        $this->view->newUserToGuest = Tri_Config::get('tri_new_user_to_guest');
 
         $this->_helper->layout->setLayout('layout');
     }

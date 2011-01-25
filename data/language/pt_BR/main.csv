@@ -33,6 +33,10 @@
 "database-file";"Banco de arquivos"
 "template";"Modelo"
 "chat";"Chat"
+"period";"Período"
+"configuration";"Configuração"
+"email";"E-mail"
+"admin";"Administração"
 
 #buttons
 "previous content";"Anterior"
@@ -164,6 +168,7 @@
 "Female";"Feminino"
 "Period";"Período"
 "Value";"Valor"
+"role";"Perfil"
 
 #status
 "active";"Ativo"

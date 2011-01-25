@@ -1,6 +1,0 @@
-<?=$this->translate('click a group to register the certificate') ?>
-<ul>
-	<?php foreach( $this->rs as $rs ):?>
-		<li><?=$this->ajax( $rs->title , 'certificate' , '/certificate/certificate/view/id/' . $rs->id ) ?></li>
-	<?php endforeach;?>
-</ul>

@@ -1,29 +1,35 @@
+<?php
+$names = Zend_Json::decode(Tri_Config::get('tri_menu'));
+$resource = new Tri_Application_Resource_Menu();
+$resource->setNames($names);
+$menu = $resource->init();
+$i = 0;
+$previousParentName = null;
+?>
 <div id="menu" class="ui-accordion ui-widget ui-helper-reset">
-        <?php $menu = Zend_Registry::get('menu');?>
-        <?php $i = 0; $previousParentName = null;?>
-		<?php foreach ($menu as $parentName => $childs): ?>
-                <?php foreach($childs as $name => $data): ?>
-                    <?php if ($this->isAllowed($data)): ?>
-                        <?php if ($parentName != $previousParentName):?>
-                            <?php if($i > 0): ?>
-                                    </ul>
-                                </div>
-                            <?php endif;?>
-                                 <h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top"><?=$this->translate($parentName)?></h3>
-                                 <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
-                                <ul>
+    <?php foreach ($menu as $parentName => $childs): ?>
+            <?php foreach($childs as $name => $data): ?>
+                <?php if ($this->isAllowed($data)): ?>
+                    <?php if ($parentName != $previousParentName):?>
+                        <?php if($i > 0): ?>
+                                </ul>
+                            </div>
                         <?php endif;?>
-                        <li>
-                            <a href="<?=$data['module']?>/<?=$data['controller']?>/<?=$data['action']?>/layout/box">
-                                <?=$this->translate($name)?>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                    <?php $previousParentName = $parentName; $i++;?>
-                <?php endforeach; ?>
-		<?php endforeach; ?>
-            </ul>
-        </div>
+                             <h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top"><?=$this->translate($parentName)?></h3>
+                             <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
+                            <ul>
+                    <?php endif;?>
+                    <li>
+                        <a href="<?=$data['module']?>/<?=$data['controller']?>/<?=$data['action']?>/layout/box">
+                            <?=$this->translate($name)?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php $previousParentName = $parentName; $i++;?>
+            <?php endforeach; ?>
+    <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 <script type="text/javascript" charset="utf-8">
     var startAnchor = 0;

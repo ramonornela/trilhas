@@ -57,10 +57,11 @@ object, embed {display: block; background: #eee; border: 2px solid black;}
 .login input{display: block; width: 105px;}
 .login dd{margin: 0;}
 
+.courses{margin-top: 10px;}
 .courses .search{margin-bottom: 20px;}
 .courses .search a{margin-left: 20px;}
-.courses .item{clear: both;}
-.courses .item img{float: left; margin: 0 5px 5px 0;}
+.courses .item{clear: both; padding-bottom: 10px;}
+.courses .item img{float: left; margin: 0 10px 5px 0;}
 .courses .item p{margin-top: 2px;}
 .courses .item span{margin-left: 5px; font-size: 0.8em; color: #ccc;}
 .courses .item img.certificate{float: none; margin: 0;}
