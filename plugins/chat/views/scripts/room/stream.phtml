@@ -1,0 +1,27 @@
+<?php if ($this->users):?>
+    <ul class="user">
+        <?php foreach ($this->users as $user):?>
+            <li>
+                <?php echo $user->name?>
+                <?php if ($user->role != 'student'):?>
+                    (<?php echo $this->translate($user->role);?>)
+                <?php endif;?>
+            </li>
+        <?php endforeach;?>
+    </ul>
+<?php endif;?>
+
+<?php if ($this->stream):?>
+    <ul class="messages">
+        <?php foreach ($this->stream as $key => $message):?>
+            <li style="<?php echo $key%2 ? 'background: #eee' : null?>">
+                <strong><?php echo $message->name?></strong>:
+                <?php echo $message->description?>
+                <span><?php echo $this->date($message->created, true)?></span>
+            </li>
+        <?php endforeach;?>
+    </ul>
+<?php endif;?>
+<script type="text/javascript">
+    $('.chat-room .messages').scrollTop(9999999);
+</script>

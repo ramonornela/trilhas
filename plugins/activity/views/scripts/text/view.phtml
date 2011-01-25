@@ -1,0 +1,9 @@
+<p>
+<?php 
+    if ($this->status == 'close') {
+        echo $this->translate('Sent. Wait corretion.');
+    } elseif ($this->status == 'final') {
+        echo $this->translate('Finalized. See your note in panel.');
+    }
+?>
+</p>

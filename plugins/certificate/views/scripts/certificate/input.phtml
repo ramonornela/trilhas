@@ -1,0 +1,45 @@
+<?php $this->suffix = $this->controller ?>
+<div>
+	<form action="#" id="formCertificate_<?=$this->suffix?>">
+		<?=$this->formHidden( "id" , $this->data->id );  ?>
+		<?=$this->formHidden( "group_id" , $this->data->group_id );  ?>
+		
+		<label for="title_<?=$this->suffix?>"><?=$this->translate("title")?>:</label>
+		<?=$this->formText( "title" ,  $this->data->title , array( "id" => "title_" . $this->suffix ) );  ?>
+		
+		<label for="hours_<?=$this->suffix?>"><?=$this->translate("hour load (hour)")?>:</label>
+		<?=$this->formText( "hours" ,  $this->data->hours , array( "id" => "hours_" . $this->suffix ) );  ?>
+		
+		<label for="started_<?=$this->suffix?>"><?=$this->translate("begin date")?>:</label>
+		<?=$this->formText( "started" , $this->date(  $this->data->started ) , array( "id" => "started_" . $this->suffix ) )?>
+		
+		<label for="finished_<?=$this->suffix?>"><?=$this->translate("end date")?>:</label>
+		<?=$this->formText( "finished" , $this->date(  $this->data->finished ) , array( "id" => "finished_" . $this->suffix ) )?>
+		<br /><br />
+		
+		<br />
+		
+		<input type="submit" value="<?=$this->translate("save")?>" />
+	</form>
+</div>
+
+<script>
+
+	new Preceptor.util.Mask( "hours_<?=$this->suffix ?>" , {func:'integer'} )
+	new Preceptor.util.Mask( "started_<?=$this->suffix ?>" , {mask:'00/00/0000'} )
+	new Preceptor.util.Mask( "finished_<?=$this->suffix ?>" , {mask:'00/00/0000'} )
+	
+	Preceptor.util.Validate.prototype.onsubmit = function(){ 
+		YAHOO.util.Event.on( 'formCertificate_<?=$this->suffix?>' , 'submit' , function( ev ){
+			
+			if( this.verify( $( 'formCertificate_<?=$this->suffix?>' ) ) )
+			{
+				new Preceptor.util.AjaxUpdate( this.div , this.url , { formId: this.formId } );
+			}
+			
+			YAHOO.util.Event.stopEvent( ev );
+			
+		} , this , true );
+	}
+</script>
+<?=$this->validate( "formCertificate_{$this->suffix}" , $this->jsonValidate , $this->suffix , "/certificate/certificate/save/" , "certificate"  ); ?>

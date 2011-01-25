@@ -1,0 +1,50 @@
+<fieldset>
+    <legend><?php echo $this->translate('new')?></legend>
+    <form action="admin/acl/add" method="post">
+        <?php
+            echo $this->formLabel('url', $this->translate('url'));
+            echo $this->formText('url');
+            echo "&nbsp;&nbsp;";
+            echo $this->formLabel('role', $this->translate('role'));
+            echo $this->formText('role');
+        ?>
+        <?php echo $this->formSubmit('save', $this->translate('Save'));?>
+    </form>
+</fieldset>
+<br />
+<form action="admin/acl/save" method="post">
+    <?php foreach ($this->data as $module => $controllers):?>
+        <div class="acl">
+            <div class="toggle">
+                <?php echo $this->translate($module)?>
+            </div>
+            <div class="list" style="display: none;">
+                <?php foreach ($controllers as $controller => $actions):?>
+                    <?php foreach ($actions as $action => $roles): ?>
+                        <div class="item">
+                            <?php
+                                $name = "data[$module][$controller][$action]";
+                                echo $this->formLabel($name,"$module/$controller/$action");
+                                echo $this->formText($name, $roles);
+                            ?>
+                            <a href="#"><?php echo $this->translate('delete')?></a>
+                        </div>
+                    <?php endforeach;?>
+                <?php endforeach;?>
+            </div>
+        </div>
+    <?php endforeach;?>
+    <?php echo $this->formSubmit('save', $this->translate('Save'));?>
+</form>
+<script type="text/javascript">
+    $('.toggle').click(function(){
+        $(this).next().slideToggle('fast');
+    });
+
+    $('.item a').click(function(){
+        if (confirm('<?php echo $this->translate('want to delete?')?>')) {
+            $(this).parent().remove();
+        }
+        return false;
+    });
+</script>

@@ -1,0 +1,28 @@
+<?php if ($this->isAllowed('form')):?>
+    <div class="right">
+        <a href="calendar/index/form"><?php echo $this->translate('New')?></a>
+    </div>
+<?php endif;?>
+<div class="calendar">
+<?php if(count($this->data)):?>
+            <?php $begin = null;?>
+            <?php foreach($this->data as $calendar): ?>
+                <?php if ($calendar->begin != $begin):?>
+                    <?php if ($begin != null):?>
+                        </ul></div>
+                    <?php endif;?>
+                    <div class="item">
+                        <div class="date">
+                            <div><?php echo date('d', strtotime($calendar->begin))?></div>
+                            <div><?php echo $this->translate(date('M', strtotime($calendar->begin)))?></div>
+                        </div>
+                        <ul>
+                <?php endif;?>
+                <li>
+                    <?php echo $calendar->description?>
+                    <?php $begin = $calendar->begin;?>
+                </li>
+            <?php endforeach;?>
+            </ul></div>
+<?php endif; ?>
+</div>

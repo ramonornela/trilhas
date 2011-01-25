@@ -1,0 +1,40 @@
+<?php $currency = new Zend_Currency(null, $this->locale); ?>
+<h3><?php echo $this->data->cname?> - <?php echo $this->data->name?></h3>
+<p>
+    <?php echo $this->translate('Period')?>:
+    <?php if ($this->data->end): ?>
+        <?php echo $this->date($this->data->begin)?> -
+        <?php echo $this->date($this->data->end)?>
+    <?php else:?>
+        <?php echo $this->translate('open')?>
+    <?php endif;?>
+</p>
+<p>
+    <?php echo $this->translate('Value')?>:
+    <?php echo $currency->toCurrency($this->data->amount)?>
+</p>
+<form target="pagseguro" method="post" action="https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx">
+    <input type="hidden" name="email_cobranca"  value="contato@preceptoread.com.br">
+    <input type="hidden" name="tipo"            value="CP">
+    <input type="hidden" name="moeda"           value="BRL">
+    <input type="hidden" name="item_id_1"       value="<?php echo $this->data->id?>">
+    <input type="hidden" name="item_descr_1"    value="<?php echo $this->data->cname?> - <?php echo $this->data->name?>">
+    <input type="hidden" name="item_quant_1"    value="1">
+    <input type="hidden" name="item_valor_1"    value="<?php echo Zend_Filter::filterStatic($this->data->amount, 'digits')?>">
+    <input type="hidden" name="item_frete_1"    value="0">
+    <input type="hidden" name="item_peso_1"     value="0">
+
+    <input type="hidden" name="cliente_nome"    value="<?php echo Zend_Auth::getInstance()->getIdentity()->name?>">
+    <input type="hidden" name="cliente_cep"     value="">
+    <input type="hidden" name="cliente_end"     value=" ">
+    <input type="hidden" name="cliente_num"     value="">
+    <input type="hidden" name="cliente_compl"   value="">
+    <input type="hidden" name="cliente_bairro"  value="">
+    <input type="hidden" name="cliente_cidade"  value="">
+    <input type="hidden" name="cliente_uf"      value="">
+    <input type="hidden" name="cliente_pais"    value="BRA">
+    <input type="hidden" name="cliente_ddd"     value="">
+    <input type="hidden" name="cliente_tel"     value="">
+    <input type="hidden" name="cliente_email"   value="<?php echo Zend_Auth::getInstance()->getIdentity()->email?>">
+    <input type="submit" name="submit"          value="Finalizar pagamento" id="submit-pagseguro">
+</form>
