@@ -1,8 +1,8 @@
 <div class="right">
-    <?php echo $this->ajax("new", 'classroom/form', 2); ?>
+    <a href="admin/classroom/form"><?php echo $this->translate('new')?></a>
 </div>
 <div class="search">
-    <form action="classroom/index" method="get">
+    <form action="admin/classroom/index" method="get">
         <input type="text" name="query" value="<?php echo $this->params['query']?>" />
         <input type="submit" value="<?php echo $this->translate('Search')?>" />
     </form>
@@ -18,10 +18,10 @@
         </tr>
         <?php foreach($this->data as $data): ?>
             <tr>
-                <td><a href="classroom/form/id/<?php echo $data->id?>"><?php echo $data->name?></a></td>
+                <td><a href="admin/classroom/form/id/<?php echo $data->id?>"><?php echo $data->name?></a></td>
                 <td><?php echo isset($data->cname) ? $data->cname : ''?></td>
                 <td><?php echo $this->translate($data->status)?></td>
-                <td><a href="classroom/list-user/id/<?php echo $data->id?>"><?php echo $this->translate('users')?></a></td>
+                <td><a href="admin/classroom/list-user/id/<?php echo $data->id?>"><?php echo $this->translate('users')?></a></td>
             </tr>
         <?php endforeach; ?>
     </table>

@@ -32,7 +32,7 @@ class Application_Form_Login extends Zend_Form
     public function init()
     {
 		$session = new Zend_Session_Namespace('data');
-		$attempts = Tri_Config::get('tri_resources');
+		$attempts = (int) Tri_Config::get('tri_attempts');
 
         $this->setAction('user/login')
              ->setMethod('post');
@@ -56,13 +56,12 @@ class Application_Form_Login extends Zend_Form
 			    ),
 			));
 			$captcha->setLabel('enter the code');
+            $captcha->setOrder(2);
+			$this->addElement($captcha);
 		}
 		
         $this->addElement($email)
              ->addElement($password);
-		if  (isset($session->attempt) && $session->attempt >= $attempts) {
-			$this->addElement($captcha);
-		}
         $this->addElement('submit', 'Login');
    }
 }

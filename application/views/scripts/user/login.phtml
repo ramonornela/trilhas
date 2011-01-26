@@ -2,7 +2,7 @@
     <?php echo $this->form?>
 	<?php echo $this->captcha?>
 </div>
-<?php if (NEW_USER_TO_GUEST) :?>
+<?php if (Tri_COnfig::get('tri_new_user_to_guest')) :?>
     <div class="right">
         <a href="user/form"><?php echo $this->translate('New user') ?></a>
     </div>

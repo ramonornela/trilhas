@@ -35,7 +35,7 @@
     <body>
         <div id="hd">
             <h1>Trilhas</h1>
-            <a href="index"><img src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" /></a>
+            <a href="index"><img border="0" src="css/themes/<?php echo $this->theme?>/images/logo.png" alt="Logo Trilhas" /></a>
             <?php if(Zend_Auth::getInstance()->hasIdentity()):?>
                 <div style="float: right;">
                     <?php echo Zend_Auth::getInstance()->getIdentity()->name?>

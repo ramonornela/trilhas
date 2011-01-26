@@ -37,6 +37,8 @@
 "configuration";"Configuração"
 "email";"E-mail"
 "admin";"Administração"
+"default";"Padrão"
+"selection-process";"Processo seletivo"
 
 #buttons
 "previous content";"Anterior"
@@ -77,6 +79,7 @@
 "page";"Página"
 "Forgot password";"Esqueceu a senha?"
 "New user";"Novo usuário"
+"Admin";"Administração"
 
 #message
 "there are no records";"Não existem registros"
@@ -169,6 +172,7 @@
 "Period";"Período"
 "Value";"Valor"
 "role";"Perfil"
+"Order";"Ordem"
 
 #status
 "active";"Ativo"

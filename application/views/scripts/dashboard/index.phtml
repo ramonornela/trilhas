@@ -22,7 +22,7 @@
                 <span class="ui-icon ui-icon-calendar"></span><?php echo $this->translate('calendar')?>
             </a>
         <?php endif;?>
-        <?php if ($this->isAllowed(array('module' => 'selection-process', 'controller' => 'index', 'action' => 'index'))):?>
+        <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'student'):?>
             <a href="selection-process" class="ui-state-default ui-corner-all">
                 <span class="ui-icon ui-icon-folder-open"></span><?php echo $this->translate('selection process')?>
             </a>

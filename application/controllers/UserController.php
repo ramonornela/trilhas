@@ -97,8 +97,8 @@ class UserController extends Tri_Controller_Action
                     $this->_redirect('/dashboard');
                 }
                 $this->view->messages = array('Login failed');
-				$session->attempt++;
             }
+            $session->attempt++;
         }
 
         if ($this->_hasParam('url')) {
@@ -107,7 +107,6 @@ class UserController extends Tri_Controller_Action
             $url = str_replace($path, '', $url);
             $session->url = $url;
         }
-		$session->attempt++;
         $this->view->form = $form;
     }
 

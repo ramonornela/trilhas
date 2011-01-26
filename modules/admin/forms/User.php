@@ -19,12 +19,12 @@
  */
 
 /**
- * @category   Application
- * @package    Application_Form
+ * @category   Admin
+ * @package    Admin_Form
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Application_Form_User extends Zend_Form
+class Admin_Form_User extends Zend_Form
 {
     /**
      * (non-PHPdoc)
@@ -41,8 +41,9 @@ class Application_Form_User extends Zend_Form
         $filters = $user->getFilters();
         $statusOptions = $user->fetchPairs('status', 'status');
         $roles = $user->fetchPairs('role', 'role');
+        $uploadDir = str_replace('APPLICATION_PATH', APPLICATION_PATH, Tri_Config::get('tri_upload_dir'));
 
-        $this->setAction('user/save')
+        $this->setAction('admin/user/save')
                 ->setMethod('post')
                 ->setAttrib('enctype', 'multipart/form-data');
 
@@ -97,7 +98,7 @@ class Application_Form_User extends Zend_Form
 
         $file = new Zend_Form_Element_File('image');
         $file->setLabel('Image')
-                ->setDestination(UPLOAD_DIR)
+                ->setDestination($uploadDir)
                 ->setMaxFileSize(2097152)//2mb
                 ->setValueDisabled(true)
                 ->addFilter('Rename', uniqid())

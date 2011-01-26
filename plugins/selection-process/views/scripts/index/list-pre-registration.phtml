@@ -18,7 +18,7 @@
 </div>
 <br />
 <div>
-	<h2><?php echo mb_strtoupper($this->selection_process->name, APP_CHARSET)?></h2>
+	<h2><?php echo $this->selection_process->name?></h2>
     <?php if (count($this->data)): ?>
 		<p style='margin-bottom:20px;'>
 			<?php echo $this->translate('select')?>: 

@@ -12,6 +12,12 @@
 
 <?php if (count($this->data)):?>
     <table class="datatable">
+        <tr>
+            <th><?php echo $this->translate('Order')?></th>
+            <th><?php echo $this->translate('Name')?></th>
+            <th><?php echo $this->translate('Status')?></th>
+            <th></th>
+        </tr>
         <?php foreach ($this->data as $key => $data): ?>
             <tr>
                 <td><?php echo $data->position; ?></td>

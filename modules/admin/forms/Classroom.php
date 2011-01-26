@@ -23,7 +23,7 @@
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Application_Form_Classroom extends Zend_Form
+class Admin_Form_Classroom extends Zend_Form
 {
     /**
      * (non-PHPdoc)
@@ -44,7 +44,7 @@ class Application_Form_Classroom extends Zend_Form
         $statusOptions = array('active' => 'active', 'inactive' => 'inactive','open' => 'open');
         $courses       = $course->fetchPairs('id', 'name', "status = 'active'");
 
-        $this->setAction('classroom/save')
+        $this->setAction('admin/classroom/save')
              ->setMethod('post')
              ->setAttrib('enctype', 'multipart/form-data');
 

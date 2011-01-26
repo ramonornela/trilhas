@@ -1,5 +1,5 @@
 <div class="right">
-    <a href="classroom/matriculate/id/<?php echo $this->id?>"><?php echo $this->translate('New')?></a>
+    <a href="admin/classroom/matriculate/id/<?php echo $this->id?>"><?php echo $this->translate('New')?></a>
 </div>
 <h3><?php echo $this->classroom->cname?> - <?php echo $this->classroom->name?></h3>
 <br />
@@ -14,7 +14,7 @@
             <tr>
                 <td><?php echo $data->name?></td>
                 <td><?php echo $data->email?></td>
-                <td><a class="delete" href="classroom/delete/userId/<?php echo $data->id?>/id/<?php echo $this->id?>"><?php echo $this->translate('delete')?></a></td>
+                <td><a class="delete" href="admin/classroom/delete/userId/<?php echo $data->id?>/id/<?php echo $this->id?>"><?php echo $this->translate('delete')?></a></td>
             </tr>
         <?php endforeach; ?>
     </table>

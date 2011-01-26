@@ -23,7 +23,7 @@
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class UserController extends Tri_Controller_Action
+class Admin_UserController extends Tri_Controller_Action
 {
 	/**
 	 * Init
@@ -36,6 +36,8 @@ class UserController extends Tri_Controller_Action
     {
         parent::init();
         $this->view->title = "User";
+        $this->_helper->layout->setLayout('admin');
+
     }
 	
 	/**
@@ -61,97 +63,15 @@ class UserController extends Tri_Controller_Action
         $paginator = new Tri_Paginator($select, $page);
         $this->view->data = $paginator->getResult();
     }
-	
-	/**
-	 * Action login.
-	 *
-	 * @return void
-	 */
-    public function loginAction()
-    {
-        $this->view->title = "Login";
-        $session = new Zend_Session_Namespace('data');
-        $auth    = Zend_Auth::getInstance();
-        $form    = new Application_Form_Login();
 
-        if ($auth->hasIdentity()) {
-            $this->_redirect('/dashboard');
-        }
-
-        if ($this->getRequest()->isPost()) {
-            if ($form->isValid($this->getRequest()->getPost())) {
-                $username = $form->getValue('email');
-                $password = $form->getValue('password');
-
-                $result = $this->login($username, $password);
-
-                if ($result->isValid()) {
-					$session->attempt = 0;
-					
-                    if ($session->url) {
-                        $url = $session->url;
-                        $session->url = null;
-                        $this->_redirect($url);
-                    }
-
-                    $this->_redirect('/dashboard');
-                }
-                $this->view->messages = array('Login failed');
-				$session->attempt++;
-            }
-        }
-
-        if ($this->_hasParam('url')) {
-            $path = str_replace('index.php','', $_SERVER['SCRIPT_NAME']);
-            $url = base64_decode($this->_getParam('url'));
-            $url = str_replace($path, '', $url);
-            $session->url = $url;
-        }
-		$session->attempt++;
-        $this->view->form = $form;
-    }
-
-    /**
-     * Form internal use. Used in loginAction and saveAction
-     *
-     *
-     * @param <string> $username
-     * @param <string> $password
-     *
-     * @return Zend_Auth_Result
-     */
-    private function login($username, $password)
-    {
-        $auth    = Zend_Auth::getInstance();
-        $db      = Zend_Db_Table::getDefaultAdapter();
-        $adapter = new Tri_Auth_Adapter_DbTable($db, 'user', 'email', 'password');
-
-        $adapter->setIdentity($username)
-                ->setCredential($password)
-                ->setCredentialTreatment('MD5(?)');
-
-        return $auth->authenticate($adapter);
-    }
-	
-	/**
-	 * Action form.
-	 *
-	 * @return void
-	 */
     public function formAction()
     {
-        $userId   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $form     = new Application_Form_User();
-        $identity = Zend_Auth::getInstance()->getIdentity();
-    	
-    	if (!NEW_USER_TO_GUEST && !Zend_Auth::getInstance()->hasIdentity()) {
-			$this->_helper->flashMessenger->addMessage('access denied');
-			$this->_redirect('/');
-		}		
+        $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $form = new Admin_Form_User();
 
-        if ($userId && $identity->role == 'institution') {
+        if ($id) {
             $table = new Tri_Db_Table('user');
-            $row   = $table->find($userId)->current();
+            $row   = $table->find($id)->current();
 
             if ($row) {
                 $form->populate($row->toArray());
@@ -163,40 +83,12 @@ class UserController extends Tri_Controller_Action
         $this->view->form = $form;
     }
 
-    public function editAction()
-    {
-        $form     = new Application_Form_User();
-        $identity = Zend_Auth::getInstance()->getIdentity();
-
-    	if (!Zend_Auth::getInstance()->hasIdentity()) {
-			$this->_helper->flashMessenger->addMessage('access denied');
-			$this->_redirect('/');
-		}
-
-        $id = $identity->id;
-
-        $table = new Tri_Db_Table('user');
-        $row   = $table->find($id)->current();
-
-        if ($row) {
-            $form->populate($row->toArray());
-        }
-        
-        $this->view->form = $form;
-        $this->render('form');
-    }
-	
-	/**
-	 * Action save.
-	 *
-	 * @return void
-	 */
     public function saveAction()
     {
         $messages     = array();
         $isValidEmail = true;
         $session      = new Zend_Session_Namespace('data');
-        $form         = new Application_Form_User();
+        $form         = new Admin_Form_User();
         $table        = new Tri_Db_Table('user');
         $data         = $this->_getAllParams();
 

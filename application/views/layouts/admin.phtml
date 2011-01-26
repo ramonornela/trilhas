@@ -73,8 +73,13 @@
             <div id="menu">
                 <div class="button">
                     <?php if ($this->isAllowed(array('module' => 'admin', 'controller' => 'index', 'action' => 'index'))):?>
-                        <a href="admin/course/index/layout/admin" class="ui-state-default ui-corner-all">
+                        <a href="admin/course/index/" class="ui-state-default ui-corner-all">
                             <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('course')?>
+                        </a>
+                    <?php endif;?>
+                    <?php if ($this->isAllowed(array('module' => 'admin', 'controller' => 'acl', 'action' => 'index'))):?>
+                        <a href="admin/acl/index/" class="ui-state-default ui-corner-all">
+                            <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('acl')?>
                         </a>
                     <?php endif;?>
                     <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'classroom', 'action' => 'form'))):?>

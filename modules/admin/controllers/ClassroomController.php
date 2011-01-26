@@ -23,26 +23,15 @@
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class ClassroomController extends Tri_Controller_Action
+class Admin_ClassroomController extends Tri_Controller_Action
 {
-   /**
-    * Init
-    *
-	* Call parent init and set title box.
-	*
-    * @return void
-	**/
     public function init()
     {
         parent::init();
+        $this->_helper->layout->setLayout('admin');
         $this->view->title = "Classroom";
     }
 	
-	/**
-	 * Action index.
-	 *
-	 * @return void
-	 */
     public function indexAction()
     {
         $page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
@@ -61,49 +50,10 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->data = $paginator->getResult();
     }
 
-	/**
-	 * Action view.
-	 *
-	 * @return void
-	 */
-    public function viewAction()
-    {
-        $classroom = new Zend_Db_Table('classroom');
-        $id        = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $rowset    = $classroom->find($id);
-
-        if (!count($rowset)) {
-            $this->_redirect('/dashboard');
-        }
-
-        $row     = $rowset->current();
-        $session = new Zend_Session_Namespace('data');
-        $session->classroom_id = $row->id;
-        $session->course_id = $row->course_id;
-        $data = Application_Model_Content::fetchAllOrganize($row->course_id);
-
-        if (!$data) {
-            Application_Model_Content::createInitialContent($row->course_id);
-            $data = Application_Model_Content::fetchAllOrganize($row->course_id);
-        }
-
-        $this->view->current = Application_Model_Content::getLastAccess($id, $data);
-        $this->view->data = Zend_Json::encode($data);
-
-        $session->contents = $this->view->data;
-        
-        $this->_helper->layout->setLayout('layout');
-    }
-	
-	/**
-	 * Action form.
-	 *
-	 * @return void
-	 */
     public function formAction()
     {
         $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $form = new Application_Form_Classroom();
+        $form = new Admin_Form_Classroom();
 
         if ($id) {
             $table = new Tri_Db_Table('classroom');
@@ -117,14 +67,9 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->form = $form;
     }
 	
-	/**
-	 * Action save.
-	 *
-	 * @return void
-	 */
     public function saveAction()
     {
-        $form  = new Application_Form_Classroom();
+        $form  = new Admin_Form_Classroom();
         $table = new Tri_Db_Table('classroom');
         $data  = $this->_getAllParams();
 
@@ -151,7 +96,7 @@ class ClassroomController extends Tri_Controller_Action
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('classroom/form/id/'.$id);
+            $this->_redirect('admin/classroom/');
         }
 
         $this->view->messages = array('Error');
@@ -159,78 +104,6 @@ class ClassroomController extends Tri_Controller_Action
         $this->render('form');
     }
 	
-	/**
-	 * Action sign.
-	 *
-	 * @return void
-	 */
-    public function signAction()
-    {
-        $data = array();
-        if ($this->_hasParam('id')) {
-            $id = Zend_filter::filterStatic($this->_getParam('id'), 'int');
-            if (Application_Model_Classroom::isAvailable($id)) {
-                $session = new Zend_Session_Namespace('data');
-                $session->classroom_id = $id;
-                $classroom = new Zend_Db_Table('classroom');
-                $row = $classroom->fetchRow(array('id = ?' => $id));
-                
-                if (PAYMENT && $row->amount && $row->amount > 0) {
-                    $this->_redirect('/classroom/pay');
-                } else {
-                    $this->_redirect('/classroom/register');
-                }
-            }
-        }
-        $this->view->messages = array('Unavailable');
-    }
-	
-	/**
-	 * Action pay.
-	 *
-	 * @return void
-	 */
-    public function payAction()
-    {
-        $classroom = new Tri_Db_Table('classroom');
-        $session   = new Zend_Session_Namespace('data');
-        $select    = $classroom->select(true)
-                               ->setIntegrityCheck(false)
-                               ->join('course', 'course.id = classroom.course_id', 'course.name as cname')
-                               ->where('classroom.id = ?', $session->classroom_id)
-                               ->order('status');
-        
-        $this->view->data = $classroom->fetchRow($select);
-    }
-	
-	/**
-	 * Action register.
-	 *
-	 * @return void
-	 */
-    public function registerAction()
-    {
-        $session = new Zend_Session_Namespace('data');
-        $classroomUser = new Tri_Db_Table('classroom_user');
-
-        $data['user_id'] = Zend_Auth::getInstance()->getIdentity()->id;
-        $data['classroom_id'] = $session->classroom_id;
-
-        try {
-            $classroomUser->createRow($data)->save();
-            $this->_helper->_flashMessenger->addMessage('Success');
-        } catch (Exception $e) {
-            $this->_helper->_flashMessenger->addMessage('Student already registered in this class');
-        }
-
-        $this->_redirect('/dashboard');
-    }
-
-	/**
-	 * Action list user.
-	 *
-	 * @return void
-	 */
     public function listUserAction()
     {
         $id = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -254,11 +127,6 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->id = $id;
     }
 	
-	/**
-	 * Action matriculate.
-	 *
-	 * @return void
-	 */
     public function matriculateAction()
     {
         $id = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -271,7 +139,7 @@ class ClassroomController extends Tri_Controller_Action
             $classroomUser->createRow($data)->save();
 
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('/classroom/list-user/id/'.$id);
+            $this->_redirect('admin/classroom/list-user/id/'.$id);
         }
         $table = new Zend_Db_Table('user');
         $select = $table->select()->order('id DESC');
@@ -281,11 +149,6 @@ class ClassroomController extends Tri_Controller_Action
         $this->view->id = $id;
     }
 	
-	/**
-	 * Action search user.
-	 *
-	 * @return void
-	 */
     public function searchUserAction()
     {
         $id    = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -308,11 +171,6 @@ class ClassroomController extends Tri_Controller_Action
         $this->render('matriculate');
     }
 	
-	/**
-	 * Action delete.
-	 *
-	 * @return void
-	 */
     public function deleteAction()
     {
         $id     = Zend_filter::filterStatic($this->_getParam('id'), 'int');
@@ -321,6 +179,6 @@ class ClassroomController extends Tri_Controller_Action
         $classroomUser->delete(array('user_id = ?' => $userId, 'classroom_id = ?' => $id));
 
         $this->_helper->_flashMessenger->addMessage('Success');
-        $this->_redirect('/classroom/list-user/id/'.$id);
+        $this->_redirect('admin/classroom/list-user/id/'.$id);
     }
 }

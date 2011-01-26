@@ -5,6 +5,9 @@ class Page_IndexController extends Tri_Controller_Action
     {
         parent::init();
         $this->view->title = "Page";
+        if (!$this->_request->isXmlHttpRequest()) {
+            $this->_helper->layout->setLayout('admin');
+        }
     }
     
     public function indexAction()
@@ -44,6 +47,7 @@ class Page_IndexController extends Tri_Controller_Action
 
     public function viewAction()
     {
+        $this->_helper->layout->setLayout('solo');
         $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $form = new Page_Form_Page();
 

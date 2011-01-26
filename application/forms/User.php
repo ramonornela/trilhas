@@ -41,6 +41,7 @@ class Application_Form_User extends Zend_Form
         $filters = $user->getFilters();
         $statusOptions = $user->fetchPairs('status', 'status');
         $roles = $user->fetchPairs('role', 'role');
+        $uploadDir = str_replace('APPLICATION_PATH', APPLICATION_PATH, Tri_Config::get('tri_upload_dir'));
 
         $this->setAction('user/save')
                 ->setMethod('post')
@@ -97,7 +98,7 @@ class Application_Form_User extends Zend_Form
 
         $file = new Zend_Form_Element_File('image');
         $file->setLabel('Image')
-                ->setDestination(UPLOAD_DIR)
+                ->setDestination($uploadDir)
                 ->setMaxFileSize(2097152)//2mb
                 ->setValueDisabled(true)
                 ->addFilter('Rename', uniqid())

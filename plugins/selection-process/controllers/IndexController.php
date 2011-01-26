@@ -35,6 +35,7 @@ class SelectionProcess_IndexController extends Tri_Controller_Action
     public function init()
     {
         parent::init();
+        $this->_helper->layout->setLayout('admin');
         $this->view->title = "Selection process";
     }
 	
@@ -69,6 +70,7 @@ class SelectionProcess_IndexController extends Tri_Controller_Action
 	 */
     public function viewAction()
     {
+        $this->_helper->layout->setLayout('solo');
 		$user_id = Zend_Filter::filterStatic($this->_getParam('user'), 'int');
 		$page  = Zend_Filter::filterStatic($this->_getParam('page'), 'int');
         $query = Zend_Filter::filterStatic($this->_getParam('query'), 'alnum');
