@@ -18,9 +18,9 @@
  */
 
 /**
- * @see Zend_Controller_Action
+ * @see Tri_Exception
  */
-require_once 'Zend/Controller/Action.php';
+require_once 'Tri/Exception.php';
 
 /**
  * @category   Tri
@@ -28,17 +28,5 @@ require_once 'Zend/Controller/Action.php';
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Tri_Controller_Action extends Zend_Controller_Action
-{
-    /**
-     * (non-PHPdoc)
-     * @see Zend_Controller_Action#init()
-     */
-    public function init()
-    {
-        if (!Zend_Auth::getInstance()->getIdentity()) {
-            $page = new Tri_Db_Table('page');
-            $this->view->pages = $page->fetchAll("status = 'active'", 'position');
-        }
-    }
-}
+class Tri_Controller_Plugin_Acl_Exception extends Tri_Exception
+{}

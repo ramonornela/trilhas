@@ -72,10 +72,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $resource = new Zend_Application_Resource_Cachemanager($options);
         $cache = $resource->init()->getCache('default');
 
-        Zend_Db_Table::setDefaultMetadataCache($cache);
-        Zend_Date::setOptions(array('cache' => $cache));
-        Zend_Translate::setCache($cache);
-        Zend_Locale::setCache($cache);
+//        Zend_Db_Table::setDefaultMetadataCache($cache);
+//        Zend_Date::setOptions(array('cache' => $cache));
+//        Zend_Translate::setCache($cache);
+//        Zend_Locale::setCache($cache);
 
         Zend_Registry::set('cache', $cache);
     }

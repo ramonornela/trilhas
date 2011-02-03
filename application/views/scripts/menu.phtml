@@ -1,5 +1,5 @@
 <?php
-$names = Zend_Json::decode(Tri_Config::get('tri_menu'));
+$names = Tri_Config::get('tri_classroom_menu', true);
 $resource = new Tri_Application_Resource_Menu();
 $resource->setNames($names);
 $menu = $resource->init();

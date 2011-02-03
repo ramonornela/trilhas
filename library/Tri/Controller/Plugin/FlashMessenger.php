@@ -18,27 +18,23 @@
  */
 
 /**
- * @see Zend_Controller_Action
- */
-require_once 'Zend/Controller/Action.php';
-
-/**
  * @category   Tri
  * @package    Tri_Controller
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Tri_Controller_Action extends Zend_Controller_Action
+class Tri_Controller_Plugin_FlashMessenger extends Zend_Controller_Plugin_Abstract
 {
-    /**
-     * (non-PHPdoc)
-     * @see Zend_Controller_Action#init()
-     */
-    public function init()
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        if (!Zend_Auth::getInstance()->getIdentity()) {
-            $page = new Tri_Db_Table('page');
-            $this->view->pages = $page->fetchAll("status = 'active'", 'position');
+        $view  = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer')->view;
+        $flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+
+        if ($flash->hasMessages()) {
+            $view->messages = $flash->getMessages();
+            $this->getResponse()->prepend('messages', $view->render('message.phtml'));
+        } else {
+            $view->messages = NULL;
         }
     }
 }

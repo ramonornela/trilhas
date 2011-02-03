@@ -36,37 +36,35 @@ class Tri_Config
      *
      * @param string $name
      */
-    public static function get($name, $classroomId = null)
+    public static function get($name, $decoded = false)
     {
         if (isset(self::$_data[$name])) {
+            if ($decoded) {
+                return Zend_Json::decode(self::$_data[$name]);
+            }
             return self::$_data[$name];
         }
 
         $table = new Tri_Db_Table('configuration');
         $where = array('name = ?' => $name);
 
-        if ($classroomId) {
-            $where['classroom_id = ?'] = $classroomId;
-        }
-
         $row = $table->fetchRow($where);
 
         if ($row) {
             self::$_data[$name] = $row->value;
+            if ($decoded) {
+                return Zend_Json::decode($row->value);
+            }
             return $row->value;
         }
 
         throw new Exception('Invalid option');
     }
 
-    public static function set($name, $data, $classroomId = null)
+    public static function set($name, $data, $encoded = false)
     {
         $table = new Tri_Db_Table('configuration');
         $where = array('name = ?' => $name);
-
-        if ($classroomId) {
-            $where['classroom_id = ?'] = $classroomId;
-        }
 
         $row = $table->fetchRow($where);
 
@@ -74,6 +72,10 @@ class Tri_Config
             $row = $table->createRow();
         }
 
+        if ($encoded) {
+            $data = Zend_Json::encode($data);
+        }
+        
         self::$_data[$name] = $row->value = $data;
         $row->save();
 

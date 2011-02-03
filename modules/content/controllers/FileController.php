@@ -102,7 +102,7 @@ class Content_FileController extends Tri_Controller_Action
             ob_get_clean();
         }
 
-        readfile($path);
+        echo file_get_contents($path);
         exit;
     }
 }

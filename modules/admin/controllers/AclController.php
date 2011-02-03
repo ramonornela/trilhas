@@ -35,13 +35,13 @@ class Admin_AclController extends Tri_Controller_Action
     
     public function indexAction()
     {
-        $resources = Zend_Json::decode(Tri_Config::get('tri_resources'));
+        $resources = Tri_Config::get('tri_resources', true);
         $this->view->data = $resources;
     }
 
     public function saveAction()
     {
-        Tri_Config::set('tri_resources', Zend_Json::encode($_POST['data']));
+        Tri_Config::set('tri_resources', $_POST['data'], true);
         
         $this->_helper->flashMessenger->addMessage('Success');
         
@@ -58,11 +58,11 @@ class Admin_AclController extends Tri_Controller_Action
             $this->_redirect('admin/acl');
         }
 
-        $resources = Zend_Json::decode(Tri_Config::get('tri_resources'));
+        $resources = Tri_Config::get('tri_resources', true);
 
         $resources[$url[0]][$url[1]][$url[2]] = $role;
 
-        Tri_Config::set('tri_resources', Zend_Json::encode($resources));
+        Tri_Config::set('tri_resources', $resources, true);
         
         $this->_helper->flashMessenger->addMessage('Success');
         $this->_redirect('admin/acl');
