@@ -41,8 +41,17 @@ Thumbs.db
 # Netbeans and Eclipse files #
 ###################
 nbproject/
-data/cache/*
-data/upload/*
 .project
 .buildpath
 .settings
+
+# Files build-in #
+###################
+data/cache/*
+data/upload/*
+
+# Files skel .dist #
+###################
+.htaccess
+application/application.ini
+application/database.ini
