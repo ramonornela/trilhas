@@ -72,7 +72,7 @@ resources.mail.transport.password = ""
 resources.mail.defaultfrom.email = ""
 resources.mail.defaultfrom.name = ""
 
-; Files extras de configuration
+; Files extras of configuration
 config.acl      = APPLICATION_PATH "/configs/acl.ini"
 config.database = APPLICATION_PATH "/configs/database.ini"
 config.menu     = APPLICATION_PATH "/configs/menu.ini"
