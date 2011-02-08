@@ -1,0 +1,22 @@
+[production]
+resources.db.adapter                  = "<adapter>"
+resources.db.params.host              = "<host>"
+resources.db.params.username          = "<user>"
+resources.db.params.password          = "<pass>"
+resources.db.params.dbname            = "<db>"
+resources.db.params.charset           = "utf8"
+resources.db.params.options.fetchMode = "obj"
+
+[staging : production]
+resources.db.params.host              = "<host>"
+resources.db.params.username          = "<user>"
+resources.db.params.password          = "<pass>"
+resources.db.params.dbname            = "<db>"
+
+[development : production]
+resources.db.params.host              = "<host>"
+resources.db.params.username          = "<user>"
+resources.db.params.password          = "<pass>"
+resources.db.params.dbname            = "<db>"
+resources.db.params.profiler.enabled  = true
+resources.db.params.profiler.class    = "Zend_Db_Profiler_Firebug"
