@@ -12,7 +12,7 @@
 "creation";"Criação"
 "content";"Conteúdo"
 "base-text";"Texto-base"
-"organize";"Organizador"
+"organizer";"Organizador"
 "restriction";"Restrição"
 "support";"Apoio"
 "notepad";"Caderno"
@@ -39,6 +39,9 @@
 "admin";"Administração"
 "default";"Padrão"
 "selection-process";"Processo seletivo"
+"acl";"Acesso"
+"plugin";"Complementos"
+"print";"Versão de imprimir"
 
 #buttons
 "previous content";"Anterior"
@@ -80,6 +83,8 @@
 "Forgot password";"Esqueceu a senha?"
 "New user";"Novo usuário"
 "Admin";"Administração"
+"activate";"Ativar"
+"desactivate";"Desativar"
 
 #message
 "there are no records";"Não existem registros"
@@ -223,3 +228,5 @@
 "Page";"Página"
 "User";"Usuário"
 "Welcome";"Benvindo"
+"Plugin";"Complemeto"
+"Access Control List";"Lista de controle de acesso"

@@ -10,6 +10,8 @@
 .center{text-align: center;}
 .none{display: none;}
 .light{color: #555;}
+.solid{border: 1px solid;}
+.dashed{border: 1px dashed;}
 
 input.input-little, textarea.textarea-little{ width: 40px; }
 input.input-small, textarea.textarea-small{ width: 80px; }

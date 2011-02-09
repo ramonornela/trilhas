@@ -9,21 +9,16 @@
         </div>
     </div>
     <div class="button">
-        <a href="user/edit" class="ui-state-default ui-corner-all">
+        <a href="user/edit" class="ui-state-default ui-corner-all" style="padding-left: 25px;">
             <span class="ui-icon ui-icon-contact"></span><?php echo $this->translate('data')?>
         </a>
         <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'institution'):?>
-            <a href="admin" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('Admin')?>
-            </a>
-        <?php endif;?>
-        <?php if ($this->isAllowed(array('module' => 'calendar', 'controller' => 'index', 'action' => 'form'))):?>
-            <a href="calendar" class="ui-state-default ui-corner-all">
-                <span class="ui-icon ui-icon-calendar"></span><?php echo $this->translate('calendar')?>
+            <a href="admin/course" class="ui-state-default ui-corner-all" style="padding-left: 25px;">
+                <span class="ui-icon ui-icon-gear"></span><?php echo $this->translate('Admin')?>
             </a>
         <?php endif;?>
         <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'student'):?>
-            <a href="selection-process" class="ui-state-default ui-corner-all">
+            <a href="selection-process" class="ui-state-default ui-corner-all" style="padding-left: 25px;">
                 <span class="ui-icon ui-icon-folder-open"></span><?php echo $this->translate('selection process')?>
             </a>
         <?php endif;?>

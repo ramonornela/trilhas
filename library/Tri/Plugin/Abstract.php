@@ -38,7 +38,7 @@ abstract class Tri_Plugin_Abstract implements Tri_Plugin_Interface
 
     protected function _addAclItem($resource, $role)
     {
-        $itens = explode('.', $resource);
+        $itens = explode('/', $resource);
         $resources = Tri_Config::get('tri_resources', true);
 
         $resources[$itens[0]][$itens[1]][$itens[2]] = $role;
@@ -48,7 +48,7 @@ abstract class Tri_Plugin_Abstract implements Tri_Plugin_Interface
 
     protected function _removeAclItem($resource)
     {
-        $itens = explode('.', $resource);
+        $itens = explode('/', $resource);
         $resources = Tri_Config::get('tri_resources', true);
 
         unset($resources[$itens[0]][$itens[1]][$itens[2]]);
@@ -68,7 +68,7 @@ abstract class Tri_Plugin_Abstract implements Tri_Plugin_Interface
     protected function _addClassroomMenuItem($category, $name, $resources)
     {
         $itens = Tri_Config::get('tri_classroom_menu', true);
-        $itens[$category][$name] = $resources;
+        $itens[$category][$name] = str_replace('/','.', $resources);
         Tri_Config::set('tri_classroom_menu', $itens, true);
     }
 
@@ -82,11 +82,11 @@ abstract class Tri_Plugin_Abstract implements Tri_Plugin_Interface
     protected function _addAdminMenuItem($name, $resources)
     {
         $itens = Tri_Config::get('tri_admin_menu', true);
-        $itens[$name] = $resources;
+        $itens[$name] = str_replace('/','.', $resources);
         Tri_Config::set('tri_admin_menu', $itens, true);
     }
 
-    protected function _removeAdminMenuItem($name, $resources)
+    protected function _removeAdminMenuItem($name)
     {
         $itens = Tri_Config::get('tri_admin_menu', true);
         unset($itens[$name]);
@@ -96,11 +96,11 @@ abstract class Tri_Plugin_Abstract implements Tri_Plugin_Interface
     protected function _addDashboardMenuItem($name, $resources)
     {
         $itens = Tri_Config::get('tri_dashboard_menu', true);
-        $itens[$name] = $resources;
+        $itens[$name] = str_replace('/','.', $resources);
         Tri_Config::set('tri_dashboard_menu', $itens, true);
     }
 
-    protected function _removeDashboardMenuItem($name, $url)
+    protected function _removeDashboardMenuItem($name)
     {
         $itens = Tri_Config::get('tri_dashboard_menu', true);
         unset($itens[$name]);
@@ -128,7 +128,11 @@ abstract class Tri_Plugin_Abstract implements Tri_Plugin_Interface
         $this->desactivate();
 
         $activedPlugins = Tri_Config::get('tri_plugins', true);
-        unset($activedPlugins[$this->_name]);
+        foreach($activedPlugins as $key => $value) {
+            if ($value == $this->_name) {
+                unset($activedPlugins[$key]);
+            }
+        }
 
         Tri_Config::set('tri_plugins', $activedPlugins, true);
     }

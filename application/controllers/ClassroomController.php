@@ -45,17 +45,20 @@ class ClassroomController extends Tri_Controller_Action
         $session = new Zend_Session_Namespace('data');
         $session->classroom_id = $row->id;
         $session->course_id = $row->course_id;
-        $data = Application_Model_Content::fetchAllOrganize($row->course_id);
-
-        if (!$data) {
-            Application_Model_Content::createInitialContent($row->course_id);
+        
+        if (in_array('content', Tri_Config::get('tri_plugins', true))) {
             $data = Application_Model_Content::fetchAllOrganize($row->course_id);
+
+            if (!$data) {
+                Application_Model_Content::createInitialContent($row->course_id);
+                $data = Application_Model_Content::fetchAllOrganize($row->course_id);
+            }
+
+            $this->view->current = Application_Model_Content::getLastAccess($id, $data);
+            $this->view->data = Zend_Json::encode($data);
+
+            $session->contents = $this->view->data;
         }
-
-        $this->view->current = Application_Model_Content::getLastAccess($id, $data);
-        $this->view->data = Zend_Json::encode($data);
-
-        $session->contents = $this->view->data;
         
         $this->_helper->layout->setLayout('layout');
     }
