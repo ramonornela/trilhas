@@ -42,8 +42,11 @@ resources.view.helperPath.Tri_View_Helper[] = "Tri/View/Helper"
 resources.layout.layoutPath = APPLICATION_PATH "/views/layouts"
 
 ; resource front controller
-resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
-resources.frontController.moduleDirectory     = APPLICATION_PATH "/../modules"
+resources.frontcontroller.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontcontroller.moduleDirectory     = APPLICATION_PATH "/../modules"
+resources.frontcontroller.throwexceptions     = false
+
+; resource modules
 resources.modules =
 
 ; resource locale 
@@ -83,6 +86,8 @@ config.menu     = APPLICATION_PATH "/configs/menu.ini"
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors         = 1
 phpSettings.error_reporting        = E_ALL
+
+resources.frontcontroller.throwexceptions     = true
 
 resources.cachemanager.default.frontend.options.caching = 0
 resources.cachemanager.default.backend.name             = "File"
