@@ -6,6 +6,7 @@ resources.db.params.password          = "<pass>"
 resources.db.params.dbname            = "<db>"
 resources.db.params.charset           = "utf8"
 resources.db.params.options.fetchMode = "obj"
+resources.db.defaultMetadataCache     = "default"
 
 [staging : production]
 resources.db.params.host              = "<host>"
