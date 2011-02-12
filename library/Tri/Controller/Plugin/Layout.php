@@ -33,7 +33,9 @@ class Tri_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         $layout->setLayout('solo');
         if ($request->isXmlHttpRequest()) {
             $layout->disableLayout();
-        } elseif ($request->getParam('layout')) {
+        }
+
+        if ($request->getParam('layout')) {
             $layout->setLayout($request->getParam('layout'));
         }
 

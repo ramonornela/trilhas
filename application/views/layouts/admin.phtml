@@ -74,32 +74,27 @@
                 <div class="button">
                     <?php if ($this->isAllowed(array('module' => 'admin', 'controller' => 'index', 'action' => 'index'))):?>
                         <a href="admin/course/index/" class="ui-state-default ui-corner-all">
-                            <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('course')?>
-                        </a>
-                    <?php endif;?>
-                    <?php if ($this->isAllowed(array('module' => 'admin', 'controller' => 'acl', 'action' => 'index'))):?>
-                        <a href="admin/acl/index/" class="ui-state-default ui-corner-all">
-                            <span class="ui-icon ui-icon-document"></span><?php echo $this->translate('acl')?>
+                            <?php echo $this->translate('course')?>
                         </a>
                     <?php endif;?>
                     <?php if ($this->isAllowed(array('module' => 'default', 'controller' => 'classroom', 'action' => 'form'))):?>
                         <a href="admin/classroom" class="ui-state-default ui-corner-all">
-                            <span class="ui-icon ui-icon-note"></span><?php echo $this->translate('classroom')?>
+                            <?php echo $this->translate('classroom')?>
                         </a>
                     <?php endif;?>
-                    <?php if ($this->isAllowed(array('module' => 'selection-process', 'controller' => 'index', 'action' => 'index'))):?>
-                        <a href="selection-process" class="ui-state-default ui-corner-all">
-                            <span class="ui-icon ui-icon-folder-open"></span><?php echo $this->translate('selection process')?>
+                    <?php if ($this->isAllowed(array('module' => 'admin', 'controller' => 'acl', 'action' => 'index'))):?>
+                        <a href="admin/acl/index/" class="ui-state-default ui-corner-all">
+                            <?php echo $this->translate('acl')?>
+                        </a>
+                    <?php endif;?>
+                    <?php if ($this->isAllowed(array('module' => 'admin', 'controller' => 'plugin', 'action' => 'index'))):?>
+                        <a href="admin/plugin" class="ui-state-default ui-corner-all">
+                            <?php echo $this->translate('plugin')?>
                         </a>
                     <?php endif;?>
                     <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'institution'):?>
                         <a href="admin/user" class="ui-state-default ui-corner-all">
-                            <span class="ui-icon ui-icon-person"></span><?php echo $this->translate('user')?>
-                        </a>
-                    <?php endif;?>
-                    <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'institution'):?>
-                        <a href="page" class="ui-state-default ui-corner-all">
-                            <span class="ui-icon ui-icon-document-b"></span><?php echo $this->translate('page')?>
+                            <?php echo $this->translate('user')?>
                         </a>
                     <?php endif;?>
                 </div>

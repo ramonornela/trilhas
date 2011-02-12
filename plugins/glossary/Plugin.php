@@ -18,27 +18,28 @@
  */
 
 /**
- * @category   Faq
- * @package    Faq_Plugin
+ * @category   Glossary
+ * @package    Glossary_Plugin
  * @copyright  Copyright (C) 2005-2010  Preceptor Educação a Distância Ltda. <http://www.preceptoead.com.br>
  * @license    http://www.gnu.org/licenses/  GNU GPL
  */
-class Faq_Plugin extends Tri_Plugin_Abstract
+class Glossary_Plugin extends Tri_Plugin_Abstract
 {
-    protected $_name = "faq";
+    protected $_name = "glossary";
     
     protected function _createDb()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `faq` (
+        $sql = "CREATE TABLE IF NOT EXISTS `glossary` (
                   `id` bigint(20) NOT NULL AUTO_INCREMENT,
                   `user_id` bigint(20) NOT NULL,
                   `classroom_id` bigint(20) NOT NULL,
-                  `question` text NOT NULL,
-                  `answer` text NOT NULL,
+                  `word` varchar(255) NOT NULL,
+                  `description` text NOT NULL,
+                  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   PRIMARY KEY (`id`),
                   KEY `user_id` (`user_id`),
                   KEY `classroom_id` (`classroom_id`)
-                )";
+                ) ";
         
         $this->_getDb()->query($sql);
     }
@@ -50,19 +51,19 @@ class Faq_Plugin extends Tri_Plugin_Abstract
 
     public function activate()
     {
-        $this->_addClassroomMenuItem('support','faq','faq/index/index');
-        $this->_addAclItem('faq/index/index','identified');
-        $this->_addAclItem('faq/index/form','teacher, coordinator, institution');
-        $this->_addAclItem('faq/index/save','teacher, coordinator, institution');
-        $this->_addAclItem('faq/index/delete','teacher, coordinator, institution');
+        $this->_addClassroomMenuItem('support','glossary','glossary/index/index');
+        $this->_addAclItem('glossary/index/index','identified');
+        $this->_addAclItem('glossary/index/form','teacher, coordinator, institution');
+        $this->_addAclItem('glossary/index/save','teacher, coordinator, institution');
+        $this->_addAclItem('glossary/index/delete','teacher, coordinator, institution');
     }
 
     public function desactivate()
     {
-        $this->_removeClassroomMenuItem('support','faq');
-        $this->_removeAclItem('faq/index/index');
-        $this->_removeAclItem('faq/index/form');
-        $this->_removeAclItem('faq/index/save');
-        $this->_removeAclItem('faq/index/delete');
+        $this->_removeClassroomMenuItem('support','glossary');
+        $this->_removeAclItem('glossary/index/index');
+        $this->_removeAclItem('glossary/index/form');
+        $this->_removeAclItem('glossary/index/save');
+        $this->_removeAclItem('glossary/index/delete');
     }
 }

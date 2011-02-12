@@ -53,7 +53,7 @@ class Tri_Application_Resource_Acl extends Zend_Application_Resource_ResourceAbs
                 $this->_acl->addRole(new Zend_Acl_Role($roleName), 'identified');
             }
         }
-//        echo Zend_Json::encode($this->_resources);exit;
+//        var_dump($this->_resources);exit;
         // rules
         foreach ($this->_resources as $module => $grants) {
             $module = strtolower($module);

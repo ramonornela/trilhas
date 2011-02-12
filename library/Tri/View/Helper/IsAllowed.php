@@ -46,8 +46,10 @@ class Tri_View_Helper_IsAllowed extends Zend_View_Helper_Abstract
             $privilege = $data['controller'] . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR .
                          $data['action'];
             $resource = $data['module'];
-            if ($acl->isAllowed($role, $resource, $privilege)) {
-                return true;
+            if ($acl->has($resource)) {
+                if ($acl->isAllowed($role, $resource, $privilege)) {
+                    return true;
+                }
             }
         } else {
             $front     = Zend_Controller_Front::getInstance();
@@ -55,8 +57,10 @@ class Tri_View_Helper_IsAllowed extends Zend_View_Helper_Abstract
             $privilege = $front->getRequest()->getControllerName()
                        . Tri_Application_Resource_Acl::RESOURCE_SEPARATOR
                        . $data;
-            if ($acl->isAllowed($role, $resource, $privilege)) {
-                return true;
+            if ($acl->has($resource)) {
+                if ($acl->isAllowed($role, $resource, $privilege)) {
+                    return true;
+                }
             }
         }
         return false;
