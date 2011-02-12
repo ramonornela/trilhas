@@ -18,5 +18,9 @@ $application = new Zend_Application(
     APPLICATION_ENV,
     APPLICATION_PATH . '/configs/application.ini'
 );
-$application->bootstrap()
-            ->run();
+try {
+    $application->bootstrap()
+                ->run();
+} catch (Exception $e) {
+    Zend_Debug::dump($e);
+}
